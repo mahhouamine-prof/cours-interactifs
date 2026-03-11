@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>L'espace et ses phénomènes — Secondaire 1 & 2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f6fb; }
+  button { font-family: inherit; }
+  table { border-collapse: collapse; width: 100%; }
+  @media (max-width: 500px) {
+    h1 { font-size: 1.4rem !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const { useState } = React;
+
+const sections = [
+  {
+    id: "aurores",
+    emoji: "🌌",
+    number: "6.3",
+    title: "Les aurores polaires",
+    content: [
+      { type: "intro", text: "Dans le ciel nocturne, loin des lumières de la ville, on peut apercevoir de magnifiques voiles lumineux prenant différentes couleurs. Ce phénomène s'appelle une aurore polaire." },
+      { type: "definition", title: "Définition", text: "Une aurore polaire est une formation lumineuse causée par la rencontre des particules du vent solaire avec les gaz de la thermosphère. Elles sont observées plus souvent près des pôles, car le champ magnétique terrestre y est plus intense." },
+      { type: "subtitle", text: "Comment se forme une aurore polaire ?" },
+      { type: "steps", steps: [
+        { icon: "☀️", title: "Le vent solaire", text: "Le Soleil émet continuellement des particules chargées électriquement dans toutes les directions à environ 400 km/s. Ce flux s'appelle le vent solaire." },
+        { icon: "🧲", title: "Le champ magnétique", text: "Le champ magnétique terrestre agit comme un aimant et dévie ces particules vers les pôles, où il est plus intense." },
+        { icon: "💡", title: "La lumière colorée", text: "En entrant dans l'atmosphère, les particules transfèrent leur énergie aux molécules de gaz de la thermosphère, qui émettent alors une douce lumière colorée." },
+      ]},
+      { type: "subtitle", text: "Les couleurs des aurores" },
+      { type: "colors", items: [
+        { color: "#5599ff", gas: "Azote (N₂)", light: "Lumière bleue" },
+        { color: "#88ff44", gas: "Oxygène (O₂)", light: "Lumière vert-jaune" },
+        { color: "#ff4466", gas: "Oxygène (altitude élevée)", light: "Lumière rouge" },
+      ]},
+      { type: "rappel", title: "Les couches de l'atmosphère", items: ["Troposphère (0 à 16 km)", "Stratosphère (jusqu'à 50 km)", "Mésosphère (jusqu'à 80 km)", "Thermosphère (jusqu'à 1000 km) ← aurores ici"] },
+      { type: "fact", text: "Les aurores ne se produisent pas uniquement sur la Terre ! Elles peuvent survenir sur toutes les planètes dotées d'une atmosphère et d'un champ magnétique." },
+    ],
+  },
+  {
+    id: "cometes",
+    emoji: "☄️",
+    number: "6.4",
+    title: "Les comètes",
+    content: [
+      { type: "intro", text: "Depuis l'Antiquité, les humains ont observé des astres étranges accompagnés d'une longue traînée lumineuse. On les appelait souvent de mauvais présages. Aujourd'hui, on les connaît beaucoup mieux !" },
+      { type: "definition", title: "Définition", text: "Une comète est un astre de petite dimension dont le noyau est constitué de glace, de poussières et de gaz à l'état solide. Lorsqu'elle s'approche du Soleil, les gaz et les poussières libérés forment une chevelure autour du noyau ainsi qu'une queue poussée par le vent solaire." },
+      { type: "subtitle", text: "Les parties d'une comète" },
+      { type: "parts", items: [
+        { icon: "⚫", name: "Noyau", desc: "Quelques centaines de mètres à une quinzaine de km. Formé de glace, poussière et gaz congelés." },
+        { icon: "🌫️", name: "Chevelure", desc: "50 000 à 250 000 km de diamètre. Nuage de gaz qui se forme quand la comète s'approche du Soleil." },
+        { icon: "💫", name: "Queue", desc: "30 à 80 millions de km. Formée par le vent solaire, elle pointe toujours dans la direction opposée au Soleil." },
+      ]},
+      { type: "subtitle", text: "D'où viennent les comètes ?" },
+      { type: "origins", items: [
+        { name: "Ceinture de Kuiper", dist: "~7 milliards km du Soleil", desc: "Source des comètes à courte période (moins de 200 ans de révolution)." },
+        { name: "Nuage d'Oort", dist: "~7 500 milliards km du Soleil", desc: "Source de la majorité des autres comètes. Période pouvant aller jusqu'à plusieurs milliards d'années." },
+      ]},
+      { type: "fact", text: "La comète Hale-Bopp, photographiée en 1997, avait une période orbitale de 4200 ans. Elle reviendra près de la Terre vers l'an 4400 !" },
+    ],
+  },
+  {
+    id: "meteorites",
+    emoji: "🌠",
+    number: "6.5",
+    title: "Les météorites et les impacts",
+    content: [
+      { type: "intro", text: "Tu as peut-être déjà vu une étoile filante et fait un vœu. Ces étoiles filantes ne sont pas de vraies étoiles — ce sont de petits débris provenant de l'espace !" },
+      { type: "vocab", title: "Les trois termes à connaître", items: [
+        { term: "Météore", def: "Débris qui brûle dans l'atmosphère et laisse une traînée lumineuse. Aussi appelé \"étoile filante\"." },
+        { term: "Météorite", def: "Débris qui ne se désintègre pas complètement et atteint la surface de la Terre." },
+        { term: "Impact météoritique", def: "Rencontre d'une météorite avec la surface de la Terre. Laisse un cratère nommé \"astroblème\"." },
+      ]},
+      { type: "subtitle", text: "Comment se forme une étoile filante ?" },
+      { type: "steps", steps: [
+        { icon: "🪨", title: "Débris dans l'espace", text: "Des poussières et débris rocheux ou métalliques flottent dans l'espace." },
+        { icon: "🌍", title: "Entrée dans l'atmosphère", text: "Ces débris pénètrent l'atmosphère terrestre à très grande vitesse." },
+        { icon: "🔥", title: "Frottement et lumière", text: "Le frottement avec les molécules de gaz produit une chaleur intense. La matière s'illumine et laisse une traînée lumineuse." },
+      ]},
+      { type: "table", title: "Fréquence des impacts selon la taille", headers: ["Taille de la météorite", "Fréquence des impacts"],
+        rows: [["1 mm","Environ toutes les 30 secondes"],["1 m","Environ tous les ans"],["10 m","Environ tous les 100 ans"],["100 m","Environ tous les 10 000 ans"],["10 km","Environ tous les 100 millions d'années"]]
+      },
+      { type: "fact", text: "Il tombe chaque année entre 10 000 et un million de tonnes de débris spatiaux sur la Terre. La plupart se désintègrent avant d'atteindre le sol !" },
+      { type: "quebec", title: "Des cratères au Québec !", items: [
+        { name: "Réservoir Manicouagan", age: "214 millions d'années", diam: "72 km" },
+        { name: "Cratère des Pingualuit", age: "1,4 million d'années", diam: "3,44 km" },
+        { name: "Lac Couture", age: "425 millions d'années", diam: "~8 km" },
+      ]},
+    ],
+  },
+];
+
+const quizQuestions = [
+  { q: "Dans quelle couche de l'atmosphère se produisent les aurores polaires ?", options: ["Troposphère","Stratosphère","Thermosphère","Mésosphère"], answer: 2, section: "aurores" },
+  { q: "Quel gaz émet de la lumière bleue lors d'une aurore polaire ?", options: ["Oxygène","Azote","Hydrogène","Hélium"], answer: 1, section: "aurores" },
+  { q: "À quelle vitesse voyagent les particules du vent solaire ?", options: ["40 km/s","400 km/s","4 000 km/s","40 000 km/s"], answer: 1, section: "aurores" },
+  { q: "Comment s'appelle la traînée lumineuse qui se forme autour du noyau d'une comète ?", options: ["La queue","La chevelure","L'atmosphère","Le halo"], answer: 1, section: "cometes" },
+  { q: "Dans quelle direction pointe la queue d'une comète ?", options: ["Vers le Soleil","Dans le sens de l'orbite","À l'opposé du Soleil","Vers la Terre"], answer: 2, section: "cometes" },
+  { q: "De quoi est principalement composé le noyau d'une comète ?", options: ["Roches et métaux","Glace, poussière et gaz congelés","Plasma et gaz","Eau liquide"], answer: 1, section: "cometes" },
+  { q: "Comment appelle-t-on un débris spatial qui brûle dans l'atmosphère et crée une traînée lumineuse ?", options: ["Météorite","Astéroïde","Météore","Comète"], answer: 2, section: "meteorites" },
+  { q: "Quel événement a probablement causé la disparition des dinosaures il y a 65 millions d'années ?", options: ["Une éruption volcanique","Un impact météoritique","Un vent solaire intense","Un changement climatique"], answer: 1, section: "meteorites" },
+  { q: "Quel nom donne-t-on à un cratère causé par un impact météoritique ?", options: ["Géode","Astroblème","Caldera","Atoll"], answer: 1, section: "meteorites" },
+  { q: "Les aurores polaires peuvent-elles se produire sur d'autres planètes que la Terre ?", options: ["Non, jamais","Oui, sur toutes les planètes","Oui, sur les planètes avec atmosphère et champ magnétique","Seulement sur Jupiter"], answer: 2, section: "aurores" },
+];
+
+const SC = {
+  aurores:    { main: "#00c9a7", dark: "#007a65", light: "#e0fff9" },
+  cometes:    { main: "#f7a72b", dark: "#b07200", light: "#fff8e0" },
+  meteorites: { main: "#e05aff", dark: "#8800bb", light: "#fce8ff" },
+};
+
+function Block({ block, color }) {
+  switch (block.type) {
+    case "intro":
+      return <p style={{fontSize:"1.05rem",lineHeight:1.8,color:"#444",background:"#f8f9fb",borderLeft:`4px solid ${color}`,padding:"1rem 1.2rem",borderRadius:"0 8px 8px 0"}}>{block.text}</p>;
+    case "definition":
+      return (
+        <div style={{background:`${color}18`,border:`2px solid ${color}`,borderRadius:12,padding:"1rem 1.3rem"}}>
+          <div style={{fontWeight:700,color:color,marginBottom:6,fontSize:"0.9rem",textTransform:"uppercase",letterSpacing:1}}>📌 {block.title}</div>
+          <p style={{margin:0,lineHeight:1.7,color:"#333"}}>{block.text}</p>
+        </div>
+      );
+    case "subtitle":
+      return <h3 style={{color:"#333",borderBottom:`2px solid ${color}`,paddingBottom:6,marginTop:24}}>{block.text}</h3>;
+    case "steps":
+      return (
+        <div style={{display:"flex",flexDirection:"column",gap:12}}>
+          {block.steps.map((s,i) => (
+            <div key={i} style={{display:"flex",gap:14,alignItems:"flex-start",background:"#fff",border:"1px solid #eee",borderRadius:10,padding:"0.9rem 1rem",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+              <div style={{fontSize:"1.8rem",minWidth:40,textAlign:"center"}}>{s.icon}</div>
+              <div><div style={{fontWeight:700,marginBottom:3,color:"#222"}}>{s.title}</div><div style={{color:"#555",fontSize:"0.95rem",lineHeight:1.6}}>{s.text}</div></div>
+            </div>
+          ))}
+        </div>
+      );
+    case "colors":
+      return (
+        <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+          {block.items.map((c,i) => (
+            <div key={i} style={{flex:"1 1 140px",background:`${c.color}22`,border:`2px solid ${c.color}`,borderRadius:10,padding:"0.8rem",textAlign:"center"}}>
+              <div style={{width:40,height:40,borderRadius:"50%",background:c.color,margin:"0 auto 8px",boxShadow:`0 0 12px ${c.color}88`}}/>
+              <div style={{fontWeight:700,fontSize:"0.85rem",color:"#333"}}>{c.gas}</div>
+              <div style={{color:"#666",fontSize:"0.82rem",marginTop:3}}>{c.light}</div>
+            </div>
+          ))}
+        </div>
+      );
+    case "rappel":
+      return (
+        <div style={{background:"#f0f4ff",border:"1px solid #c5d0ff",borderRadius:10,padding:"1rem 1.2rem"}}>
+          <div style={{fontWeight:700,marginBottom:8,color:"#4455cc"}}>📚 Rappel — {block.title}</div>
+          <ol style={{margin:0,paddingLeft:20}}>{block.items.map((it,i) => <li key={i} style={{color:"#444",marginBottom:4,fontSize:"0.95rem"}}>{it}</li>)}</ol>
+        </div>
+      );
+    case "fact":
+      return (
+        <div style={{background:"#fffbea",border:"1px solid #f0d040",borderRadius:10,padding:"0.9rem 1.2rem",display:"flex",gap:12,alignItems:"flex-start"}}>
+          <span style={{fontSize:"1.5rem"}}>💡</span>
+          <p style={{margin:0,color:"#555",lineHeight:1.7,fontSize:"0.95rem"}}>{block.text}</p>
+        </div>
+      );
+    case "parts":
+      return (
+        <div style={{display:"flex",flexDirection:"column",gap:10}}>
+          {block.items.map((p,i) => (
+            <div key={i} style={{display:"flex",gap:12,background:"#fff",border:"1px solid #eee",borderRadius:10,padding:"0.8rem 1rem"}}>
+              <span style={{fontSize:"1.6rem"}}>{p.icon}</span>
+              <div><strong style={{color:"#222"}}>{p.name}</strong><div style={{color:"#555",fontSize:"0.92rem",marginTop:3}}>{p.desc}</div></div>
+            </div>
+          ))}
+        </div>
+      );
+    case "origins":
+      return (
+        <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+          {block.items.map((o,i) => (
+            <div key={i} style={{flex:"1 1 200px",background:"#fff7ee",border:"1px solid #f7c87b",borderRadius:10,padding:"0.9rem 1rem"}}>
+              <div style={{fontWeight:700,color:"#b07200",marginBottom:4}}>{o.name}</div>
+              <div style={{fontSize:"0.82rem",color:"#888",marginBottom:6}}>📍 {o.dist}</div>
+              <div style={{color:"#555",fontSize:"0.9rem"}}>{o.desc}</div>
+            </div>
+          ))}
+        </div>
+      );
+    case "vocab":
+      return (
+        <div>
+          <div style={{fontWeight:700,marginBottom:10,color:"#555"}}>{block.title}</div>
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>
+            {block.items.map((v,i) => (
+              <div key={i} style={{display:"flex",gap:10,background:"#fff",border:"1px solid #ddd",borderRadius:8,padding:"0.8rem 1rem",flexWrap:"wrap"}}>
+                <div style={{fontWeight:700,minWidth:140,color:"#c020e0"}}>{v.term}</div>
+                <div style={{color:"#555",fontSize:"0.93rem",lineHeight:1.6,flex:1}}>{v.def}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    case "table":
+      return (
+        <div>
+          <div style={{fontWeight:700,marginBottom:8,color:"#555"}}>{block.title}</div>
+          <table>
+            <thead><tr>{block.headers.map((h,i) => <th key={i} style={{background:"#e05aff22",padding:"8px 12px",textAlign:"left",borderBottom:"2px solid #e05aff"}}>{h}</th>)}</tr></thead>
+            <tbody>{block.rows.map((row,i) => <tr key={i} style={{background:i%2===0?"#fff":"#faf0ff"}}>{row.map((cell,j) => <td key={j} style={{padding:"7px 12px",borderBottom:"1px solid #eee"}}>{cell}</td>)}</tr>)}</tbody>
+          </table>
+        </div>
+      );
+    case "quebec":
+      return (
+        <div style={{background:"#f0fff4",border:"1px solid #6dcc88",borderRadius:10,padding:"1rem 1.2rem"}}>
+          <div style={{fontWeight:700,marginBottom:8,color:"#2a8a44"}}>🍁 {block.title}</div>
+          <div style={{display:"flex",flexDirection:"column",gap:6}}>
+            {block.items.map((c,i) => (
+              <div key={i} style={{display:"flex",gap:10,fontSize:"0.92rem",color:"#444"}}>
+                <span>•</span><span><strong>{c.name}</strong> — Diamètre : {c.diam} — il y a {c.age}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    default: return null;
+  }
+}
+
+function SectionView({ section, onBack }) {
+  const c = SC[section.id];
+  return (
+    <div style={{maxWidth:700,margin:"0 auto",padding:"1rem"}}>
+      <button onClick={onBack} style={{background:"none",border:`2px solid ${c.main}`,color:c.main,borderRadius:8,padding:"6px 16px",cursor:"pointer",fontWeight:700,marginBottom:20,fontSize:"0.9rem"}}>← Retour</button>
+      <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:24}}>
+        <div style={{fontSize:"3rem"}}>{section.emoji}</div>
+        <div>
+          <div style={{fontSize:"0.82rem",fontWeight:700,color:c.main,textTransform:"uppercase",letterSpacing:1}}>Section {section.number}</div>
+          <h2 style={{margin:0,color:"#1a1a2e",fontSize:"1.6rem"}}>{section.title}</h2>
+        </div>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:16}}>
+        {section.content.map((block,i) => <Block key={i} block={block} color={c.main}/>)}
+      </div>
+    </div>
+  );
+}
+
+function QuizView({ onBack }) {
+  const [current, setCurrent] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [done, setDone] = useState(false);
+
+  const q = quizQuestions[current];
+  const c = SC[q.section];
+
+  const handleNext = () => {
+    const newAnswers = [...answers, selected];
+    if (current + 1 >= quizQuestions.length) { setAnswers(newAnswers); setDone(true); }
+    else { setAnswers(newAnswers); setSelected(null); setCurrent(current + 1); }
+  };
+
+  const handleRestart = () => { setCurrent(0); setSelected(null); setAnswers([]); setDone(false); };
+
+  if (done) {
+    const score = answers.filter((a,i) => a === quizQuestions[i].answer).length;
+    const pct = Math.round((score / quizQuestions.length) * 100);
+    return (
+      <div style={{maxWidth:600,margin:"0 auto",padding:"2rem 1rem",textAlign:"center"}}>
+        <button onClick={onBack} style={{background:"none",border:"2px solid #888",color:"#888",borderRadius:8,padding:"6px 16px",cursor:"pointer",fontWeight:700,marginBottom:24,fontSize:"0.9rem"}}>← Retour</button>
+        <div style={{fontSize:"4rem",marginBottom:8}}>{pct>=80?"🏆":pct>=60?"👍":"📚"}</div>
+        <h2 style={{color:"#1a1a2e",marginBottom:6}}>Résultats</h2>
+        <div style={{fontSize:"3rem",fontWeight:900,color:pct>=80?"#00c9a7":pct>=60?"#f7a72b":"#e05aff"}}>{score} / {quizQuestions.length}</div>
+        <div style={{color:"#666",marginBottom:28}}>{pct>=80?"Excellent travail !":pct>=60?"Bon effort, continue !":"Relis les sections et réessaie !"}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:8,textAlign:"left",marginBottom:24}}>
+          {quizQuestions.map((qq,i) => (
+            <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",background:answers[i]===qq.answer?"#e8fff6":"#fff0f0",border:`1px solid ${answers[i]===qq.answer?"#88ddb0":"#ffaaaa"}`,borderRadius:8,padding:"0.7rem 1rem",fontSize:"0.88rem"}}>
+              <span>{answers[i]===qq.answer?"✅":"❌"}</span>
+              <div>
+                <div style={{fontWeight:600,color:"#333",marginBottom:2}}>{qq.q}</div>
+                {answers[i]!==qq.answer && <div style={{color:"#c00"}}>Bonne réponse : {qq.options[qq.answer]}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+        <button onClick={handleRestart} style={{background:"#1a1a2e",color:"#fff",border:"none",borderRadius:10,padding:"10px 28px",cursor:"pointer",fontWeight:700,fontSize:"1rem"}}>Recommencer</button>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{maxWidth:600,margin:"0 auto",padding:"1rem"}}>
+      <button onClick={onBack} style={{background:"none",border:"2px solid #888",color:"#888",borderRadius:8,padding:"6px 16px",cursor:"pointer",fontWeight:700,marginBottom:20,fontSize:"0.9rem"}}>← Retour</button>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <span style={{fontWeight:700,color:"#888",fontSize:"0.9rem"}}>Question {current+1} / {quizQuestions.length}</span>
+        <span style={{background:`${c.main}22`,color:c.dark,borderRadius:20,padding:"3px 12px",fontSize:"0.82rem",fontWeight:700}}>
+          Section {q.section==="aurores"?"6.3":q.section==="cometes"?"6.4":"6.5"}
+        </span>
+      </div>
+      <div style={{background:`linear-gradient(135deg, ${c.main}18, white)`,border:`2px solid ${c.main}`,borderRadius:14,padding:"1.4rem",marginBottom:16}}>
+        <p style={{fontSize:"1.05rem",fontWeight:600,color:"#1a1a2e",margin:0,lineHeight:1.6}}>{q.q}</p>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
+        {q.options.map((opt,i) => {
+          let bg="#fff", border="1px solid #ddd", col="#333", fw=400;
+          if (selected !== null) {
+            if (i===q.answer) { bg="#e8fff6"; border="2px solid #00c9a7"; col="#006644"; fw=700; }
+            else if (i===selected) { bg="#fff0f0"; border="2px solid #ff5555"; col="#aa0000"; }
+          }
+          return (
+            <button key={i} onClick={() => { if(selected===null) setSelected(i); }}
+              style={{background:bg,border,borderRadius:10,padding:"0.9rem 1.2rem",cursor:selected!==null?"default":"pointer",textAlign:"left",color:col,fontWeight:fw,fontSize:"0.95rem",transition:"all 0.15s"}}>
+              <span style={{fontWeight:700,marginRight:8}}>{String.fromCharCode(65+i)}.</span>{opt}
+              {selected!==null&&i===q.answer&&" ✓"}
+              {selected!==null&&i===selected&&i!==q.answer&&" ✗"}
+            </button>
+          );
+        })}
+      </div>
+      {selected!==null && (
+        <button onClick={handleNext} style={{width:"100%",background:c.main,color:"#fff",border:"none",borderRadius:10,padding:"12px",cursor:"pointer",fontWeight:700,fontSize:"1rem"}}>
+          {current+1>=quizQuestions.length?"Voir les résultats →":"Question suivante →"}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  const [view, setView] = useState("home");
+  const [activeSection, setActiveSection] = useState(null);
+
+  if (view==="section" && activeSection) {
+    return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0"}}><SectionView section={activeSection} onBack={()=>setView("home")}/></div>;
+  }
+  if (view==="quiz") {
+    return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0"}}><QuizView onBack={()=>setView("home")}/></div>;
+  }
+
+  return (
+    <div style={{minHeight:"100vh",background:"#f4f6fb"}}>
+      <div style={{background:"linear-gradient(135deg,#0d0d2b 0%,#1a1a4e 60%,#0d2060 100%)",padding:"3rem 1rem 2.5rem",textAlign:"center",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 30% 50%, #00c9a740 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, #e05aff30 0%, transparent 60%)"}}/>
+        <div style={{position:"relative"}}>
+          <div style={{fontSize:"0.85rem",fontWeight:700,color:"#aabbff",letterSpacing:3,textTransform:"uppercase",marginBottom:10}}>Chapitre 6 — La Terre et l'espace</div>
+          <h1 style={{color:"#fff",fontSize:"clamp(1.6rem,5vw,2.5rem)",margin:"0 0 10px",fontWeight:900,letterSpacing:-0.5}}>🌌 L'espace et ses phénomènes</h1>
+          <p style={{color:"#aac0ff",fontSize:"1rem",margin:0}}>Secondaire 1 &amp; 2 — Aurores polaires, comètes et météorites</p>
+        </div>
+      </div>
+
+      <div style={{maxWidth:700,margin:"0 auto",padding:"2rem 1rem"}}>
+        <h2 style={{color:"#1a1a2e",fontSize:"1.1rem",fontWeight:700,marginBottom:16}}>📖 Choisir une section</h2>
+        <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:32}}>
+          {sections.map(s => {
+            const c = SC[s.id];
+            return (
+              <button key={s.id} onClick={()=>{setActiveSection(s);setView("section");}}
+                style={{background:"#fff",border:`2px solid ${c.main}`,borderRadius:14,padding:"1.2rem 1.4rem",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:16,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+                <div style={{fontSize:"2.4rem"}}>{s.emoji}</div>
+                <div>
+                  <div style={{fontSize:"0.78rem",fontWeight:700,color:c.main,textTransform:"uppercase",letterSpacing:1}}>Section {s.number}</div>
+                  <div style={{fontWeight:700,color:"#1a1a2e",fontSize:"1.05rem"}}>{s.title}</div>
+                </div>
+                <div style={{marginLeft:"auto",color:c.main,fontSize:"1.2rem"}}>→</div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div onClick={()=>setView("quiz")} style={{background:"linear-gradient(135deg,#1a1a2e,#2a2a5e)",borderRadius:16,padding:"1.5rem",textAlign:"center",cursor:"pointer",boxShadow:"0 4px 16px rgba(0,0,0,0.15)"}}>
+          <div style={{fontSize:"2.5rem",marginBottom:8}}>🧠</div>
+          <div style={{fontWeight:900,color:"#fff",fontSize:"1.2rem",marginBottom:4}}>Quiz — Teste tes connaissances</div>
+          <div style={{color:"#aac0ff",fontSize:"0.9rem"}}>{quizQuestions.length} questions sur les 3 sections</div>
+          <div style={{marginTop:14,background:"#00c9a7",color:"#fff",borderRadius:8,padding:"8px 24px",display:"inline-block",fontWeight:700}}>Commencer le quiz →</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

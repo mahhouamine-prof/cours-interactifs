@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Le système endocrinien — Secondaire 3</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f6fb; }
+  button { font-family: inherit; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const { useState } = React;
+
+const sections = [
+  {
+    id: "intro",
+    emoji: "🔬",
+    number: "1",
+    title: "Qu'est-ce que le système endocrinien ?",
+    color: "#16a085",
+    content: [
+      { type: "intro", text: "Ton corps a besoin de coordonner des milliers de réactions en même temps : digérer, grandir, dormir, gérer le stress, se reproduire… Tout cela est orchestré par deux grands systèmes de communication : le système nerveux (rapide, électrique) et le système endocrinien (plus lent, mais durable). Dans ce cours, on s'intéresse au système endocrinien !" },
+      { type: "definition", title: "Système endocrinien", text: "Le système endocrinien est un ensemble de glandes et de cellules qui fabriquent et libèrent des hormones directement dans le sang. Ces hormones voyagent jusqu'aux organes cibles pour leur envoyer des messages et coordonner les grandes fonctions du corps." },
+      { type: "definition", title: "Hormone", text: "Une hormone est un messager chimique fabriqué par une glande endocrine et transporté par le sang jusqu'à des cellules cibles situées ailleurs dans le corps, où elle déclenche une réaction précise." },
+      { type: "definition", title: "Glande endocrine", text: "Une glande endocrine est un organe qui fabrique des hormones et les déverse directement dans le sang (sans canal). Le mot « endocrine » vient du grec : endo = à l'intérieur, krinein = sécréter." },
+      { type: "subtitle", text: "Glandes endocrines vs glandes exocrines" },
+      { type: "compare", items: [
+        { zone: "Glande ENDOCRINE", icon: "🩸", desc: "Sécrète ses hormones directement dans le sang. Exemple : thyroïde, surrénales, pancréas (partie endocrine). Pas de canal." },
+        { zone: "Glande EXOCRINE", icon: "🚿", desc: "Sécrète ses produits dans un canal vers une surface. Exemple : glandes salivaires, glandes sudoripares, pancréas (partie exocrine)." },
+      ]},
+      { type: "fact", text: "Le pancréas est à la fois endocrine (il sécrète l'insuline dans le sang) et exocrine (il sécrète des enzymes digestives dans l'intestin via un canal) !" },
+      { type: "subtitle", text: "Comment fonctionne une hormone ?" },
+      { type: "steps", steps: [
+        { icon: "1️⃣", title: "Fabrication", text: "Une glande endocrine reçoit un signal (nerveux ou chimique) et fabrique une hormone." },
+        { icon: "2️⃣", title: "Libération dans le sang", text: "L'hormone est libérée directement dans les capillaires sanguins (sans canal). Elle voyage dans tout le corps." },
+        { icon: "3️⃣", title: "Reconnaissance par la cellule cible", text: "Seules les cellules qui possèdent le bon récepteur (comme une serrure et une clé) vont réagir à l'hormone." },
+        { icon: "4️⃣", title: "Réponse de l'organe cible", text: "La cellule cible change son comportement : elle accélère, ralentit, produit une autre substance, etc." },
+      ]},
+      { type: "analogy", title: "🔑 Analogie : la clé et la serrure", text: "Imagine une hormone comme une clé et les récepteurs des cellules cibles comme des serrures. La même clé (hormone) circule partout dans le corps, mais elle ne peut ouvrir que les bonnes serrures. C'est pour ça qu'une hormone n'affecte pas toutes les cellules, seulement ses cellules cibles !" },
+    ],
+  },
+  {
+    id: "glandes",
+    emoji: "🧬",
+    number: "2",
+    title: "Les principales glandes et leurs hormones",
+    color: "#8e44ad",
+    content: [
+      { type: "intro", text: "Le corps humain possède plusieurs glandes endocrines, chacune spécialisée dans la production d'une ou plusieurs hormones. Voici les principales glandes à connaître pour le secondaire 3." },
+      { type: "gland_table", glandes: [
+        {
+          name: "Hypothalamus", emoji: "🧠", location: "Cerveau (région inférieure)",
+          hormones: ["Hormones de libération (ex. : GnRH, CRH)", "Hormones d'inhibition"],
+          roles: ["Chef d'orchestre : contrôle l'hypophyse", "Reçoit les signaux du système nerveux et les traduit en signaux hormonaux"],
+          color: "#e74c3c"
+        },
+        {
+          name: "Hypophyse", emoji: "👑", location: "Base du cerveau",
+          hormones: ["Hormone de croissance (GH)", "FSH et LH (hormones reproductrices)", "TSH (stimule la thyroïde)", "ACTH (stimule les surrénales)"],
+          roles: ["Appelée la « glande maîtresse »", "Contrôle la plupart des autres glandes endocrines", "Régule la croissance, la reproduction"],
+          color: "#e67e22"
+        },
+        {
+          name: "Thyroïde", emoji: "🦋", location: "Cou (devant la trachée)",
+          hormones: ["Thyroxine (T4)", "Triiodothyronine (T3)", "Calcitonine"],
+          roles: ["Régule le métabolisme (vitesse des réactions chimiques du corps)", "Contrôle la croissance et le développement", "Régule le taux de calcium sanguin (calcitonine)"],
+          color: "#27ae60"
+        },
+        {
+          name: "Glandes surrénales", emoji: "⚡", location: "Au-dessus des reins",
+          hormones: ["Adrénaline (épinéphrine)", "Cortisol", "Aldostérone"],
+          roles: ["Adrénaline : réponse au stress immédiat (combat ou fuite)", "Cortisol : gestion du stress à long terme, inflammation", "Aldostérone : régule la pression artérielle"],
+          color: "#c0392b"
+        },
+        {
+          name: "Pancréas (endocrine)", emoji: "🍬", location: "Derrière l'estomac",
+          hormones: ["Insuline", "Glucagon"],
+          roles: ["Insuline : fait baisser la glycémie (taux de sucre dans le sang)", "Glucagon : fait monter la glycémie", "Maintient l'équilibre du sucre sanguin (homéostasie)"],
+          color: "#2980b9"
+        },
+        {
+          name: "Gonades", emoji: "🌸", location: "Ovaires (F) / Testicules (M)",
+          hormones: ["Œstrogènes et progestérone (ovaires)", "Testostérone (testicules)"],
+          roles: ["Développement des caractères sexuels secondaires (puberté)", "Régulation du cycle menstruel", "Production des cellules reproductrices"],
+          color: "#d35400"
+        },
+      ]},
+      { type: "fact", text: "L'hypophyse est à peine de la taille d'un pois (environ 1 cm) mais elle contrôle une grande partie de ton système hormonal ! C'est pourquoi on l'appelle la « glande maîtresse »." },
+    ],
+  },
+  {
+    id: "comparaison",
+    emoji: "⚖️",
+    number: "3",
+    title: "Système nerveux vs système endocrinien",
+    color: "#2980b9",
+    content: [
+      { type: "intro", text: "Le système nerveux et le système endocrinien travaillent ensemble pour contrôler le corps. Mais ils fonctionnent de manière très différente. Connaître leurs différences est essentiel !" },
+      { type: "compare_table", rows: [
+        { aspect: "Type de messager", nerveux: "Influx nerveux (électrique)", endocrinien: "Hormones (chimique)" },
+        { aspect: "Vitesse", nerveux: "Très rapide (millisecondes)", endocrinien: "Plus lente (secondes à heures)" },
+        { aspect: "Durée d'action", nerveux: "Très courte (instantanée)", endocrinien: "Longue (heures, jours)" },
+        { aspect: "Voie de transport", nerveux: "Fibres nerveuses", endocrinien: "Sang" },
+        { aspect: "Cible", nerveux: "Muscle ou glande précise", endocrinien: "Organes multiples (tout le corps)" },
+        { aspect: "Exemples d'effets", nerveux: "Retirer sa main d'une flamme, cligner des yeux", endocrinien: "Croissance, puberté, glycémie" },
+      ]},
+      { type: "subtitle", text: "Les deux systèmes collaborent !" },
+      { type: "steps", steps: [
+        { icon: "👁️", title: "Exemple : le stress", text: "Tu vois un danger → ton système nerveux envoie un signal électrique rapide à tes glandes surrénales → elles libèrent de l'adrénaline dans le sang → ton cœur s'accélère, tes muscles se préparent. Le système nerveux a déclenché une réponse hormonale !" },
+        { icon: "🌙", title: "Exemple : le sommeil", text: "Quand il fait nuit, ton système nerveux détecte l'obscurité via les yeux → signal à la glande pinéale → libération de mélatonine → tu commences à avoir sommeil. Les deux systèmes coopèrent !" },
+      ]},
+      { type: "encadre", title: "L'axe hypothalamus-hypophyse : le pont entre les deux systèmes", text: "L'hypothalamus est la structure qui relie le système nerveux et le système endocrinien. Il reçoit des informations du cerveau (nerveuses) et les traduit en signaux hormonaux vers l'hypophyse. L'hypophyse envoie ensuite ses propres hormones vers les autres glandes.", items: [] },
+    ],
+  },
+  {
+    id: "exemples",
+    emoji: "🌱",
+    number: "4",
+    title: "Exemples concrets",
+    color: "#e67e22",
+    content: [
+      { type: "intro", text: "Les hormones influencent ta vie quotidienne plus que tu ne le crois ! Voici trois exemples importants pour le secondaire 3." },
+      { type: "subtitle", text: "🌸 La puberté" },
+      { type: "steps", steps: [
+        { icon: "🧠", title: "Déclenchement", text: "Vers 8-13 ans, l'hypothalamus commence à produire plus de GnRH. Cela stimule l'hypophyse à sécréter davantage de FSH et LH." },
+        { icon: "🌸", title: "Chez la fille", text: "FSH et LH stimulent les ovaires → augmentation des œstrogènes → développement des seins, des hanches, début des menstruations, poils pubiens et axillaires." },
+        { icon: "🌱", title: "Chez le garçon", text: "FSH et LH stimulent les testicules → augmentation de la testostérone → développement des muscles, du pénis, de la voix (mue), poils pubiens et faciaux, production de spermatozoïdes." },
+        { icon: "📈", title: "Hormone de croissance", text: "L'hypophyse augmente aussi la sécrétion d'hormone de croissance (GH), ce qui provoque une poussée de croissance rapide du corps entier." },
+      ]},
+      { type: "fact", text: "La testostérone est présente chez les deux sexes, mais en quantité très différente. Les filles en produisent aussi (par les ovaires et les surrénales), mais en beaucoup plus petite quantité que les garçons." },
+      { type: "subtitle", text: "⚡ Le stress et l'adrénaline" },
+      { type: "encadre", title: "La réponse « combat ou fuite »", text: "Face à une situation dangereuse ou stressante, le cerveau envoie un signal aux glandes surrénales. En quelques secondes, elles libèrent de l'adrénaline dans le sang. Voilà ce que ça fait :", items: [
+        "❤️ Le cœur bat plus vite → plus de sang aux muscles",
+        "🫁 La respiration s'accélère → plus d'oxygène",
+        "👁️ Les pupilles se dilatent → meilleure vision",
+        "💪 Les muscles se contractent → prêts à agir",
+        "🍬 Le foie libère du glucose → plus d'énergie",
+      ]},
+      { type: "subtitle", text: "🍬 La glycémie et l'insuline" },
+      { type: "steps", steps: [
+        { icon: "⬆️", title: "Après un repas", text: "Tu manges des glucides → la glycémie (taux de sucre dans le sang) monte → le pancréas détecte cela et sécrète de l'INSULINE → l'insuline permet aux cellules d'absorber le glucose → la glycémie redescend à la normale." },
+        { icon: "⬇️", title: "Entre les repas", text: "La glycémie baisse → le pancréas sécrète du GLUCAGON → le foie libère du glucose dans le sang → la glycémie remonte à la normale." },
+        { icon: "⚖️", title: "L'homéostasie", text: "Ce système de régulation qui maintient la glycémie stable s'appelle l'homéostasie. C'est un exemple parfait de rétroaction négative : quand quelque chose monte trop, une hormone le fait redescendre, et vice versa." },
+      ]},
+      { type: "definition", title: "Diabète", text: "Le diabète est une maladie où le système de régulation de la glycémie est défaillant. Dans le diabète de type 1, le pancréas ne produit plus d'insuline. Dans le diabète de type 2, les cellules ne répondent plus correctement à l'insuline." },
+    ],
+  },
+];
+
+const quizQuestions = [
+  { q: "Qu'est-ce qu'une hormone ?", options: ["Un type de cellule sanguine", "Un messager chimique fabriqué par une glande et transporté par le sang", "Un signal électrique envoyé par les nerfs", "Une enzyme digestive"], answer: 1 },
+  { q: "Quelle est la différence principale entre une glande endocrine et une glande exocrine ?", options: ["La glande endocrine est plus grosse", "La glande endocrine sécrète dans le sang (sans canal), la glande exocrine sécrète dans un canal", "La glande exocrine produit des hormones, la glande endocrine des enzymes", "Elles fonctionnent de façon identique"], answer: 1 },
+  { q: "Pourquoi une hormone n'affecte-t-elle pas toutes les cellules du corps ?", options: ["Parce qu'elle ne voyage pas dans tout le corps", "Parce qu'elle se détruit rapidement", "Parce que seules les cellules qui possèdent le bon récepteur vont réagir", "Parce qu'elle est trop grosse pour entrer dans certaines cellules"], answer: 2 },
+  { q: "Quelle glande est appelée la « glande maîtresse » ?", options: ["La thyroïde", "Le pancréas", "Les glandes surrénales", "L'hypophyse"], answer: 3 },
+  { q: "Quelle hormone est responsable de la baisse de la glycémie après un repas ?", options: ["Le glucagon", "L'adrénaline", "L'insuline", "Le cortisol"], answer: 2 },
+  { q: "Quelle est la principale différence de vitesse entre le système nerveux et le système endocrinien ?", options: ["Le système endocrinien est plus rapide que le système nerveux", "Le système nerveux agit en millisecondes, le système endocrinien en secondes ou heures", "Les deux systèmes ont la même vitesse", "Le système nerveux est plus lent car il utilise le sang"], answer: 1 },
+  { q: "Lors d'une situation de stress, quelle hormone est rapidement libérée par les glandes surrénales ?", options: ["L'insuline", "La thyroxine", "L'adrénaline", "Les œstrogènes"], answer: 2 },
+  { q: "Quelle glande relie le système nerveux et le système endocrinien ?", options: ["L'hypophyse", "L'hypothalamus", "La thyroïde", "Le pancréas"], answer: 1 },
+  { q: "Quelle hormone déclenche la puberté chez le garçon en développant les caractères sexuels secondaires ?", options: ["Les œstrogènes", "L'insuline", "La testostérone", "Le cortisol"], answer: 2 },
+  { q: "Qu'est-ce que l'homéostasie ?", options: ["La croissance rapide pendant la puberté", "La capacité du corps à maintenir un équilibre stable de ses paramètres (ex. glycémie)", "La libération d'adrénaline en cas de stress", "La production de cellules reproductrices"], answer: 1 },
+];
+
+const SC = {
+  intro:       { main: "#16a085", dark: "#0e6655", light: "#e8f8f5" },
+  glandes:     { main: "#8e44ad", dark: "#6c3483", light: "#f5eef8" },
+  comparaison: { main: "#2980b9", dark: "#1a5276", light: "#eaf4fb" },
+  exemples:    { main: "#e67e22", dark: "#a04000", light: "#fef5e7" },
+};
+
+function Block({ block, color }) {
+  switch (block.type) {
+    case "intro":
+      return <p style={{fontSize:"1.02rem",lineHeight:1.85,color:"#444",background:"#f8f9fb",borderLeft:`4px solid ${color}`,padding:"1rem 1.4rem",borderRadius:"0 8px 8px 0"}}>{block.text}</p>;
+
+    case "definition":
+      return (
+        <div style={{background:`${color}12`,border:`2px solid ${color}`,borderRadius:12,padding:"1rem 1.4rem"}}>
+          <div style={{fontWeight:700,color:color,marginBottom:6,fontSize:"0.85rem",textTransform:"uppercase",letterSpacing:1}}>📌 {block.title}</div>
+          <p style={{margin:0,lineHeight:1.8,color:"#333",fontSize:"0.96rem"}}>{block.text}</p>
+        </div>
+      );
+
+    case "subtitle":
+      return <h3 style={{color:"#222",borderBottom:`2px solid ${color}`,paddingBottom:7,marginTop:28,fontSize:"1.05rem"}}>{block.text}</h3>;
+
+    case "steps":
+      return (
+        <div style={{display:"flex",flexDirection:"column",gap:10}}>
+          {block.steps.map((s,i) => (
+            <div key={i} style={{display:"flex",gap:14,alignItems:"flex-start",background:"#fff",border:"1px solid #e8eaed",borderRadius:10,padding:"0.95rem",boxShadow:"0 1px 4px rgba(0,0,0,0.05)"}}>
+              <div style={{fontSize:"1.7rem",minWidth:40,textAlign:"center"}}>{s.icon}</div>
+              <div>
+                <div style={{fontWeight:700,marginBottom:3,color:"#1a1a2e",fontSize:"0.96rem"}}>{s.title}</div>
+                <div style={{color:"#555",fontSize:"0.92rem",lineHeight:1.72}}>{s.text}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+
+    case "compare":
+      return (
+        <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+          {block.items.map((c,i) => (
+            <div key={i} style={{flex:"1 1 220px",background:"#fff",border:"1px solid #ddd",borderRadius:12,padding:"1rem",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+              <div style={{fontSize:"1.5rem",marginBottom:6}}>{c.icon}</div>
+              <div style={{fontWeight:700,color:color,marginBottom:6,fontSize:"0.9rem",textTransform:"uppercase"}}>{c.zone}</div>
+              <div style={{color:"#555",fontSize:"0.91rem",lineHeight:1.7}}>{c.desc}</div>
+            </div>
+          ))}
+        </div>
+      );
+
+    case "encadre":
+      return (
+        <div style={{background:`${color}10`,border:`1px solid ${color}55`,borderRadius:12,padding:"1rem 1.3rem"}}>
+          <div style={{fontWeight:700,color:color,marginBottom:8,fontSize:"0.95rem"}}>💡 {block.title}</div>
+          <p style={{color:"#444",lineHeight:1.75,fontSize:"0.94rem",marginBottom:block.items&&block.items.length>0?10:0}}>{block.text}</p>
+          {block.items && block.items.length > 0 && (
+            <ul style={{margin:0,paddingLeft:18}}>
+              {block.items.map((it,i) => <li key={i} style={{color:"#444",marginBottom:5,fontSize:"0.92rem"}}>{it}</li>)}
+            </ul>
+          )}
+        </div>
+      );
+
+    case "fact":
+      return (
+        <div style={{background:"#fffbea",border:"1px solid #f0d040",borderRadius:10,padding:"0.9rem 1.3rem",display:"flex",gap:12,alignItems:"flex-start"}}>
+          <span style={{fontSize:"1.4rem"}}>🔬</span>
+          <p style={{margin:0,color:"#555",lineHeight:1.78,fontSize:"0.92rem"}}>{block.text}</p>
+        </div>
+      );
+
+    case "analogy":
+      return (
+        <div style={{background:"#f0fff4",border:"2px solid #27ae60",borderRadius:12,padding:"1rem 1.3rem"}}>
+          <div style={{fontWeight:700,color:"#1e8449",marginBottom:6,fontSize:"0.95rem"}}>{block.title}</div>
+          <p style={{color:"#444",lineHeight:1.78,fontSize:"0.93rem",margin:0}}>{block.text}</p>
+        </div>
+      );
+
+    case "gland_table":
+      return (
+        <div style={{display:"flex",flexDirection:"column",gap:12}}>
+          {block.glandes.map((g,i) => (
+            <div key={i} style={{background:"#fff",border:`2px solid ${g.color}30`,borderLeft:`4px solid ${g.color}`,borderRadius:10,padding:"1rem",boxShadow:"0 1px 5px rgba(0,0,0,0.06)"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
+                <span style={{fontSize:"1.6rem"}}>{g.emoji}</span>
+                <div>
+                  <div style={{fontWeight:800,color:g.color,fontSize:"1rem"}}>{g.name}</div>
+                  <div style={{fontSize:"0.8rem",color:"#888"}}>📍 {g.location}</div>
+                </div>
+              </div>
+              <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+                <div style={{flex:"1 1 180px"}}>
+                  <div style={{fontWeight:700,fontSize:"0.8rem",color:"#555",textTransform:"uppercase",marginBottom:4}}>Hormones produites</div>
+                  <ul style={{paddingLeft:16,margin:0}}>
+                    {g.hormones.map((h,j) => <li key={j} style={{fontSize:"0.88rem",color:"#333",marginBottom:2}}>{h}</li>)}
+                  </ul>
+                </div>
+                <div style={{flex:"1 1 180px"}}>
+                  <div style={{fontWeight:700,fontSize:"0.8rem",color:"#555",textTransform:"uppercase",marginBottom:4}}>Rôle principal</div>
+                  <ul style={{paddingLeft:16,margin:0}}>
+                    {g.roles.map((r,j) => <li key={j} style={{fontSize:"0.88rem",color:"#333",marginBottom:2}}>{r}</li>)}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+
+    case "compare_table":
+      return (
+        <div style={{overflowX:"auto"}}>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:"0.9rem"}}>
+            <thead>
+              <tr>
+                <th style={{background:"#f0f0f0",padding:"10px 12px",textAlign:"left",borderRadius:"8px 0 0 0",border:"1px solid #ddd",color:"#333"}}>Aspect</th>
+                <th style={{background:"#eaf4fb",padding:"10px 12px",textAlign:"left",border:"1px solid #ddd",color:"#2980b9"}}>⚡ Système nerveux</th>
+                <th style={{background:"#f5eef8",padding:"10px 12px",textAlign:"left",borderRadius:"0 8px 0 0",border:"1px solid #ddd",color:"#8e44ad"}}>🧬 Système endocrinien</th>
+              </tr>
+            </thead>
+            <tbody>
+              {block.rows.map((r,i) => (
+                <tr key={i} style={{background:i%2===0?"#fff":"#fafafa"}}>
+                  <td style={{padding:"9px 12px",border:"1px solid #ddd",fontWeight:700,color:"#444",fontSize:"0.87rem"}}>{r.aspect}</td>
+                  <td style={{padding:"9px 12px",border:"1px solid #ddd",color:"#1a5276",fontSize:"0.87rem"}}>{r.nerveux}</td>
+                  <td style={{padding:"9px 12px",border:"1px solid #ddd",color:"#6c3483",fontSize:"0.87rem"}}>{r.endocrinien}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+
+    default: return null;
+  }
+}
+
+function SectionView({ section, onBack }) {
+  const c = SC[section.id];
+  return (
+    <div style={{maxWidth:720,margin:"0 auto",padding:"1rem"}}>
+      <button onClick={onBack} style={{background:"none",border:`2px solid ${c.main}`,color:c.main,borderRadius:8,padding:"6px 18px",cursor:"pointer",fontWeight:700,marginBottom:22,fontSize:"0.9rem"}}>← Retour</button>
+      <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:26}}>
+        <div style={{fontSize:"3rem"}}>{section.emoji}</div>
+        <div>
+          <div style={{fontSize:"0.78rem",fontWeight:700,color:c.main,textTransform:"uppercase",letterSpacing:1.5}}>Section {section.number}</div>
+          <h2 style={{margin:0,color:"#1a1a2e",fontSize:"1.5rem",lineHeight:1.3}}>{section.title}</h2>
+        </div>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:18}}>
+        {section.content.map((block,i) => <Block key={i} block={block} color={c.main}/>)}
+      </div>
+    </div>
+  );
+}
+
+function QuizView({ onBack }) {
+  const [current, setCurrent] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [done, setDone] = useState(false);
+
+  const q = quizQuestions[current];
+
+  const handleNext = () => {
+    const na = [...answers, selected];
+    if (current + 1 >= quizQuestions.length) { setAnswers(na); setDone(true); }
+    else { setAnswers(na); setSelected(null); setCurrent(current + 1); }
+  };
+  const handleRestart = () => { setCurrent(0); setSelected(null); setAnswers([]); setDone(false); };
+
+  if (done) {
+    const score = answers.filter((a,i) => a === quizQuestions[i].answer).length;
+    const pct = Math.round((score / quizQuestions.length) * 100);
+    return (
+      <div style={{maxWidth:640,margin:"0 auto",padding:"2rem 1rem",textAlign:"center"}}>
+        <button onClick={onBack} style={{background:"none",border:"2px solid #888",color:"#888",borderRadius:8,padding:"6px 16px",cursor:"pointer",fontWeight:700,marginBottom:24,fontSize:"0.9rem"}}>← Retour</button>
+        <div style={{fontSize:"4rem",marginBottom:8}}>{pct>=80?"🏆":pct>=60?"👍":"📚"}</div>
+        <h2 style={{color:"#1a1a2e",marginBottom:6}}>Résultats</h2>
+        <div style={{fontSize:"3rem",fontWeight:900,color:pct>=80?"#27ae60":pct>=60?"#f39c12":"#c0392b",marginBottom:8}}>{score} / {quizQuestions.length}</div>
+        <div style={{color:"#666",marginBottom:28}}>{pct>=80?"Excellent ! Tu maîtrises le système endocrinien 🎉":pct>=60?"Bon effort ! Relis les sections moins bien réussies.":"Relis le cours et réessaie !"}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:8,textAlign:"left",marginBottom:28}}>
+          {quizQuestions.map((qq,i) => (
+            <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",background:answers[i]===qq.answer?"#eafaf1":"#fdf0ef",border:`1px solid ${answers[i]===qq.answer?"#82e0aa":"#f1948a"}`,borderRadius:8,padding:"0.7rem 1rem",fontSize:"0.87rem"}}>
+              <span>{answers[i]===qq.answer?"✅":"❌"}</span>
+              <div>
+                <div style={{fontWeight:600,color:"#333",marginBottom:2}}>{qq.q}</div>
+                {answers[i]!==qq.answer && <div style={{color:"#c0392b",fontSize:"0.84rem"}}>✓ Bonne réponse : {qq.options[qq.answer]}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+        <button onClick={handleRestart} style={{background:"#1a1a2e",color:"#fff",border:"none",borderRadius:10,padding:"12px 32px",cursor:"pointer",fontWeight:700,fontSize:"1rem"}}>🔄 Recommencer</button>
+      </div>
+    );
+  }
+
+  const progressPct = (current / quizQuestions.length) * 100;
+  return (
+    <div style={{maxWidth:640,margin:"0 auto",padding:"1rem"}}>
+      <button onClick={onBack} style={{background:"none",border:"2px solid #888",color:"#888",borderRadius:8,padding:"6px 16px",cursor:"pointer",fontWeight:700,marginBottom:20,fontSize:"0.9rem"}}>← Retour</button>
+      <div style={{background:"#e8eaed",borderRadius:20,height:8,marginBottom:20,overflow:"hidden"}}>
+        <div style={{background:"#16a085",height:"100%",width:`${progressPct}%`,transition:"width 0.4s ease",borderRadius:20}}/>
+      </div>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:16}}>
+        <span style={{fontWeight:700,color:"#888",fontSize:"0.9rem"}}>Question {current+1} / {quizQuestions.length}</span>
+      </div>
+      <div style={{background:"linear-gradient(135deg,#16a08515,white)",border:"2px solid #16a085",borderRadius:14,padding:"1.4rem",marginBottom:18}}>
+        <p style={{fontSize:"1.04rem",fontWeight:600,color:"#1a1a2e",margin:0,lineHeight:1.65}}>{q.q}</p>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
+        {q.options.map((opt,i) => {
+          let bg="#fff", border="1px solid #ddd", col="#333", fw=400;
+          if (selected !== null) {
+            if (i===q.answer) { bg="#eafaf1"; border="2px solid #27ae60"; col="#1e8449"; fw=700; }
+            else if (i===selected) { bg="#fdf0ef"; border="2px solid #e74c3c"; col="#c0392b"; }
+          }
+          return (
+            <button key={i} onClick={() => { if(selected===null) setSelected(i); }}
+              style={{background:bg,border,borderRadius:10,padding:"0.95rem 1.2rem",cursor:selected!==null?"default":"pointer",textAlign:"left",color:col,fontWeight:fw,fontSize:"0.94rem",lineHeight:1.5}}>
+              <span style={{fontWeight:800,marginRight:10,opacity:0.5}}>{String.fromCharCode(65+i)}.</span>{opt}
+              {selected!==null&&i===q.answer&&<span style={{marginLeft:8}}>✓</span>}
+              {selected!==null&&i===selected&&i!==q.answer&&<span style={{marginLeft:8}}>✗</span>}
+            </button>
+          );
+        })}
+      </div>
+      {selected!==null && (
+        <button onClick={handleNext} style={{width:"100%",background:"#16a085",color:"#fff",border:"none",borderRadius:10,padding:"13px",cursor:"pointer",fontWeight:700,fontSize:"1rem"}}>
+          {current+1>=quizQuestions.length?"Voir mes résultats →":"Question suivante →"}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  const [view, setView] = useState("home");
+  const [activeSection, setActiveSection] = useState(null);
+
+  if (view==="section" && activeSection) {
+    const c = SC[activeSection.id];
+    return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0 3rem"}}><SectionView section={activeSection} onBack={()=>setView("home")}/></div>;
+  }
+  if (view==="quiz") {
+    return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0 3rem"}}><QuizView onBack={()=>setView("home")}/></div>;
+  }
+
+  return (
+    <div style={{minHeight:"100vh",background:"#f4f6fb"}}>
+      {/* Header */}
+      <div style={{background:"linear-gradient(135deg,#0a2a1a 0%,#16a085 45%,#0a1a2a 100%)",padding:"3rem 1rem 2.5rem",textAlign:"center",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 20% 50%,#27ae6030 0%,transparent 55%), radial-gradient(ellipse at 80% 30%,#8e44ad25 0%,transparent 55%),"}}/>
+        <div style={{position:"relative"}}>
+          <div style={{fontSize:"0.8rem",fontWeight:700,color:"#a8e6cf",letterSpacing:3,textTransform:"uppercase",marginBottom:10}}>Sciences et technologies · Secondaire 3</div>
+          <h1 style={{color:"#fff",fontSize:"clamp(1.5rem,5vw,2.3rem)",margin:"0 0 10px",fontWeight:900}}>🧬 Le système endocrinien</h1>
+          <p style={{color:"#d5f5e3",fontSize:"1rem",margin:"0 0 18px"}}>Introduction — Les glandes, les hormones et leurs rôles</p>
+          <div style={{display:"flex",justifyContent:"center",gap:10,flexWrap:"wrap"}}>
+            {["🔬 Définitions","🧬 Glandes & hormones","⚖️ Nerveux vs endocrinien","🌱 Puberté · Stress · Glycémie"].map((t,i) => (
+              <span key={i} style={{background:"rgba(255,255,255,0.15)",color:"#fff",borderRadius:20,padding:"4px 14px",fontSize:"0.8rem",fontWeight:600}}>{t}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{maxWidth:720,margin:"0 auto",padding:"2rem 1rem"}}>
+
+        {/* Intro box */}
+        <div style={{background:"#fff",border:"2px solid #16a085",borderRadius:14,padding:"1.2rem 1.4rem",marginBottom:28,display:"flex",gap:14,alignItems:"flex-start"}}>
+          <span style={{fontSize:"2rem"}}>📋</span>
+          <div>
+            <div style={{fontWeight:700,color:"#0e6655",marginBottom:5,fontSize:"1rem"}}>Comment utiliser ce cours</div>
+            <p style={{color:"#555",fontSize:"0.92rem",lineHeight:1.78,margin:0}}>
+              Lis chaque section avant de compléter ton document papier. Les définitions importantes sont encadrées en couleur. Termine avec le quiz pour vérifier ta compréhension !
+            </p>
+          </div>
+        </div>
+
+        <h2 style={{color:"#1a1a2e",fontSize:"1.1rem",fontWeight:700,marginBottom:16}}>📖 Sections du cours</h2>
+
+        <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:32}}>
+          {sections.map(s => {
+            const c = SC[s.id];
+            return (
+              <button key={s.id} onClick={()=>{setActiveSection(s);setView("section");}}
+                style={{background:"#fff",border:`2px solid ${c.main}`,borderRadius:14,padding:"1.2rem 1.4rem",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:16,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",transition:"all 0.15s"}}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow=`0 6px 20px ${c.main}35`;}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.06)";}}>
+                <div style={{fontSize:"2.2rem"}}>{s.emoji}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:"0.76rem",fontWeight:700,color:c.main,textTransform:"uppercase",letterSpacing:1,marginBottom:2}}>Section {s.number}</div>
+                  <div style={{fontWeight:700,color:"#1a1a2e",fontSize:"1rem"}}>{s.title}</div>
+                </div>
+                <div style={{color:c.main,fontSize:"1.3rem",fontWeight:900}}>→</div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Quiz card */}
+        <div onClick={()=>setView("quiz")} style={{background:"linear-gradient(135deg,#0a2a1a,#0a1a2a)",borderRadius:16,padding:"1.8rem",textAlign:"center",cursor:"pointer",boxShadow:"0 4px 20px rgba(0,0,0,0.2)"}}>
+          <div style={{fontSize:"2.5rem",marginBottom:8}}>🧠</div>
+          <div style={{fontWeight:900,color:"#fff",fontSize:"1.2rem",marginBottom:5}}>Quiz — Teste tes connaissances</div>
+          <div style={{color:"#a8e6cf",fontSize:"0.9rem",marginBottom:18}}>{quizQuestions.length} questions · Toutes les sections</div>
+          <div style={{display:"flex",justifyContent:"center",gap:8,flexWrap:"wrap",marginBottom:18}}>
+            <span style={{background:"#16a085",color:"#fff",borderRadius:20,padding:"3px 14px",fontSize:"0.82rem",fontWeight:700}}>🔬 Définitions</span>
+            <span style={{background:"#8e44ad",color:"#fff",borderRadius:20,padding:"3px 14px",fontSize:"0.82rem",fontWeight:700}}>🧬 Glandes</span>
+            <span style={{background:"#2980b9",color:"#fff",borderRadius:20,padding:"3px 14px",fontSize:"0.82rem",fontWeight:700}}>⚖️ Comparaison</span>
+            <span style={{background:"#e67e22",color:"#fff",borderRadius:20,padding:"3px 14px",fontSize:"0.82rem",fontWeight:700}}>🌱 Exemples</span>
+          </div>
+          <div style={{background:"#16a085",color:"#fff",borderRadius:8,padding:"10px 28px",display:"inline-block",fontWeight:700,fontSize:"1rem"}}>Commencer le quiz →</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
