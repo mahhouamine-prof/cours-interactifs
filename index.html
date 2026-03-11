@@ -563,7 +563,7 @@ function renderCards() {
     const done = isDone(c.id);
     const pct = done ? 100 : 0;
     return `
-    <div class="card ${done?"done":""}" style="animation-delay:${i*0.06}s" onclick="openModal('${c.id}')">
+    <div class="card ${done?"done":""}" style="animation-delay:${i*0.06}s" onclick="window.open('${c.file}','_blank')">
       <div class="done-overlay"><div class="done-badge">✓ Complété</div></div>
       <div class="card-top">
         <div class="card-emoji">${c.emoji}</div>
@@ -603,8 +603,8 @@ function openModal(id) {
       ${c.sections.map(s=>`<div class="modal-section-item"><span>${s}</span></div>`).join("")}
     </div>
     <div class="modal-actions">
-      <a href="${c.file}" download>
-        <button class="btn-primary" onclick="closeModalDirect()">⬇ Télécharger le cours</button>
+      <a href="${c.file}" target="_blank">
+        <button class="btn-primary" onclick="closeModalDirect()">▶ Ouvrir le cours</button>
       </a>
       <button class="mark-done-btn" onclick="markDone('${c.id}')" ${done?"disabled style='opacity:0.4'":""}>
         ${done?"✓ Complété":"✓ Marquer complété"}
