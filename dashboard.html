@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mon tableau de bord — CoursInteractifs</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0e0e12;
+    --surface: #16161c;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0f0f5;
+    --muted: #888;
+    --accent: #ff5c35;
+    --green: #3ecf8e;
+    --yellow: #f0c040;
+    --red: #ff5555;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+  /* Background glow */
+  body::before {
+    content: ''; position: fixed; top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,92,53,0.08) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 2.5rem; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: rgba(14,14,18,0.9);
+    backdrop-filter: blur(12px); z-index: 100;
+  }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); }
+  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .back-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 6px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; text-decoration: none; transition: all 0.2s; }
+  .back-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; position: relative; z-index: 1; }
+
+  /* Login screen */
+  #login-screen { text-align: center; padding: 4rem 0; }
+  #login-screen h1 { font-family: 'Syne', sans-serif; font-weight: 900; font-size: 2.5rem; margin-bottom: 0.5rem; }
+  #login-screen h1 span { color: var(--accent); }
+  #login-screen p { color: var(--muted); margin-bottom: 2.5rem; font-size: 1rem; }
+  .login-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 2.5rem; max-width: 420px; margin: 0 auto;
+  }
+  .login-card label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; font-weight: 500; text-align: left; }
+  .login-card input {
+    width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.85rem 1rem; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; margin-bottom: 1.2rem;
+    transition: border-color 0.2s; outline: none;
+  }
+  .login-card input:focus { border-color: var(--accent); }
+  .btn-primary {
+    width: 100%; background: var(--accent); color: #fff; border: none;
+    border-radius: 10px; padding: 0.9rem; font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1rem; cursor: pointer; transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+
+  /* Dashboard */
+  #dashboard { display: none; }
+  .dash-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+  .dash-hello h2 { font-family: 'Syne', sans-serif; font-weight: 900; font-size: 2rem; }
+  .dash-hello h2 span { color: var(--accent); }
+  .dash-hello p { color: var(--muted); margin-top: 4px; }
+  .logout-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; transition: all 0.2s; }
+  .logout-btn:hover { color: var(--text); }
+
+  /* Stats row */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 1.4rem; text-align: center;
+  }
+  .stat-card .num { font-family: 'Syne', sans-serif; font-weight: 900; font-size: 2.2rem; color: var(--accent); }
+  .stat-card .lbl { color: var(--muted); font-size: 0.82rem; margin-top: 4px; }
+
+  /* Course results grid */
+  .section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-size: 0.78rem; }
+  .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+
+  .course-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 1.4rem; transition: border-color 0.2s; position: relative; overflow: hidden;
+  }
+  .course-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--score-color, var(--border));
+  }
+  .course-card:hover { border-color: rgba(255,255,255,0.15); }
+  .course-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .course-emoji { font-size: 1.8rem; }
+  .score-badge {
+    font-family: 'Syne', sans-serif; font-weight: 900; font-size: 1.4rem;
+    color: var(--score-color, var(--muted));
+  }
+  .course-name { font-weight: 600; font-size: 0.92rem; margin-bottom: 4px; }
+  .course-meta { font-size: 0.78rem; color: var(--muted); }
+  .score-bar { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; margin-top: 1rem; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 3px; background: var(--score-color, var(--muted)); transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+
+  /* Not done card */
+  .course-card.not-done { opacity: 0.5; }
+  .course-card.not-done .score-badge { color: var(--muted); font-size: 1rem; font-family: 'DM Sans', sans-serif; font-weight: 400; }
+
+  /* Retake button */
+  .retake-btn {
+    display: inline-block; margin-top: 1rem; background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border); color: var(--muted); padding: 5px 12px;
+    border-radius: 6px; font-size: 0.78rem; cursor: pointer; text-decoration: none;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+  }
+  .retake-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* Empty state */
+  .empty-state { text-align: center; padding: 3rem; color: var(--muted); }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+
+  @media (max-width: 600px) {
+    header { padding: 1rem 1.2rem; }
+    .container { padding: 2rem 1.2rem; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+    .stat-card .num { font-size: 1.6rem; }
+    .dash-hello h2 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-dot"></div>
+    CoursInteractifs
+  </a>
+  <a href="index.html" class="back-btn">← Retour aux cours</a>
+</header>
+
+<div class="container">
+
+  <!-- Login -->
+  <div id="login-screen">
+    <h1>Mon <span>tableau<br/>de bord</span></h1>
+    <p>Entre ton prénom et nom pour voir tes résultats</p>
+    <div class="login-card">
+      <label>Ton prénom et nom</label>
+      <input type="text" id="nom-input" placeholder="ex. Marie Tremblay" autocomplete="name"/>
+      <button class="btn-primary" onclick="login()">Voir mes résultats →</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard">
+    <div class="dash-header">
+      <div class="dash-hello">
+        <h2>Bonjour, <span id="prenom-affiche"></span> 👋</h2>
+        <p>Voici l'état de tes résultats</p>
+      </div>
+      <button class="logout-btn" onclick="logout()">Changer de nom</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="num" id="stat-completes">0</div>
+        <div class="lbl">Cours complétés</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-moyenne">—</div>
+        <div class="lbl">Moyenne générale</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-meilleur">—</div>
+        <div class="lbl">Meilleur score</div>
+      </div>
+    </div>
+
+    <div class="section-title">Résultats par cours</div>
+    <div class="courses-grid" id="courses-grid"></div>
+  </div>
+
+</div>
+
+<script>
+const COURSES = [
+  { id: "espace",       emoji: "🌌", name: "L'espace et ses phénomènes",      file: "cours_espace.html" },
+  { id: "roches",       emoji: "🪨", name: "Les types de roches",              file: "cours_roches.html" },
+  { id: "electromag",   emoji: "⚡", name: "Les phénomènes électromagnétiques", file: "cours_electromagnetisme_gifs.html" },
+  { id: "endocrinien",  emoji: "🧬", name: "Le système endocrinien",           file: "cours_systeme_endocrinien.html" },
+  { id: "reactions",    emoji: "🔥", name: "Réactions endothermiques/exothermiques", file: "cours_reactions_energetiques_sec5.html" },
+];
+
+function scoreColor(pct) {
+  if (pct >= 80) return 'var(--green)';
+  if (pct >= 60) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
+function getKey(name) {
+  return 'scores_' + name.toLowerCase().replace(/\s+/g,'_');
+}
+
+function login() {
+  const nom = document.getElementById('nom-input').value.trim();
+  if (!nom) { alert('Entre ton prénom et nom pour continuer.'); return; }
+  localStorage.setItem('eleve_nom', nom);
+
+  // Add to global list
+  let all = [];
+  try { all = JSON.parse(localStorage.getItem('tous_eleves') || '[]'); } catch {}
+  if (!all.includes(nom)) { all.push(nom); localStorage.setItem('tous_eleves', JSON.stringify(all)); }
+
+  showDashboard(nom);
+}
+
+function logout() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('nom-input').value = '';
+}
+
+function showDashboard(nom) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  const prenom = nom.split(' ')[0];
+  document.getElementById('prenom-affiche').textContent = prenom;
+
+  const key = getKey(nom);
+  let scores = {};
+  try { scores = JSON.parse(localStorage.getItem(key) || '{}'); } catch {}
+
+  // Stats
+  const done = COURSES.filter(c => scores[c.id]);
+  const pcts = done.map(c => scores[c.id].pct);
+  const moyenne = pcts.length ? Math.round(pcts.reduce((a,b)=>a+b,0)/pcts.length) : null;
+  const meilleur = pcts.length ? Math.max(...pcts) : null;
+
+  document.getElementById('stat-completes').textContent = done.length + ' / ' + COURSES.length;
+  document.getElementById('stat-moyenne').textContent = moyenne !== null ? moyenne + '%' : '—';
+  document.getElementById('stat-meilleur').textContent = meilleur !== null ? meilleur + '%' : '—';
+
+  // Cards
+  const grid = document.getElementById('courses-grid');
+  grid.innerHTML = COURSES.map(c => {
+    const s = scores[c.id];
+    if (!s) {
+      return `
+        <div class="course-card not-done">
+          <div class="course-top">
+            <span class="course-emoji">${c.emoji}</span>
+            <span class="score-badge">Non fait</span>
+          </div>
+          <div class="course-name">${c.name}</div>
+          <div class="course-meta">Quiz non complété</div>
+          <div class="score-bar"><div class="score-fill" style="width:0%"></div></div>
+          <a href="${c.file}" class="retake-btn">Faire le cours →</a>
+        </div>`;
+    }
+    const col = scoreColor(s.pct);
+    return `
+      <div class="course-card" style="--score-color:${col}">
+        <div class="course-top">
+          <span class="course-emoji">${c.emoji}</span>
+          <span class="score-badge">${s.pct}%</span>
+        </div>
+        <div class="course-name">${c.name}</div>
+        <div class="course-meta">${s.score} / ${s.total} bonnes réponses · ${s.date}</div>
+        <div class="score-bar"><div class="score-fill" style="width:0%" data-width="${s.pct}%"></div></div>
+        <a href="${c.file}" class="retake-btn">Refaire le quiz →</a>
+      </div>`;
+  }).join('');
+
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.score-fill[data-width]').forEach(el => {
+      el.style.width = el.dataset.width;
+    });
+  }, 100);
+}
+
+// Auto-login if name saved
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('eleve_nom');
+  if (saved) {
+    document.getElementById('nom-input').value = saved;
+    showDashboard(saved);
+  }
+});
+
+// Enter key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+</script>
+</body>
+</html>
