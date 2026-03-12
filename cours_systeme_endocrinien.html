@@ -156,16 +156,16 @@ const sections = [
 ];
 
 const quizQuestions = [
-  { q: "Qu'est-ce qu'une hormone ?", options: ["Un type de cellule sanguine", "Un messager chimique fabriqué par une glande et transporté par le sang", "Un signal électrique envoyé par les nerfs", "Une enzyme digestive"], answer: 1 },
-  { q: "Quelle est la différence principale entre une glande endocrine et une glande exocrine ?", options: ["La glande endocrine est plus grosse", "La glande endocrine sécrète dans le sang (sans canal), la glande exocrine sécrète dans un canal", "La glande exocrine produit des hormones, la glande endocrine des enzymes", "Elles fonctionnent de façon identique"], answer: 1 },
-  { q: "Pourquoi une hormone n'affecte-t-elle pas toutes les cellules du corps ?", options: ["Parce qu'elle ne voyage pas dans tout le corps", "Parce qu'elle se détruit rapidement", "Parce que seules les cellules qui possèdent le bon récepteur vont réagir", "Parce qu'elle est trop grosse pour entrer dans certaines cellules"], answer: 2 },
-  { q: "Quelle glande est appelée la « glande maîtresse » ?", options: ["La thyroïde", "Le pancréas", "Les glandes surrénales", "L'hypophyse"], answer: 3 },
-  { q: "Quelle hormone est responsable de la baisse de la glycémie après un repas ?", options: ["Le glucagon", "L'adrénaline", "L'insuline", "Le cortisol"], answer: 2 },
-  { q: "Quelle est la principale différence de vitesse entre le système nerveux et le système endocrinien ?", options: ["Le système endocrinien est plus rapide que le système nerveux", "Le système nerveux agit en millisecondes, le système endocrinien en secondes ou heures", "Les deux systèmes ont la même vitesse", "Le système nerveux est plus lent car il utilise le sang"], answer: 1 },
-  { q: "Lors d'une situation de stress, quelle hormone est rapidement libérée par les glandes surrénales ?", options: ["L'insuline", "La thyroxine", "L'adrénaline", "Les œstrogènes"], answer: 2 },
-  { q: "Quelle glande relie le système nerveux et le système endocrinien ?", options: ["L'hypophyse", "L'hypothalamus", "La thyroïde", "Le pancréas"], answer: 1 },
-  { q: "Quelle hormone déclenche la puberté chez le garçon en développant les caractères sexuels secondaires ?", options: ["Les œstrogènes", "L'insuline", "La testostérone", "Le cortisol"], answer: 2 },
-  { q: "Qu'est-ce que l'homéostasie ?", options: ["La croissance rapide pendant la puberté", "La capacité du corps à maintenir un équilibre stable de ses paramètres (ex. glycémie)", "La libération d'adrénaline en cas de stress", "La production de cellules reproductrices"], answer: 1 },
+  { q: "Qu'est-ce qu'une hormone ?", options: ["Un type de cellule sanguine", "Un messager chimique fabriqué par une glande et transporté par le sang", "Un signal électrique envoyé par les nerfs", "Une enzyme digestive"], answer: 1 , explication: "Une hormone est un messager chimique produit par une glande et transporté par le sang jusqu'à ses organes cibles." },
+  { q: "Quelle est la différence principale entre une glande endocrine et une glande exocrine ?", options: ["La glande endocrine est plus grosse", "La glande endocrine sécrète dans le sang (sans canal), la glande exocrine sécrète dans un canal", "La glande exocrine produit des hormones, la glande endocrine des enzymes", "Elles fonctionnent de façon identique"], answer: 1 , explication: "La glande endocrine déverse ses sécrétions directement dans le sang (pas de canal), contrairement à la glande exocrine qui possède un canal de transport." },
+  { q: "Pourquoi une hormone n'affecte-t-elle pas toutes les cellules du corps ?", options: ["Parce qu'elle ne voyage pas dans tout le corps", "Parce qu'elle se détruit rapidement", "Parce que seules les cellules qui possèdent le bon récepteur vont réagir", "Parce qu'elle est trop grosse pour entrer dans certaines cellules"], answer: 2 , explication: "Seules les cellules possédant le bon récepteur (comme une clé dans une serrure) vont réagir à l'hormone — c'est la spécificité hormonale." },
+  { q: "Quelle glande est appelée la « glande maîtresse » ?", options: ["La thyroïde", "Le pancréas", "Les glandes surrénales", "L'hypophyse"], answer: 3 , explication: "L'hypophyse est souvent appelée la 'glande maîtresse' car elle contrôle de nombreuses autres glandes endocrines." },
+  { q: "Quelle hormone est responsable de la baisse de la glycémie après un repas ?", options: ["Le glucagon", "L'adrénaline", "L'insuline", "Le cortisol"], answer: 2 , explication: "La thyroïde produit la thyroxine qui régule le métabolisme — trop peu = hypothyroïdie (fatigue), trop = hyperthyroïdie (agitation)." },
+  { q: "Quelle est la principale différence de vitesse entre le système nerveux et le système endocrinien ?", options: ["Le système endocrinien est plus rapide que le système nerveux", "Le système nerveux agit en millisecondes, le système endocrinien en secondes ou heures", "Les deux systèmes ont la même vitesse", "Le système nerveux est plus lent car il utilise le sang"], answer: 1 , explication: "Les surrénales produisent l'adrénaline qui prépare le corps à l'action (augmente la fréquence cardiaque, dilate les pupilles, libère du glucose)." },
+  { q: "Lors d'une situation de stress, quelle hormone est rapidement libérée par les glandes surrénales ?", options: ["L'insuline", "La thyroxine", "L'adrénaline", "Les œstrogènes"], answer: 2 , explication: "Le pancréas produit l'insuline (fait baisser la glycémie) et le glucagon (fait monter la glycémie) — un équilibre essentiel." },
+  { q: "Quelle glande relie le système nerveux et le système endocrinien ?", options: ["L'hypophyse", "L'hypothalamus", "La thyroïde", "Le pancréas"], answer: 1 , explication: "Le système nerveux agit en secondes (influx électrique), le système endocrinien agit en minutes à heures (hormones dans le sang)." },
+  { q: "Quelle hormone déclenche la puberté chez le garçon en développant les caractères sexuels secondaires ?", options: ["Les œstrogènes", "L'insuline", "La testostérone", "Le cortisol"], answer: 2 , explication: "Le diabète de type 1 est une maladie auto-immune où le pancréas ne produit plus d'insuline. Le type 2 est une résistance à l'insuline." },
+  { q: "Qu'est-ce que l'homéostasie ?", options: ["La croissance rapide pendant la puberté", "La capacité du corps à maintenir un équilibre stable de ses paramètres (ex. glycémie)", "La libération d'adrénaline en cas de stress", "La production de cellules reproductrices"], answer: 1 , explication: "La puberté est déclenchée par l'hypophyse qui ordonne aux gonades (ovaires ou testicules) de produire des hormones sexuelles." },
 ];
 
 const SC = {
@@ -326,6 +326,8 @@ function SectionView({ section, onBack }) {
   );
 }
 
+const COURSE_ID = "endocrinien";
+
 function QuizView({ onBack }) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -397,6 +399,11 @@ function QuizView({ onBack }) {
           );
         })}
       </div>
+      {selected!==null && selected!==q.answer && (
+        <div style={{background:"#fffbe6",border:"1px solid #f0d060",borderRadius:10,padding:"0.8rem 1rem",marginBottom:12,fontSize:"0.9rem",color:"#555"}}>
+          💡 <strong>Explication :</strong> {q.explication}
+        </div>
+      )}
       {selected!==null && (
         <button onClick={handleNext} style={{width:"100%",background:"#16a085",color:"#fff",border:"none",borderRadius:10,padding:"13px",cursor:"pointer",fontWeight:700,fontSize:"1rem"}}>
           {current+1>=quizQuestions.length?"Voir mes résultats →":"Question suivante →"}

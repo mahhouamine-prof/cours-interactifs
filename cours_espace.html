@@ -102,16 +102,16 @@ const sections = [
 ];
 
 const quizQuestions = [
-  { q: "Dans quelle couche de l'atmosphère se produisent les aurores polaires ?", options: ["Troposphère","Stratosphère","Thermosphère","Mésosphère"], answer: 2, section: "aurores" },
-  { q: "Quel gaz émet de la lumière bleue lors d'une aurore polaire ?", options: ["Oxygène","Azote","Hydrogène","Hélium"], answer: 1, section: "aurores" },
-  { q: "À quelle vitesse voyagent les particules du vent solaire ?", options: ["40 km/s","400 km/s","4 000 km/s","40 000 km/s"], answer: 1, section: "aurores" },
-  { q: "Comment s'appelle la traînée lumineuse qui se forme autour du noyau d'une comète ?", options: ["La queue","La chevelure","L'atmosphère","Le halo"], answer: 1, section: "cometes" },
-  { q: "Dans quelle direction pointe la queue d'une comète ?", options: ["Vers le Soleil","Dans le sens de l'orbite","À l'opposé du Soleil","Vers la Terre"], answer: 2, section: "cometes" },
-  { q: "De quoi est principalement composé le noyau d'une comète ?", options: ["Roches et métaux","Glace, poussière et gaz congelés","Plasma et gaz","Eau liquide"], answer: 1, section: "cometes" },
-  { q: "Comment appelle-t-on un débris spatial qui brûle dans l'atmosphère et crée une traînée lumineuse ?", options: ["Météorite","Astéroïde","Météore","Comète"], answer: 2, section: "meteorites" },
-  { q: "Quel événement a probablement causé la disparition des dinosaures il y a 65 millions d'années ?", options: ["Une éruption volcanique","Un impact météoritique","Un vent solaire intense","Un changement climatique"], answer: 1, section: "meteorites" },
-  { q: "Quel nom donne-t-on à un cratère causé par un impact météoritique ?", options: ["Géode","Astroblème","Caldera","Atoll"], answer: 1, section: "meteorites" },
-  { q: "Les aurores polaires peuvent-elles se produire sur d'autres planètes que la Terre ?", options: ["Non, jamais","Oui, sur toutes les planètes","Oui, sur les planètes avec atmosphère et champ magnétique","Seulement sur Jupiter"], answer: 2, section: "aurores" },
+  { q: "Dans quelle couche de l'atmosphère se produisent les aurores polaires ?", options: ["Troposphère","Stratosphère","Thermosphère","Mésosphère"], answer: 2, section: "aurores" , explication: "Les aurores polaires se produisent dans la thermosphère, là où les particules solaires entrent en collision avec les molécules atmosphériques." },
+  { q: "Quel gaz émet de la lumière bleue lors d'une aurore polaire ?", options: ["Oxygène","Azote","Hydrogène","Hélium"], answer: 1, section: "aurores" , explication: "L'azote émet surtout du bleu et du violet lors des aurores. L'oxygène, lui, émet du vert et du rouge." },
+  { q: "À quelle vitesse voyagent les particules du vent solaire ?", options: ["40 km/s","400 km/s","4 000 km/s","40 000 km/s"], answer: 1, section: "aurores" , explication: "Le vent solaire voyage à environ 400 km/s depuis le Soleil jusqu'à la Terre." },
+  { q: "Comment s'appelle la traînée lumineuse qui se forme autour du noyau d'une comète ?", options: ["La queue","La chevelure","L'atmosphère","Le halo"], answer: 1, section: "cometes" , explication: "La queue de poussière reflète la lumière solaire, tandis que la queue de plasma est poussée par le vent solaire — elles pointent toujours dans des directions légèrement différentes." },
+  { q: "Dans quelle direction pointe la queue d'une comète ?", options: ["Vers le Soleil","Dans le sens de l'orbite","À l'opposé du Soleil","Vers la Terre"], answer: 2, section: "cometes" , explication: "Les comètes proviennent du nuage d'Oort ou de la ceinture de Kuiper, aux confins du système solaire." },
+  { q: "De quoi est principalement composé le noyau d'une comète ?", options: ["Roches et métaux","Glace, poussière et gaz congelés","Plasma et gaz","Eau liquide"], answer: 1, section: "cometes" , explication: "Une météorite est un météoroïde qui a survécu à son passage dans l'atmosphère et atteint le sol. Un météore brûle complètement dans l'atmosphère." },
+  { q: "Comment appelle-t-on un débris spatial qui brûle dans l'atmosphère et crée une traînée lumineuse ?", options: ["Météorite","Astéroïde","Météore","Comète"], answer: 2, section: "meteorites" , explication: "Le cratère de Manicouagan, au Québec, est l'un des plus grands cratères d'impact préservés sur Terre (~100 km de diamètre)." },
+  { q: "Quel événement a probablement causé la disparition des dinosaures il y a 65 millions d'années ?", options: ["Une éruption volcanique","Un impact météoritique","Un vent solaire intense","Un changement climatique"], answer: 1, section: "meteorites" , explication: "L'impacteur de Chicxulub mesurait environ 10-15 km de diamètre et a provoqué l'extinction des dinosaures il y a 66 millions d'années." },
+  { q: "Quel nom donne-t-on à un cratère causé par un impact météoritique ?", options: ["Géode","Astroblème","Caldera","Atoll"], answer: 1, section: "meteorites" , explication: "Le champ magnétique terrestre dévie la plupart des particules du vent solaire, nous protégeant des radiations — sans lui, la vie telle qu'on la connaît serait impossible." },
+  { q: "Les aurores polaires peuvent-elles se produire sur d'autres planètes que la Terre ?", options: ["Non, jamais","Oui, sur toutes les planètes","Oui, sur les planètes avec atmosphère et champ magnétique","Seulement sur Jupiter"], answer: 2, section: "aurores" , explication: "Les aurores australes se produisent au pôle Sud — elles sont le miroir parfait des aurores boréales du pôle Nord." },
 ];
 
 const SC = {
@@ -253,6 +253,8 @@ function SectionView({ section, onBack }) {
   );
 }
 
+const COURSE_ID = "espace";
+
 function QuizView({ onBack }) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -267,6 +269,26 @@ function QuizView({ onBack }) {
     if (current + 1 >= quizQuestions.length) { setAnswers(newAnswers); setDone(true); }
     else { setAnswers(newAnswers); setSelected(null); setCurrent(current + 1); }
   };
+
+  // Save score when quiz is done
+  React.useEffect(() => {
+    if (done) {
+      const score = answers.filter((a,i) => a === quizQuestions[i].answer).length;
+      const pct = Math.round((score / quizQuestions.length) * 100);
+      const name = localStorage.getItem('eleve_nom') || '';
+      if (name) {
+        const key = 'scores_' + name.toLowerCase().replace(/\s+/g,'_');
+        let scores = {};
+        try { scores = JSON.parse(localStorage.getItem(key) || '{}'); } catch {}
+        scores[COURSE_ID] = { score, total: quizQuestions.length, pct, date: new Date().toLocaleDateString('fr-CA') };
+        localStorage.setItem(key, JSON.stringify(scores));
+        // Also save to global list
+        let allStudents = [];
+        try { allStudents = JSON.parse(localStorage.getItem('tous_eleves') || '[]'); } catch {}
+        if (!allStudents.includes(name)) { allStudents.push(name); localStorage.setItem('tous_eleves', JSON.stringify(allStudents)); }
+      }
+    }
+  }, [done]);
 
   const handleRestart = () => { setCurrent(0); setSelected(null); setAnswers([]); setDone(false); };
 
@@ -286,7 +308,7 @@ function QuizView({ onBack }) {
               <span>{answers[i]===qq.answer?"✅":"❌"}</span>
               <div>
                 <div style={{fontWeight:600,color:"#333",marginBottom:2}}>{qq.q}</div>
-                {answers[i]!==qq.answer && <div style={{color:"#c00"}}>Bonne réponse : {qq.options[qq.answer]}</div>}
+                {answers[i]!==qq.answer && <div><div style={{color:"#c00",fontWeight:600,marginBottom:4}}>Bonne réponse : {qq.options[qq.answer]}</div><div style={{color:"#555",fontSize:"0.82rem",background:"#fffbe6",borderRadius:6,padding:"4px 8px",marginTop:2}}>💡 {qq.explication}</div></div>}
               </div>
             </div>
           ))}
@@ -325,6 +347,11 @@ function QuizView({ onBack }) {
           );
         })}
       </div>
+      {selected!==null && selected!==q.answer && (
+        <div style={{background:"#fffbe6",border:"1px solid #f0d060",borderRadius:10,padding:"0.8rem 1rem",marginBottom:12,fontSize:"0.9rem",color:"#555"}}>
+          💡 <strong>Explication :</strong> {q.explication}
+        </div>
+      )}
       {selected!==null && (
         <button onClick={handleNext} style={{width:"100%",background:c.main,color:"#fff",border:"none",borderRadius:10,padding:"12px",cursor:"pointer",fontWeight:700,fontSize:"1rem"}}>
           {current+1>=quizQuestions.length?"Voir les résultats →":"Question suivante →"}
@@ -342,6 +369,28 @@ function App() {
     return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0"}}><SectionView section={activeSection} onBack={()=>setView("home")}/></div>;
   }
   if (view==="quiz") {
+    const [nomSaisi, setNomSaisi] = React.useState(localStorage.getItem('eleve_nom') || '');
+    const [nomConfirme, setNomConfirme] = React.useState(!!localStorage.getItem('eleve_nom'));
+    if (!nomConfirme) {
+      return (
+        <div style={{minHeight:"100vh",background:"#f4f6fb",display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <div style={{background:"#fff",borderRadius:16,padding:"2rem",maxWidth:400,width:"90%",textAlign:"center",boxShadow:"0 4px 20px rgba(0,0,0,0.1)"}}>
+            <div style={{fontSize:"3rem",marginBottom:"1rem"}}>📝</div>
+            <h2 style={{color:"#1a1a2e",marginBottom:"0.5rem"}}>Avant de commencer</h2>
+            <p style={{color:"#666",marginBottom:"1.5rem"}}>Entre ton prénom et nom pour que ton résultat soit sauvegardé.</p>
+            <input value={nomSaisi} onChange={e=>setNomSaisi(e.target.value)}
+              placeholder="Prénom Nom"
+              onKeyDown={e=>{if(e.key==='Enter'&&nomSaisi.trim()){localStorage.setItem('eleve_nom',nomSaisi.trim());setNomConfirme(true);}}}
+              style={{width:"100%",padding:"10px 14px",border:"2px solid #ddd",borderRadius:8,fontSize:"1rem",marginBottom:"1rem",boxSizing:"border-box"}}/>
+            <button onClick={()=>{if(nomSaisi.trim()){localStorage.setItem('eleve_nom',nomSaisi.trim());setNomConfirme(true);}}}
+              style={{background:"#1a1a2e",color:"#fff",border:"none",borderRadius:10,padding:"10px 28px",cursor:"pointer",fontWeight:700,fontSize:"1rem",width:"100%"}}>
+              Commencer le quiz →
+            </button>
+            <button onClick={()=>setView("home")} style={{background:"none",border:"none",color:"#888",cursor:"pointer",marginTop:"1rem",fontSize:"0.9rem"}}>← Retour</button>
+          </div>
+        </div>
+      );
+    }
     return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0"}}><QuizView onBack={()=>setView("home")}/></div>;
   }
 

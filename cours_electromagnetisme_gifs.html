@@ -137,18 +137,18 @@ const sections = [
 ];
 
 const quizQuestions = [
-  { q: "Que se passe-t-il quand on approche deux pôles identiques d'aimants l'un de l'autre ?", options: ["Ils s'attirent", "Ils se repoussent", "Rien ne se passe", "Ils fusionnent"], answer: 1, section: "aimants" },
-  { q: "Quels sont les matériaux ferromagnétiques parmi les suivants ?", options: ["L'aluminium et le cuivre", "Le plastique et le bois", "Le fer, le cobalt et le nickel", "L'or et l'argent"], answer: 2, section: "aimants" },
-  { q: "Que représentent les lignes de champ magnétique ?", options: ["La trajectoire des électrons", "La direction et l'intensité du champ magnétique", "La température de l'aimant", "La résistance électrique du matériau"], answer: 1, section: "aimants" },
-  { q: "Où le champ magnétique d'un aimant est-il le plus intense ?", options: ["Au centre de l'aimant", "À égale distance des deux pôles", "Aux pôles, là où les lignes sont les plus rapprochées", "À l'extérieur, loin de l'aimant"], answer: 2, section: "aimants" },
-  { q: "Pourquoi le pôle Nord d'une boussole pointe-t-il vers le Nord géographique ?", options: ["Par coïncidence", "Parce que le pôle Sud magnétique de la Terre est près du pôle Nord géographique", "Parce que le pôle Nord magnétique de la Terre est près du pôle Nord géographique", "À cause de la gravité"], answer: 1, section: "aimants" },
-  { q: "Quelle est la forme des lignes de champ créées par un courant dans un fil rectiligne ?", options: ["Des lignes droites parallèles au fil", "Des spirales qui s'éloignent du fil", "Des cercles concentriques autour du fil", "Des ellipses autour du fil"], answer: 2, section: "fil_courant" },
-  { q: "Comment augmenter l'intensité du champ magnétique créé par un fil parcouru par un courant ?", options: ["En augmentant la longueur du fil", "En augmentant l'intensité du courant électrique", "En refroidissant le fil", "En utilisant un fil plus épais"], answer: 1, section: "fil_courant" },
-  { q: "À quoi sert la première règle de la main droite ?", options: ["Déterminer le sens du courant", "Déterminer le sens des lignes de champ magnétique créées par un courant dans un fil", "Calculer l'intensité du champ magnétique", "Identifier les matériaux ferromagnétiques"], answer: 1, section: "fil_courant" },
-  { q: "Qu'est-ce qu'un solénoïde ?", options: ["Un aimant permanent en forme de U", "Une bobine de plusieurs enroulements de fil conducteur appelés spires", "Un fil électrique très long", "Un matériau ferromagnétique"], answer: 1, section: "solenoide" },
-  { q: "Comment augmente-t-on l'intensité du champ dans un solénoïde ? (plusieurs bonnes réponses — choisis la plus complète)", options: ["En réduisant le courant", "En augmentant le courant ET le nombre de spires ET en ajoutant un noyau de fer", "En allongeant le solénoïde", "En utilisant un courant alternatif"], answer: 1, section: "solenoide" },
-  { q: "Quel est l'avantage principal d'un électroaimant par rapport à un aimant permanent ?", options: ["Il est toujours plus puissant", "Il peut être activé et désactivé en contrôlant le courant", "Il ne nécessite aucune source d'énergie", "Il est plus léger"], answer: 1, section: "solenoide" },
-  { q: "Où le champ magnétique d'un solénoïde est-il le plus intense et le plus uniforme ?", options: ["À l'extérieur, aux extrémités", "Sur les côtés du solénoïde", "À l'intérieur du solénoïde", "À égale distance des deux pôles"], answer: 2, section: "solenoide" },
+  { q: "Que se passe-t-il quand on approche deux pôles identiques d'aimants l'un de l'autre ?", options: ["Ils s'attirent", "Ils se repoussent", "Rien ne se passe", "Ils fusionnent"], answer: 1, section: "aimants" , explication: "Deux pôles identiques (N-N ou S-S) se repoussent toujours. Seuls les pôles opposés (N-S) s'attirent." },
+  { q: "Quels sont les matériaux ferromagnétiques parmi les suivants ?", options: ["L'aluminium et le cuivre", "Le plastique et le bois", "Le fer, le cobalt et le nickel", "L'or et l'argent"], answer: 2, section: "aimants" , explication: "Le fer, le cobalt et le nickel sont les trois matériaux ferromagnétiques classiques — ils sont attirés par les aimants." },
+  { q: "Que représentent les lignes de champ magnétique ?", options: ["La trajectoire des électrons", "La direction et l'intensité du champ magnétique", "La température de l'aimant", "La résistance électrique du matériau"], answer: 1, section: "aimants" , explication: "Les lignes de champ magnétique indiquent la direction (du pôle N vers le pôle S à l'extérieur) et l'intensité (plus elles sont serrées, plus le champ est fort)." },
+  { q: "Où le champ magnétique d'un aimant est-il le plus intense ?", options: ["Au centre de l'aimant", "À égale distance des deux pôles", "Aux pôles, là où les lignes sont les plus rapprochées", "À l'extérieur, loin de l'aimant"], answer: 2, section: "aimants" , explication: "Une boussole s'aligne avec le champ magnétique terrestre — son aiguille pointe vers le nord magnétique de la Terre." },
+  { q: "Pourquoi le pôle Nord d'une boussole pointe-t-il vers le Nord géographique ?", options: ["Par coïncidence", "Parce que le pôle Sud magnétique de la Terre est près du pôle Nord géographique", "Parce que le pôle Nord magnétique de la Terre est près du pôle Nord géographique", "À cause de la gravité"], answer: 1, section: "aimants" , explication: "Quand on coupe un aimant en deux, chaque morceau devient un aimant complet avec son propre pôle N et pôle S — on ne peut pas isoler un pôle seul." },
+  { q: "Quelle est la forme des lignes de champ créées par un courant dans un fil rectiligne ?", options: ["Des lignes droites parallèles au fil", "Des spirales qui s'éloignent du fil", "Des cercles concentriques autour du fil", "Des ellipses autour du fil"], answer: 2, section: "fil_courant" , explication: "Selon la règle de la main droite, si le pouce pointe dans le sens du courant, les doigts enroulés indiquent le sens des lignes de champ magnétique autour du fil." },
+  { q: "Comment augmenter l'intensité du champ magnétique créé par un fil parcouru par un courant ?", options: ["En augmentant la longueur du fil", "En augmentant l'intensité du courant électrique", "En refroidissant le fil", "En utilisant un fil plus épais"], answer: 1, section: "fil_courant" , explication: "Plus le courant est intense, plus le champ magnétique autour du fil est fort." },
+  { q: "À quoi sert la première règle de la main droite ?", options: ["Déterminer le sens du courant", "Déterminer le sens des lignes de champ magnétique créées par un courant dans un fil", "Calculer l'intensité du champ magnétique", "Identifier les matériaux ferromagnétiques"], answer: 1, section: "fil_courant" , explication: "Le champ magnétique d'un solénoïde ressemble à celui d'un aimant droit, avec un pôle N et un pôle S à chaque extrémité." },
+  { q: "Qu'est-ce qu'un solénoïde ?", options: ["Un aimant permanent en forme de U", "Une bobine de plusieurs enroulements de fil conducteur appelés spires", "Un fil électrique très long", "Un matériau ferromagnétique"], answer: 1, section: "solenoide" , explication: "Un électroaimant peut être activé et désactivé en contrôlant le courant — c'est son principal avantage sur un aimant permanent." },
+  { q: "Comment augmente-t-on l'intensité du champ dans un solénoïde ? (plusieurs bonnes réponses — choisis la plus complète)", options: ["En réduisant le courant", "En augmentant le courant ET le nombre de spires ET en ajoutant un noyau de fer", "En allongeant le solénoïde", "En utilisant un courant alternatif"], answer: 1, section: "solenoide" , explication: "Pour inverser la polarité d'un électroaimant, il suffit d'inverser le sens du courant électrique." },
+  { q: "Quel est l'avantage principal d'un électroaimant par rapport à un aimant permanent ?", options: ["Il est toujours plus puissant", "Il peut être activé et désactivé en contrôlant le courant", "Il ne nécessite aucune source d'énergie", "Il est plus léger"], answer: 1, section: "solenoide" , explication: "Le noyau de fer augmente considérablement l'intensité du champ magnétique d'un solénoïde — c'est le principe de tous les électroaimants industriels." },
+  { q: "Où le champ magnétique d'un solénoïde est-il le plus intense et le plus uniforme ?", options: ["À l'extérieur, aux extrémités", "Sur les côtés du solénoïde", "À l'intérieur du solénoïde", "À égale distance des deux pôles"], answer: 2, section: "solenoide" , explication: "Les électroaimants sont utilisés dans les grues, les IRM médicales, les haut-parleurs et les moteurs électriques." },
 ];
 
 const SC = {
@@ -300,6 +300,8 @@ function SectionView({ section, onBack }) {
   );
 }
 
+const COURSE_ID = "electromagnetisme";
+
 function QuizView({ onBack }) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -381,6 +383,11 @@ function QuizView({ onBack }) {
         })}
       </div>
 
+      {selected!==null && selected!==q.answer && (
+        <div style={{background:"#fffbe6",border:"1px solid #f0d060",borderRadius:10,padding:"0.8rem 1rem",marginBottom:12,fontSize:"0.9rem",color:"#555"}}>
+          💡 <strong>Explication :</strong> {q.explication}
+        </div>
+      )}
       {selected!==null && (
         <button onClick={handleNext} style={{width:"100%",background:c.main,color:"#fff",border:"none",borderRadius:10,padding:"13px",cursor:"pointer",fontWeight:700,fontSize:"1rem",letterSpacing:0.5}}>
           {current+1>=quizQuestions.length?"Voir mes résultats →":"Question suivante →"}

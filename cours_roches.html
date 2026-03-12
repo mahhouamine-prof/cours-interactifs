@@ -126,16 +126,16 @@ const sections = [
 ];
 
 const quizQuestions = [
-  { q: "Qu'est-ce qu'une roche ?", options: ["Un minéral pur", "Un assemblage de minéraux qui forme la croûte terrestre", "Une substance liquide issue du magma", "Un fossile d'organisme marin"], answer: 1, section: "intro_roches" },
-  { q: "Combien y a-t-il de types principaux de roches ?", options: ["2", "3", "4", "5"], answer: 1, section: "intro_roches" },
-  { q: "Quel est le point de départ du cycle de formation des roches ?", options: ["Les sédiments", "Les roches métamorphiques", "Le magma", "Les fossiles"], answer: 2, section: "cycle" },
-  { q: "Comment se forment les roches sédimentaires ?", options: ["Par refroidissement du magma", "Par recristallisation sous pression", "Par dépôt et compaction de sédiments", "Par éruption volcanique"], answer: 2, section: "sedimentaires" },
-  { q: "Quelle est la différence entre une roche ignée extrusive et intrusive ?", options: ["La couleur", "La vitesse de refroidissement du magma", "La profondeur des sédiments", "La présence de fossiles"], answer: 1, section: "ignees" },
-  { q: "Quelle roche ignée a une texture vitreuse car elle se refroidit très rapidement ?", options: ["Granite", "Gabbro", "Obsidienne", "Marbre"], answer: 2, section: "ignees" },
-  { q: "Les roches sédimentaires d'origine biochimique proviennent de :", options: ["L'évaporation de l'eau", "L'érosion des roches", "La minéralisation d'êtres vivants", "La fusion du magma"], answer: 2, section: "sedimentaires" },
-  { q: "Quel processus transforme une roche en roche métamorphique ?", options: ["Le dépôt de sédiments", "La chaleur et la pression extrêmes", "Le refroidissement rapide de la lave", "L'évaporation de l'eau de mer"], answer: 1, section: "metamorphiques" },
-  { q: "Quelle roche métamorphique provient du métamorphisme du calcaire ?", options: ["Gneiss", "Quartzite", "Obsidienne", "Marbre"], answer: 3, section: "metamorphiques" },
-  { q: "Où se trouvent les plus vieilles roches du monde ?", options: ["En Australie", "Au Québec, près de la baie d'Hudson", "En Sibérie", "Au Groenland"], answer: 1, section: "intro_roches" },
+  { q: "Qu'est-ce qu'une roche ?", options: ["Un minéral pur", "Un assemblage de minéraux qui forme la croûte terrestre", "Une substance liquide issue du magma", "Un fossile d'organisme marin"], answer: 1, section: "intro_roches" , explication: "Une roche est toujours composée d'un ou plusieurs minéraux assemblés — ce n'est pas un minéral pur ni une substance liquide." },
+  { q: "Combien y a-t-il de types principaux de roches ?", options: ["2", "3", "4", "5"], answer: 1, section: "intro_roches" , explication: "On distingue 3 grands types : ignées, sédimentaires et métamorphiques." },
+  { q: "Quel est le point de départ du cycle de formation des roches ?", options: ["Les sédiments", "Les roches métamorphiques", "Le magma", "Les fossiles"], answer: 2, section: "cycle" , explication: "Le cycle des roches commence toujours par le magma, qui est la roche fondue en profondeur." },
+  { q: "Comment se forment les roches sédimentaires ?", options: ["Par refroidissement du magma", "Par recristallisation sous pression", "Par dépôt et compaction de sédiments", "Par éruption volcanique"], answer: 2, section: "sedimentaires" , explication: "Les sédiments (débris, grains) s'accumulent et se compactent sur des millions d'années pour former des roches sédimentaires." },
+  { q: "Quelle est la différence entre une roche ignée extrusive et intrusive ?", options: ["La couleur", "La vitesse de refroidissement du magma", "La profondeur des sédiments", "La présence de fossiles"], answer: 1, section: "ignees" , explication: "La différence clé : une roche extrusive refroidit vite en surface (petits cristaux), une intrusive refroidit lentement en profondeur (gros cristaux)." },
+  { q: "Quelle roche ignée a une texture vitreuse car elle se refroidit très rapidement ?", options: ["Granite", "Gabbro", "Obsidienne", "Marbre"], answer: 2, section: "ignees" , explication: "L'obsidienne est formée d'un refroidissement si rapide que les cristaux n'ont pas le temps de se former, ce qui lui donne sa texture vitreuse." },
+  { q: "Les roches sédimentaires d'origine biochimique proviennent de :", options: ["L'évaporation de l'eau", "L'érosion des roches", "La minéralisation d'êtres vivants", "La fusion du magma"], answer: 2, section: "sedimentaires" , explication: "Les roches biochimiques sont formées par la minéralisation de restes d'êtres vivants (coquillages, coraux, etc.)." },
+  { q: "Quel processus transforme une roche en roche métamorphique ?", options: ["Le dépôt de sédiments", "La chaleur et la pression extrêmes", "Le refroidissement rapide de la lave", "L'évaporation de l'eau de mer"], answer: 1, section: "metamorphiques" , explication: "La chaleur et la pression extrêmes (mais sans faire fondre la roche) la transforment en roche métamorphique." },
+  { q: "Quelle roche métamorphique provient du métamorphisme du calcaire ?", options: ["Gneiss", "Quartzite", "Obsidienne", "Marbre"], answer: 3, section: "metamorphiques" , explication: "Le calcaire soumis à un métamorphisme donne du marbre — une des roches métamorphiques les plus connues." },
+  { q: "Où se trouvent les plus vieilles roches du monde ?", options: ["En Australie", "Au Québec, près de la baie d'Hudson", "En Sibérie", "Au Groenland"], answer: 1, section: "intro_roches" , explication: "Le Bouclier canadien, au Québec, contient certaines des roches les plus anciennes de la planète (plus de 4 milliards d'années)." },
 ];
 
 const SC = {
@@ -225,6 +225,8 @@ function SectionView({ section, onBack }) {
   );
 }
 
+const COURSE_ID = "roches";
+
 function QuizView({ onBack }) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -239,6 +241,26 @@ function QuizView({ onBack }) {
     if (current + 1 >= quizQuestions.length) { setAnswers(newAnswers); setDone(true); }
     else { setAnswers(newAnswers); setSelected(null); setCurrent(current + 1); }
   };
+
+  // Save score when quiz is done
+  React.useEffect(() => {
+    if (done) {
+      const score = answers.filter((a,i) => a === quizQuestions[i].answer).length;
+      const pct = Math.round((score / quizQuestions.length) * 100);
+      const name = localStorage.getItem('eleve_nom') || '';
+      if (name) {
+        const key = 'scores_' + name.toLowerCase().replace(/\s+/g,'_');
+        let scores = {};
+        try { scores = JSON.parse(localStorage.getItem(key) || '{}'); } catch {}
+        scores[COURSE_ID] = { score, total: quizQuestions.length, pct, date: new Date().toLocaleDateString('fr-CA') };
+        localStorage.setItem(key, JSON.stringify(scores));
+        // Also save to global list
+        let allStudents = [];
+        try { allStudents = JSON.parse(localStorage.getItem('tous_eleves') || '[]'); } catch {}
+        if (!allStudents.includes(name)) { allStudents.push(name); localStorage.setItem('tous_eleves', JSON.stringify(allStudents)); }
+      }
+    }
+  }, [done]);
 
   const handleRestart = () => { setCurrent(0); setSelected(null); setAnswers([]); setDone(false); };
 
@@ -258,7 +280,7 @@ function QuizView({ onBack }) {
               <span>{answers[i]===qq.answer?"✅":"❌"}</span>
               <div>
                 <div style={{fontWeight:600,color:"#333",marginBottom:2}}>{qq.q}</div>
-                {answers[i]!==qq.answer && <div style={{color:"#c00"}}>Bonne réponse : {qq.options[qq.answer]}</div>}
+                {answers[i]!==qq.answer && <div><div style={{color:"#c00",fontWeight:600,marginBottom:4}}>Bonne réponse : {qq.options[qq.answer]}</div><div style={{color:"#555",fontSize:"0.82rem",background:"#fffbe6",borderRadius:6,padding:"4px 8px",marginTop:2}}>💡 {qq.explication}</div></div>}
               </div>
             </div>
           ))}
@@ -295,6 +317,11 @@ function QuizView({ onBack }) {
           );
         })}
       </div>
+      {selected!==null && selected!==q.answer && (
+        <div style={{background:"#fffbe6",border:"1px solid #f0d060",borderRadius:10,padding:"0.8rem 1rem",marginBottom:12,fontSize:"0.9rem",color:"#555"}}>
+          💡 <strong>Explication :</strong> {q.explication}
+        </div>
+      )}
       {selected!==null && (
         <button onClick={handleNext} style={{width:"100%",background:c.main,color:"#fff",border:"none",borderRadius:10,padding:"12px",cursor:"pointer",fontWeight:700,fontSize:"1rem"}}>
           {current+1>=quizQuestions.length?"Voir les résultats →":"Question suivante →"}
@@ -312,6 +339,28 @@ function App() {
     return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0"}}><SectionView section={activeSection} onBack={()=>setView("home")}/></div>;
   }
   if (view==="quiz") {
+    const [nomSaisi, setNomSaisi] = React.useState(localStorage.getItem('eleve_nom') || '');
+    const [nomConfirme, setNomConfirme] = React.useState(!!localStorage.getItem('eleve_nom'));
+    if (!nomConfirme) {
+      return (
+        <div style={{minHeight:"100vh",background:"#f4f6fb",display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <div style={{background:"#fff",borderRadius:16,padding:"2rem",maxWidth:400,width:"90%",textAlign:"center",boxShadow:"0 4px 20px rgba(0,0,0,0.1)"}}>
+            <div style={{fontSize:"3rem",marginBottom:"1rem"}}>📝</div>
+            <h2 style={{color:"#1a1a2e",marginBottom:"0.5rem"}}>Avant de commencer</h2>
+            <p style={{color:"#666",marginBottom:"1.5rem"}}>Entre ton prénom et nom pour que ton résultat soit sauvegardé.</p>
+            <input value={nomSaisi} onChange={e=>setNomSaisi(e.target.value)}
+              placeholder="Prénom Nom"
+              onKeyDown={e=>{if(e.key==='Enter'&&nomSaisi.trim()){localStorage.setItem('eleve_nom',nomSaisi.trim());setNomConfirme(true);}}}
+              style={{width:"100%",padding:"10px 14px",border:"2px solid #ddd",borderRadius:8,fontSize:"1rem",marginBottom:"1rem",boxSizing:"border-box"}}/>
+            <button onClick={()=>{if(nomSaisi.trim()){localStorage.setItem('eleve_nom',nomSaisi.trim());setNomConfirme(true);}}}
+              style={{background:"#1a1a2e",color:"#fff",border:"none",borderRadius:10,padding:"10px 28px",cursor:"pointer",fontWeight:700,fontSize:"1rem",width:"100%"}}>
+              Commencer le quiz →
+            </button>
+            <button onClick={()=>setView("home")} style={{background:"none",border:"none",color:"#888",cursor:"pointer",marginTop:"1rem",fontSize:"0.9rem"}}>← Retour</button>
+          </div>
+        </div>
+      );
+    }
     return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0"}}><QuizView onBack={()=>setView("home")}/></div>;
   }
 

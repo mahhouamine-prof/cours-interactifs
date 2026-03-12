@@ -183,18 +183,18 @@ const sections = [
 ];
 
 const quizQuestions = [
-  { q: "Lors d'une réaction exothermique, que se passe-t-il à la température du milieu environnant ?", options: ["Elle diminue", "Elle reste stable", "Elle augmente", "Elle oscille"], answer: 2 },
-  { q: "Quelle est la position de l'énergie dans l'équation thermochimique d'une réaction endothermique ?", options: ["Du côté des produits (à droite)", "Du côté des réactifs (à gauche)", "En dehors de l'équation seulement", "Elle ne figure pas dans l'équation"], answer: 1 },
-  { q: "Pour une réaction exothermique, quelle est la valeur de ΔH ?", options: ["ΔH > 0 (positive)", "ΔH = 0", "ΔH < 0 (négative)", "ΔH peut être positive ou négative"], answer: 2 },
-  { q: "Comment calcule-t-on la variation d'enthalpie ΔH ?", options: ["ΔH = Hr − Hp", "ΔH = Hp − Hr", "ΔH = Hp + Hr", "ΔH = Hr × Hp"], answer: 1 },
-  { q: "Sur un diagramme énergétique, que représente le sommet de la courbe (le pic) ?", options: ["L'enthalpie des réactifs", "L'enthalpie des produits", "Le complexe activé (état de transition)", "La variation d'enthalpie totale"], answer: 2 },
-  { q: "Comment calcule-t-on l'énergie d'activation directe (Ead) ?", options: ["Ead = Hr − Hca", "Ead = Hp − Hr", "Ead = Hca − Hr", "Ead = Hca − Hp"], answer: 2 },
-  { q: "Parmi les réactions suivantes, laquelle est typiquement endothermique ?", options: ["La combustion du méthane", "La neutralisation acide-base", "La décomposition de l'ammoniac par la chaleur", "La rouille (oxydation du fer)"], answer: 2 },
-  { q: "Lors du bris d'une liaison chimique, l'énergie est :", options: ["Dégagée (processus exothermique)", "Absorbée (processus endothermique)", "Ni absorbée ni dégagée", "Transformée en lumière uniquement"], answer: 1 },
-  { q: "Dans un diagramme énergétique exothermique, quelle relation est vraie ?", options: ["Ead > Eainv", "Hp > Hr", "Ead < Eainv", "ΔH > 0"], answer: 2 },
-  { q: "Si Hr = 480 kJ/mol et Hp = 310 kJ/mol, quelle est la valeur de ΔH et le type de réaction ?", options: ["ΔH = +170 kJ/mol, endothermique", "ΔH = −170 kJ/mol, exothermique", "ΔH = +790 kJ/mol, exothermique", "ΔH = −310 kJ/mol, endothermique"], answer: 1 },
-  { q: "La formation de nouvelles liaisons chimiques est un processus :", options: ["Toujours endothermique", "Toujours exothermique", "Endothermique ou exothermique selon la liaison", "Sans effet énergétique"], answer: 1 },
-  { q: "Laquelle de ces équations représente une réaction EXOTHERMIQUE en notation ΔH ?", options: ["2NH₃(g) → N₂(g) + 3H₂(g)  ΔH = +95,4 kJ/mol", "N₂(g) + 3H₂(g) → 2NH₃(g)  ΔH = −95,4 kJ/mol", "H₂O(s) + 6 kJ → H₂O(l)", "CaCO₃(s) + 178 kJ → CaO(s) + CO₂(g)"], answer: 1 },
+  { q: "Lors d'une réaction exothermique, que se passe-t-il à la température du milieu environnant ?", options: ["Elle diminue", "Elle reste stable", "Elle augmente", "Elle oscille"], answer: 2 , explication: "Dans une réaction exothermique, l'énergie est libérée vers le milieu — la température de l'environnement augmente." },
+  { q: "Quelle est la position de l'énergie dans l'équation thermochimique d'une réaction endothermique ?", options: ["Du côté des produits (à droite)", "Du côté des réactifs (à gauche)", "En dehors de l'équation seulement", "Elle ne figure pas dans l'équation"], answer: 1 , explication: "Pour une réaction endothermique, l'énergie est un réactif — elle apparaît du côté gauche (réactifs) de l'équation thermochimique." },
+  { q: "Pour une réaction exothermique, quelle est la valeur de ΔH ?", options: ["ΔH > 0 (positive)", "ΔH = 0", "ΔH < 0 (négative)", "ΔH peut être positive ou négative"], answer: 2 , explication: "ΔH négatif = réaction exothermique (libère de l'énergie). ΔH positif = réaction endothermique (absorbe de l'énergie)." },
+  { q: "Comment calcule-t-on la variation d'enthalpie ΔH ?", options: ["ΔH = Hr − Hp", "ΔH = Hp − Hr", "ΔH = Hp + Hr", "ΔH = Hr × Hp"], answer: 1 , explication: "L'énergie d'activation est l'énergie minimale nécessaire pour démarrer une réaction — même les réactions exothermiques en ont besoin." },
+  { q: "Sur un diagramme énergétique, que représente le sommet de la courbe (le pic) ?", options: ["L'enthalpie des réactifs", "L'enthalpie des produits", "Le complexe activé (état de transition)", "La variation d'enthalpie totale"], answer: 2 , explication: "Dans un diagramme énergétique, les réactifs sont plus haut que les produits pour une réaction exothermique (l'énergie descend)." },
+  { q: "Comment calcule-t-on l'énergie d'activation directe (Ead) ?", options: ["Ead = Hr − Hca", "Ead = Hp − Hr", "Ead = Hca − Hr", "Ead = Hca − Hp"], answer: 2 , explication: "Lors de la rupture des liaisons chimiques, de l'énergie est absorbée. Lors de la formation de nouvelles liaisons, de l'énergie est libérée." },
+  { q: "Parmi les réactions suivantes, laquelle est typiquement endothermique ?", options: ["La combustion du méthane", "La neutralisation acide-base", "La décomposition de l'ammoniac par la chaleur", "La rouille (oxydation du fer)"], answer: 2 , explication: "Le bilan énergétique = Énergie libérée (formation) − Énergie absorbée (rupture). Si positif → exothermique, si négatif → endothermique." },
+  { q: "Lors du bris d'une liaison chimique, l'énergie est :", options: ["Dégagée (processus exothermique)", "Absorbée (processus endothermique)", "Ni absorbée ni dégagée", "Transformée en lumière uniquement"], answer: 1 , explication: "La photosynthèse est endothermique : les plantes absorbent l'énergie lumineuse pour produire du glucose." },
+  { q: "Dans un diagramme énergétique exothermique, quelle relation est vraie ?", options: ["Ead > Eainv", "Hp > Hr", "Ead < Eainv", "ΔH > 0"], answer: 2 , explication: "La combustion est exothermique : le carbone et l'hydrogène se combinent à l'oxygène en libérant beaucoup d'énergie sous forme de chaleur et de lumière." },
+  { q: "Si Hr = 480 kJ/mol et Hp = 310 kJ/mol, quelle est la valeur de ΔH et le type de réaction ?", options: ["ΔH = +170 kJ/mol, endothermique", "ΔH = −170 kJ/mol, exothermique", "ΔH = +790 kJ/mol, exothermique", "ΔH = −310 kJ/mol, endothermique"], answer: 1 , explication: "Un catalyseur abaisse l'énergie d'activation sans changer le bilan énergétique global de la réaction (ΔH reste identique)." },
+  { q: "La formation de nouvelles liaisons chimiques est un processus :", options: ["Toujours endothermique", "Toujours exothermique", "Endothermique ou exothermique selon la liaison", "Sans effet énergétique"], answer: 1 , explication: "Pour H₂ + Cl₂ → 2HCl : on brise H-H (436 kJ) et Cl-Cl (243 kJ), puis on forme 2×H-Cl (2×432 kJ). Bilan = 864 − 679 = −185 kJ → exothermique." },
+  { q: "Laquelle de ces équations représente une réaction EXOTHERMIQUE en notation ΔH ?", options: ["2NH₃(g) → N₂(g) + 3H₂(g)  ΔH = +95,4 kJ/mol", "N₂(g) + 3H₂(g) → 2NH₃(g)  ΔH = −95,4 kJ/mol", "H₂O(s) + 6 kJ → H₂O(l)", "CaCO₃(s) + 178 kJ → CaO(s) + CO₂(g)"], answer: 1 , explication: "La réaction inverse d'une réaction endothermique est toujours exothermique, et vice-versa — le ΔH change de signe." },
 ];
 
 const SC = {
@@ -418,6 +418,8 @@ function SectionView({ section, onBack }) {
   );
 }
 
+const COURSE_ID = "reactions";
+
 function QuizView({ onBack }) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -487,6 +489,11 @@ function QuizView({ onBack }) {
           );
         })}
       </div>
+      {selected!==null && selected!==q.answer && (
+        <div style={{background:"#fffbe6",border:"1px solid #f0d060",borderRadius:10,padding:"0.8rem 1rem",marginBottom:12,fontSize:"0.9rem",color:"#555"}}>
+          💡 <strong>Explication :</strong> {q.explication}
+        </div>
+      )}
       {selected!==null && (
         <button onClick={handleNext} style={{width:"100%",background:"#c0392b",color:"#fff",border:"none",borderRadius:10,padding:"13px",cursor:"pointer",fontWeight:700,fontSize:"1rem"}}>
           {current+1>=quizQuestions.length?"Voir mes résultats →":"Question suivante →"}
