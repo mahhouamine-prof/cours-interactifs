@@ -249,15 +249,26 @@ function QuizView({ onBack }) {
       const pct = Math.round((score / quizQuestions.length) * 100);
       const name = localStorage.getItem('eleve_nom') || '';
       if (name) {
+        // Save locally
         const key = 'scores_' + name.toLowerCase().replace(/\s+/g,'_');
         let scores = {};
         try { scores = JSON.parse(localStorage.getItem(key) || '{}'); } catch {}
         scores[COURSE_ID] = { score, total: quizQuestions.length, pct, date: new Date().toLocaleDateString('fr-CA') };
         localStorage.setItem(key, JSON.stringify(scores));
-        // Also save to global list
         let allStudents = [];
         try { allStudents = JSON.parse(localStorage.getItem('tous_eleves') || '[]'); } catch {}
         if (!allStudents.includes(name)) { allStudents.push(name); localStorage.setItem('tous_eleves', JSON.stringify(allStudents)); }
+        // Send to Google Sheets
+        const SCRIPT_URL = "REMPLACE_PAR_TON_URL";
+        if (SCRIPT_URL !== "REMPLACE_PAR_TON_URL") {
+          const details = {};
+          quizQuestions.forEach((q,i) => { details[i] = { correct: answers[i] === q.answer, chosen: q.options[answers[i]], answer: q.options[q.answer] }; });
+          fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ eleve: name, cours: COURSE_ID, score, total: quizQuestions.length, details })
+          }).catch(() => {});
+        }
       }
     }
   }, [done]);
@@ -334,13 +345,13 @@ function QuizView({ onBack }) {
 function App() {
   const [view, setView] = useState("home");
   const [activeSection, setActiveSection] = useState(null);
+  const [nomSaisi, setNomSaisi] = useState(localStorage.getItem('eleve_nom') || '');
+  const [nomConfirme, setNomConfirme] = useState(!!localStorage.getItem('eleve_nom'));
 
   if (view==="section" && activeSection) {
     return <div style={{minHeight:"100vh",background:"#f4f6fb",padding:"1.5rem 0"}}><SectionView section={activeSection} onBack={()=>setView("home")}/></div>;
   }
   if (view==="quiz") {
-    const [nomSaisi, setNomSaisi] = React.useState(localStorage.getItem('eleve_nom') || '');
-    const [nomConfirme, setNomConfirme] = React.useState(!!localStorage.getItem('eleve_nom'));
     if (!nomConfirme) {
       return (
         <div style={{minHeight:"100vh",background:"#f4f6fb",display:"flex",alignItems:"center",justifyContent:"center"}}>
