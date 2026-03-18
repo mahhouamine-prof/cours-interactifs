@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagramme énergétique — Chimie Sec 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080f1a;
+    --bg2: #0d1826;
+    --bg3: #112035;
+    --card: #0f1e30;
+    --card2: #152540;
+    --border: #1e3a5c;
+    --cyan: #00d4ff;
+    --cyan2: #00aacc;
+    --teal: #00e5c8;
+    --amber: #ffb347;
+    --rose: #ff6b8a;
+    --green: #4ade80;
+    --purple: #b39ddb;
+    --text: #e8f0fe;
+    --text2: #8ba8c8;
+    --text3: #5a7898;
+    --font: 'Space Grotesk', sans-serif;
+    --serif: 'Crimson Pro', serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── GRID BACKGROUND ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,15,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 56px;
+    overflow-x: auto;
+  }
+
+  nav .brand {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-right: auto;
+  }
+
+  nav a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color 0.2s;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover { color: var(--cyan); border-bottom-color: var(--cyan); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.25);
+    padding: 4px 16px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--teal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text2);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    font-family: var(--serif);
+    font-style: italic;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .pill {
+    font-size: 0.75rem;
+    font-family: var(--mono);
+    padding: 4px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    background: var(--card);
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 940px;
+    margin: 0 auto 4rem;
+    padding: 0 1.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--cyan);
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .section-header h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--teal));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--cyan);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .card p { color: var(--text2); margin-bottom: 0.5rem; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ─── DEFINITION BOX ─── */
+  .def-box {
+    background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,229,200,0.04));
+    border: 1px solid rgba(0,212,255,0.2);
+    border-left: 4px solid var(--cyan);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+  }
+
+  .def-box .def-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 0.5rem;
+  }
+
+  .def-box p { color: var(--text); font-size: 1rem; }
+  .def-box strong { color: var(--cyan); }
+
+  /* ─── FORMULA BOX ─── */
+  .formula {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.75rem;
+    margin: 1rem 0;
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--teal);
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .formula-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text3);
+    margin-bottom: 0.5rem;
+    font-family: var(--font);
+  }
+
+  /* ─── GRID 2 ─── */
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* ─── COMPARE CARDS ─── */
+  .compare-endo {
+    background: linear-gradient(135deg, rgba(255,107,138,0.07), rgba(255,107,138,0.03));
+    border: 1px solid rgba(255,107,138,0.25);
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+  .compare-exo {
+    background: linear-gradient(135deg, rgba(255,179,71,0.07), rgba(255,179,71,0.03));
+    border: 1px solid rgba(255,179,71,0.25);
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+
+  .compare-endo h4 { color: var(--rose); font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .compare-exo h4 { color: var(--amber); font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .compare-endo p, .compare-exo p { color: var(--text2); font-size: 0.9rem; }
+
+  /* ─── SVG DIAGRAM CONTAINER ─── */
+  .diagram-wrap {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .diagram-wrap h4 {
+    font-size: 0.75rem;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .diagram-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    justify-content: center;
+  }
+
+  .diagram-tab {
+    padding: 6px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-family: var(--font);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .diagram-tab.active-endo {
+    background: rgba(255,107,138,0.12);
+    border-color: var(--rose);
+    color: var(--rose);
+  }
+  .diagram-tab.active-exo {
+    background: rgba(255,179,71,0.12);
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  /* ─── LIST STYLES ─── */
+  .fancy-list {
+    list-style: none;
+    padding: 0;
+  }
+  .fancy-list li {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(30,58,92,0.5);
+    color: var(--text2);
+    font-size: 0.95rem;
+  }
+  .fancy-list li:last-child { border-bottom: none; }
+  .fancy-list li::before {
+    content: '→';
+    color: var(--cyan);
+    flex-shrink: 0;
+    font-family: var(--mono);
+  }
+
+  /* ─── TABLE ─── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 1rem 0;
+  }
+  .data-table th {
+    background: var(--bg3);
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(30,58,92,0.4);
+    color: var(--text2);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(0,212,255,0.04); }
+
+  /* ─── HIGHLIGHT ─── */
+  .hl-cyan { color: var(--cyan); font-weight: 600; }
+  .hl-rose { color: var(--rose); font-weight: 600; }
+  .hl-amber { color: var(--amber); font-weight: 600; }
+  .hl-teal { color: var(--teal); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-purple { color: var(--purple); font-weight: 600; }
+
+  /* ─── ALERT BOX ─── */
+  .alert {
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .alert-warn {
+    background: rgba(255,179,71,0.08);
+    border: 1px solid rgba(255,179,71,0.25);
+    color: var(--text2);
+  }
+  .alert-info {
+    background: rgba(0,212,255,0.06);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: var(--text2);
+  }
+  .alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ─── QUIZ ─── */
+  #quiz-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 940px;
+    margin: 0 auto 4rem;
+    position: relative;
+    z-index: 1;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .quiz-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .quiz-progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan), var(--teal));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .question-num {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .option-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    text-align: left;
+    color: var(--text2);
+    font-family: var(--font);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: rgba(0,212,255,0.4);
+    background: rgba(0,212,255,0.06);
+    color: var(--text);
+  }
+  .option-btn .opt-letter {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text3);
+    background: var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+  .option-btn.correct {
+    background: rgba(74,222,128,0.1);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .option-btn.correct .opt-letter { background: rgba(74,222,128,0.2); color: var(--green); }
+  .option-btn.wrong {
+    background: rgba(255,107,138,0.1);
+    border-color: var(--rose);
+    color: var(--rose);
+  }
+  .option-btn.wrong .opt-letter { background: rgba(255,107,138,0.2); color: var(--rose); }
+  .option-btn:disabled { cursor: default; }
+
+  .feedback-box {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.ok {
+    background: rgba(74,222,128,0.1);
+    border: 1px solid rgba(74,222,128,0.3);
+    color: var(--green);
+  }
+  .feedback-box.bad {
+    background: rgba(255,107,138,0.1);
+    border: 1px solid rgba(255,107,138,0.3);
+    color: var(--rose);
+  }
+
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--cyan2), var(--teal));
+    color: var(--bg);
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+  .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .score-display {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text3);
+  }
+
+  /* ─── RESULT ─── */
+  #quiz-result {
+    text-align: center;
+    display: none;
+    padding: 1rem 0;
+  }
+  #quiz-result.show { display: block; }
+  .result-score {
+    font-size: 4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--cyan), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .result-msg { font-size: 1.1rem; color: var(--text2); margin: 0.5rem 0 1.5rem; font-family: var(--serif); font-style: italic; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text3);
+    font-size: 0.8rem;
+    font-family: var(--mono);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section { animation: fadeSlideUp 0.5s ease both; }
+
+  /* curve animation on load */
+  .curve-path {
+    stroke-dasharray: 800;
+    stroke-dashoffset: 800;
+    animation: drawLine 2s ease forwards 0.3s;
+  }
+  @keyframes drawLine {
+    to { stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="brand">⚗️ Chimie · Sec 5</div>
+  <a href="#s1">Enthalpie</a>
+  <a href="#s2">Diagramme</a>
+  <a href="#s3">Complexe activé</a>
+  <a href="#s4">Endothermique</a>
+  <a href="#s5">Exothermique</a>
+  <a href="#quiz-section">Quiz</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">Aspect énergétique des transformations</div>
+  <h1>Le diagramme énergétique</h1>
+  <p>Énergie d'activation, enthalpie et complexe activé — tous les concepts pour maîtriser l'aspect énergétique des réactions chimiques.</p>
+  <div class="hero-pills">
+    <span class="pill">ΔH = Hp − Hr</span>
+    <span class="pill">Ea = Hca − Hr</span>
+    <span class="pill">Eainv = Hca − Hp</span>
+    <span class="pill">Sec 5 · Chimie</span>
+  </div>
+</header>
+
+<!-- ══════════════ SECTION 1 — ENTHALPIE ══════════════ -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>L'enthalpie et la variation d'enthalpie</h2>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label">Définition</div>
+    <p>L'<strong>enthalpie (H)</strong> est l'énergie totale contenue dans un système chimique à pression constante. Elle représente la somme de toutes les formes d'énergie (cinétique + potentielle) des particules. Elle s'exprime en <strong>kJ/mol</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔋 D'où vient cette énergie ?</h3>
+    <ul class="fancy-list">
+      <li>Énergie cinétique liée au mouvement des électrons et des molécules (vibration, rotation, translation)</li>
+      <li>Énergie potentielle provenant des forces d'attraction entre noyaux et électrons</li>
+      <li>Énergie stockée dans les liaisons chimiques entre les atomes</li>
+    </ul>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label">Définition</div>
+    <p>La <strong>variation d'enthalpie (ΔH)</strong> correspond à l'énergie absorbée ou dégagée lors d'une réaction chimique à pression et température constantes. On parle aussi de <em>chaleur de réaction</em>.</p>
+  </div>
+
+  <div class="formula">
+    <div class="formula-label">Formule de la variation d'enthalpie</div>
+    ΔH = H<sub style="font-size:0.75em">produits</sub> − H<sub style="font-size:0.75em">réactifs</sub>
+  </div>
+
+  <div class="grid2">
+    <div class="compare-endo">
+      <h4>🔺 ΔH positif → Endothermique</h4>
+      <p>Les produits ont <strong>plus</strong> d'enthalpie que les réactifs. La réaction <strong>absorbe</strong> de l'énergie de l'environnement.</p>
+    </div>
+    <div class="compare-exo">
+      <h4>🔻 ΔH négatif → Exothermique</h4>
+      <p>Les produits ont <strong>moins</strong> d'enthalpie que les réactifs. La réaction <strong>libère</strong> de l'énergie dans l'environnement.</p>
+    </div>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label">Enthalpie molaire standard</div>
+    <p>La <strong>variation d'enthalpie molaire standard (ΔH°)</strong> est mesurée dans des conditions standards (25 °C, 1 atm, solutions à 1 mol/L). Elle permet de comparer les réactions entre elles. L'unité est le <strong>kJ/mol</strong>.</p>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">💡</span>
+    <span>En pratique, il est difficile de mesurer l'enthalpie absolue d'une substance. On mesure donc la <em>variation</em> d'enthalpie en observant la chaleur échangée avec l'environnement.</span>
+  </div>
+</section>
+
+<!-- ══════════════ SECTION 2 — DIAGRAMME ÉNERGÉTIQUE ══════════════ -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Le diagramme énergétique</h2>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label">Définition</div>
+    <p>Le <strong>diagramme énergétique</strong> est un graphique qui présente les différents niveaux d'enthalpie des substances en fonction de la <em>progression de la réaction</em>. Il permet de visualiser si une réaction est endo ou exothermique, et de calculer l'énergie d'activation.</p>
+  </div>
+
+  <!-- INTERACTIVE DIAGRAM -->
+  <div class="diagram-wrap">
+    <h4>Diagramme interactif — choisissez le type de réaction</h4>
+    <div class="diagram-tabs">
+      <button class="diagram-tab active-endo" id="tab-endo" onclick="switchDiagram('endo')">🔵 Endothermique</button>
+      <button class="diagram-tab" id="tab-exo" onclick="switchDiagram('exo')">🟠 Exothermique</button>
+    </div>
+    <svg id="energy-svg" viewBox="0 0 560 300" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid lines -->
+      <line x1="60" y1="20" x2="60" y2="260" stroke="rgba(30,58,92,0.7)" stroke-width="1"/>
+      <line x1="60" y1="260" x2="520" y2="260" stroke="rgba(30,58,92,0.7)" stroke-width="1"/>
+      <!-- Axis labels -->
+      <text x="30" y="150" transform="rotate(-90 30 150)" fill="#5a7898" font-size="10" font-family="JetBrains Mono" text-anchor="middle">Enthalpie (kJ/mol)</text>
+      <text x="290" y="285" fill="#5a7898" font-size="10" font-family="JetBrains Mono" text-anchor="middle">Progression de la réaction →</text>
+      <!-- Dynamic content -->
+      <g id="diagram-endo">
+        <!-- Horizontal level lines -->
+        <line x1="60" y1="200" x2="160" y2="200" stroke="#00d4ff" stroke-width="2" stroke-dasharray="6,4" opacity="0.6"/>
+        <line x1="360" y1="100" x2="520" y2="100" stroke="#ff6b8a" stroke-width="2" stroke-dasharray="6,4" opacity="0.6"/>
+        <line x1="200" y1="50" x2="320" y2="50" stroke="#b39ddb" stroke-width="2" stroke-dasharray="6,4" opacity="0.6"/>
+        <!-- Curve -->
+        <path class="curve-path" d="M70,200 C120,200 140,200 160,200 C200,200 190,50 230,50 C250,50 270,50 290,50 C310,50 300,100 360,100 C400,100 480,100 510,100" fill="none" stroke="#00d4ff" stroke-width="2.5"/>
+        <!-- Labels -->
+        <text x="110" y="218" fill="#00d4ff" font-size="11" font-family="JetBrains Mono">Réactifs</text>
+        <text x="250" y="42" fill="#b39ddb" font-size="11" font-family="JetBrains Mono">Complexe activé (Ca)</text>
+        <text x="400" y="88" fill="#ff6b8a" font-size="11" font-family="JetBrains Mono">Produits</text>
+        <!-- Arrows & ΔH -->
+        <line x1="350" y1="200" x2="350" y2="104" stroke="#4ade80" stroke-width="1.5"/>
+        <polygon points="346,104 354,104 350,98" fill="#4ade80"/>
+        <polygon points="346,200 354,200 350,206" fill="#4ade80"/>
+        <text x="356" y="160" fill="#4ade80" font-size="11" font-family="JetBrains Mono">+ΔH</text>
+        <!-- Ea arrow -->
+        <line x1="180" y1="200" x2="180" y2="54" stroke="#ffb347" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="176,54 184,54 180,48" fill="#ffb347"/>
+        <text x="185" y="130" fill="#ffb347" font-size="11" font-family="JetBrains Mono">Ea</text>
+        <!-- H values -->
+        <text x="62" y="197" fill="#5a7898" font-size="9" font-family="JetBrains Mono">0</text>
+        <text x="62" y="97" fill="#5a7898" font-size="9" font-family="JetBrains Mono">100</text>
+        <text x="62" y="47" fill="#5a7898" font-size="9" font-family="JetBrains Mono">150</text>
+      </g>
+      <g id="diagram-exo" style="display:none">
+        <!-- Horizontal level lines -->
+        <line x1="60" y1="100" x2="160" y2="100" stroke="#ffb347" stroke-width="2" stroke-dasharray="6,4" opacity="0.6"/>
+        <line x1="360" y1="200" x2="520" y2="200" stroke="#00d4ff" stroke-width="2" stroke-dasharray="6,4" opacity="0.6"/>
+        <line x1="200" y1="50" x2="320" y2="50" stroke="#b39ddb" stroke-width="2" stroke-dasharray="6,4" opacity="0.6"/>
+        <!-- Curve -->
+        <path class="curve-path" d="M70,100 C120,100 140,100 160,100 C200,100 190,50 230,50 C250,50 270,50 290,50 C310,50 300,200 360,200 C400,200 480,200 510,200" fill="none" stroke="#ffb347" stroke-width="2.5"/>
+        <!-- Labels -->
+        <text x="110" y="88" fill="#ffb347" font-size="11" font-family="JetBrains Mono">Réactifs</text>
+        <text x="250" y="42" fill="#b39ddb" font-size="11" font-family="JetBrains Mono">Complexe activé (Ca)</text>
+        <text x="400" y="218" fill="#00d4ff" font-size="11" font-family="JetBrains Mono">Produits</text>
+        <!-- Arrows & ΔH -->
+        <line x1="350" y1="104" x2="350" y2="196" stroke="#ff6b8a" stroke-width="1.5"/>
+        <polygon points="346,196 354,196 350,202" fill="#ff6b8a"/>
+        <polygon points="346,104 354,104 350,98" fill="#ff6b8a"/>
+        <text x="356" y="160" fill="#ff6b8a" font-size="11" font-family="JetBrains Mono">−ΔH</text>
+        <!-- Ea arrow -->
+        <line x1="180" y1="100" x2="180" y2="54" stroke="#ffb347" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="176,54 184,54 180,48" fill="#ffb347"/>
+        <text x="185" y="82" fill="#ffb347" font-size="11" font-family="JetBrains Mono">Ea</text>
+        <!-- H values -->
+        <text x="62" y="97" fill="#5a7898" font-size="9" font-family="JetBrains Mono">100</text>
+        <text x="62" y="197" fill="#5a7898" font-size="9" font-family="JetBrains Mono">0</text>
+        <text x="62" y="47" fill="#5a7898" font-size="9" font-family="JetBrains Mono">150</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h3>📐 Comment lire un diagramme énergétique ?</h3>
+    <ul class="fancy-list">
+      <li>L'axe des Y représente l'<span class="hl-cyan">enthalpie</span> en kJ/mol</li>
+      <li>L'axe des X représente la <span class="hl-teal">progression de la réaction</span> (début → fin)</li>
+      <li>Le <span class="hl-purple">sommet de la courbe</span> correspond au complexe activé (Ca)</li>
+      <li>La flèche verticale entre réactifs et produits indique la <span class="hl-green">variation d'enthalpie ΔH</span></li>
+      <li>La flèche de réactifs vers le sommet indique l'<span class="hl-amber">énergie d'activation Ea</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🔁 Réaction directe et réaction inverse</h3>
+    <p style="color:var(--text2)">Certaines réactions sont réversibles : les produits peuvent redevenir réactifs. Dans ce cas, le diagramme s'interprète dans les deux sens :</p>
+    <table class="data-table" style="margin-top:1rem">
+      <thead>
+        <tr><th>Réaction</th><th>Direction</th><th>Ea utilisée</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="hl-cyan">Directe</td><td>Réactifs → Produits</td><td>Ea = Hca − Hr</td></tr>
+        <tr><td class="hl-rose">Inverse</td><td>Produits → Réactifs</td><td>Ea inv = Hca − Hp</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════ SECTION 3 — COMPLEXE ACTIVÉ ══════════════ -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Le complexe activé et l'énergie d'activation</h2>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label">Définition — Complexe activé</div>
+    <p>Le <strong>complexe activé (Ca)</strong> est un état de transition instable et très énergétique qui se forme lors du passage des réactifs aux produits. Il correspond au sommet de la courbe dans le diagramme énergétique.</p>
+  </div>
+
+  <div class="card">
+    <h3>⚡ Qu'est-ce que le complexe activé ?</h3>
+    <p style="color:var(--text2);margin-bottom:0.75rem">Lors d'une collision efficace entre des molécules de réactifs, un état intermédiaire se forme brièvement :</p>
+    <ul class="fancy-list">
+      <li>Les liaisons des réactifs s'<span class="hl-rose">affaiblissent</span> tandis que de nouvelles liaisons commencent à se <span class="hl-green">former</span></li>
+      <li>Cet état est <span class="hl-amber">extrêmement instable</span> — quasi indétectable expérimentalement</li>
+      <li>Il est souvent représenté comme un <span class="hl-purple">amas d'atomes non liés</span> chimiquement</li>
+      <li>Il possède toujours l'<span class="hl-cyan">enthalpie maximale</span> de la réaction (sommet)</li>
+    </ul>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label">Définition — Énergie d'activation</div>
+    <p>L'<strong>énergie d'activation (Ea)</strong> est la quantité d'énergie minimale que doivent posséder les réactifs pour former le complexe activé et permettre à la réaction de se dérouler. Elle est toujours <strong>positive</strong>, que la réaction soit endo ou exothermique.</p>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="formula">
+        <div class="formula-label">Énergie d'activation — réaction directe</div>
+        Ea = H<sub style="font-size:0.75em">ca</sub> − H<sub style="font-size:0.75em">r</sub>
+      </div>
+    </div>
+    <div>
+      <div class="formula">
+        <div class="formula-label">Énergie d'activation — réaction inverse</div>
+        Ea<sub style="font-size:0.75em">inv</sub> = H<sub style="font-size:0.75em">ca</sub> − H<sub style="font-size:0.75em">p</sub>
+      </div>
+    </div>
+  </div>
+
+  <!-- Worked example -->
+  <div class="card">
+    <h3>📝 Exemple résolu</h3>
+    <p style="color:var(--text2);margin-bottom:1rem">Soit un diagramme avec : H<sub>réactifs</sub> = 0 kJ/mol, H<sub>ca</sub> = 150 kJ/mol, H<sub>produits</sub> = 100 kJ/mol.</p>
+    <table class="data-table">
+      <thead><tr><th>Calcul</th><th>Formule</th><th>Résultat</th></tr></thead>
+      <tbody>
+        <tr><td>ΔH</td><td>Hp − Hr = 100 − 0</td><td class="hl-rose">+100 kJ/mol → Endothermique</td></tr>
+        <tr><td>Ea (directe)</td><td>Hca − Hr = 150 − 0</td><td class="hl-amber">150 kJ/mol</td></tr>
+        <tr><td>Ea inv (inverse)</td><td>Hca − Hp = 150 − 100</td><td class="hl-teal">50 kJ/mol</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert alert-warn">
+    <span class="alert-icon">⚠️</span>
+    <span>L'énergie d'activation est <strong>toujours positive</strong> et <strong>indépendante du ΔH</strong>. Même une réaction exothermique a besoin d'une Ea pour démarrer (ex. : une allumette qui met le feu).</span>
+  </div>
+</section>
+
+<!-- ══════════════ SECTION 4 — ENDOTHERMIQUE ══════════════ -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Les réactions endothermiques en détail</h2>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label">Définition</div>
+    <p>Une réaction <strong>endothermique</strong> est une réaction qui <strong>absorbe de l'énergie</strong> de son environnement. Les produits sont à un niveau d'enthalpie plus élevé que les réactifs. Le <strong>ΔH est positif</strong>.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>🌡️ Caractéristiques</h3>
+      <ul class="fancy-list">
+        <li>ΔH <span class="hl-rose">&gt; 0</span> (positif)</li>
+        <li>Hp <span class="hl-cyan">&gt;</span> Hr</li>
+        <li>L'environnement se <span class="hl-rose">refroidit</span></li>
+        <li>Courbe : produits <span class="hl-rose">plus hauts</span> que réactifs</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🧪 Exemples concrets</h3>
+      <ul class="fancy-list">
+        <li>Dissolution du nitrate d'ammonium dans l'eau (pochette de froid)</li>
+        <li>Photosynthèse des plantes</li>
+        <li>Cuisson d'un œuf</li>
+        <li>Fonte de la glace</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📊 Interprétation du diagramme endothermique</h3>
+    <p style="color:var(--text2);margin-bottom:0.75rem">Dans un diagramme endothermique :</p>
+    <ul class="fancy-list">
+      <li>La flèche ΔH <span class="hl-cyan">pointe vers le haut</span> (des réactifs vers les produits)</li>
+      <li>Le <span class="hl-amber">Ea</span> est mesuré depuis les réactifs jusqu'au sommet (Ca)</li>
+      <li>Le <span class="hl-teal">Ea inversé</span> (réaction inverse) est PLUS PETIT que le Ea direct</li>
+      <li>La réaction inverse (produits → réactifs) est <span class="hl-amber">exothermique</span></li>
+    </ul>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">🔍</span>
+    <span>Dans une réaction endothermique, la réaction inverse est toujours <strong>exothermique</strong>, et vice-versa. Le diagramme reste le même, on le lit simplement dans l'autre sens.</span>
+  </div>
+</section>
+
+<!-- ══════════════ SECTION 5 — EXOTHERMIQUE ══════════════ -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Les réactions exothermiques en détail</h2>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label">Définition</div>
+    <p>Une réaction <strong>exothermique</strong> est une réaction qui <strong>libère de l'énergie</strong> dans l'environnement. Les produits sont à un niveau d'enthalpie plus bas que les réactifs. Le <strong>ΔH est négatif</strong>.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>🔥 Caractéristiques</h3>
+      <ul class="fancy-list">
+        <li>ΔH <span class="hl-amber">&lt; 0</span> (négatif)</li>
+        <li>Hp <span class="hl-cyan">&lt;</span> Hr</li>
+        <li>L'environnement se <span class="hl-amber">réchauffe</span></li>
+        <li>Courbe : produits <span class="hl-amber">plus bas</span> que réactifs</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🧪 Exemples concrets</h3>
+      <ul class="fancy-list">
+        <li>Combustion du méthane (flamme de cuisinière)</li>
+        <li>Respiration cellulaire</li>
+        <li>Solidification de l'eau (congélation)</li>
+        <li>Dissolution de NaOH dans l'eau</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📊 Interprétation du diagramme exothermique</h3>
+    <p style="color:var(--text2);margin-bottom:0.75rem">Dans un diagramme exothermique :</p>
+    <ul class="fancy-list">
+      <li>La flèche ΔH <span class="hl-amber">pointe vers le bas</span> (des réactifs vers les produits)</li>
+      <li>Le <span class="hl-amber">Ea</span> est mesuré depuis les réactifs jusqu'au sommet (Ca)</li>
+      <li>Le <span class="hl-teal">Ea inversé</span> est PLUS GRAND que le Ea direct</li>
+      <li>La réaction inverse (produits → réactifs) est <span class="hl-rose">endothermique</span></li>
+    </ul>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <div class="card">
+    <h3>📋 Tableau comparatif récapitulatif</h3>
+    <table class="data-table" style="margin-top:0.5rem">
+      <thead>
+        <tr>
+          <th>Caractéristique</th>
+          <th>Endothermique</th>
+          <th>Exothermique</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ΔH</td>
+          <td class="hl-rose">Positif (+)</td>
+          <td class="hl-amber">Négatif (−)</td>
+        </tr>
+        <tr>
+          <td>Énergie</td>
+          <td>Absorbée</td>
+          <td>Libérée</td>
+        </tr>
+        <tr>
+          <td>Hp vs Hr</td>
+          <td>Hp &gt; Hr</td>
+          <td>Hp &lt; Hr</td>
+        </tr>
+        <tr>
+          <td>Flèche ΔH</td>
+          <td>↑ vers le haut</td>
+          <td>↓ vers le bas</td>
+        </tr>
+        <tr>
+          <td>Effet sur l'environnement</td>
+          <td>Refroidissement</td>
+          <td>Réchauffement</td>
+        </tr>
+        <tr>
+          <td>Ea vs Ea inv</td>
+          <td>Ea &gt; Ea inv</td>
+          <td>Ea &lt; Ea inv</td>
+        </tr>
+        <tr>
+          <td>Réaction inverse</td>
+          <td>Exothermique</td>
+          <td>Endothermique</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════ QUIZ ══════════════ -->
+<div id="quiz-section">
+  <div class="quiz-header">
+    <h2>🎯 Quiz de révision</h2>
+    <span class="score-display" id="score-disp">0 / 10</span>
+  </div>
+  <div class="quiz-progress-bar">
+    <div class="quiz-progress-fill" id="q-prog" style="width:10%"></div>
+  </div>
+
+  <div id="quiz-body">
+    <div class="question-num" id="q-num">Question 1 / 10</div>
+    <div class="question-text" id="q-text"></div>
+    <div class="options" id="q-opts"></div>
+    <div class="feedback-box" id="q-feedback"></div>
+    <div class="quiz-nav">
+      <div></div>
+      <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()" style="display:none">Question suivante →</button>
+    </div>
+  </div>
+
+  <div id="quiz-result">
+    <div class="result-score" id="r-score"></div>
+    <div class="result-msg" id="r-msg"></div>
+    <button class="btn btn-primary" onclick="restartQuiz()">🔄 Recommencer le quiz</button>
+  </div>
+</div>
+
+<footer>
+  <span>Chimie Sec 5 · Réactions énergétiques — Cours interactif</span><br>
+  <span style="color:var(--text3);font-size:0.7rem;margin-top:4px;display:block">Contenu basé sur le programme du MEES · Quebec</span>
+</footer>
+
+<script>
+// ─── DIAGRAM SWITCH ───
+function switchDiagram(type) {
+  const endo = document.getElementById('diagram-endo');
+  const exo = document.getElementById('diagram-exo');
+  const tabEndo = document.getElementById('tab-endo');
+  const tabExo = document.getElementById('tab-exo');
+  const paths = document.querySelectorAll('.curve-path');
+
+  if (type === 'endo') {
+    endo.style.display = '';
+    exo.style.display = 'none';
+    tabEndo.className = 'diagram-tab active-endo';
+    tabExo.className = 'diagram-tab';
+  } else {
+    endo.style.display = 'none';
+    exo.style.display = '';
+    tabEndo.className = 'diagram-tab';
+    tabExo.className = 'diagram-tab active-exo';
+  }
+  // Re-trigger animation
+  paths.forEach(p => {
+    p.style.animation = 'none';
+    p.offsetHeight;
+    p.style.animation = '';
+  });
+}
+
+// ─── QUIZ DATA ───
+const questions = [
+  {
+    q: "Qu'est-ce que l'enthalpie (H) d'une substance ?",
+    opts: [
+      "La température d'une réaction chimique",
+      "L'énergie totale d'un système à pression constante",
+      "La masse molaire d'un composé",
+      "La vitesse à laquelle une réaction se produit"
+    ],
+    ans: 1,
+    fb: "L'enthalpie est l'énergie totale d'un système (cinétique + potentielle) à pression constante, exprimée en kJ/mol."
+  },
+  {
+    q: "Dans une réaction exothermique, quel est le signe de ΔH ?",
+    opts: ["ΔH > 0 (positif)", "ΔH = 0 (nul)", "ΔH < 0 (négatif)", "ΔH peut être positif ou négatif"],
+    ans: 2,
+    fb: "Une réaction exothermique libère de l'énergie. Les produits ont moins d'enthalpie que les réactifs, donc ΔH = Hp − Hr est négatif."
+  },
+  {
+    q: "Quelle est la formule correcte pour calculer la variation d'enthalpie ΔH ?",
+    opts: ["ΔH = Hr − Hp", "ΔH = Hca − Hr", "ΔH = Hp − Hr", "ΔH = Hr + Hp"],
+    ans: 2,
+    fb: "ΔH = Hp − Hr. On soustrait l'enthalpie des réactifs de celle des produits."
+  },
+  {
+    q: "Qu'est-ce que le complexe activé (Ca) ?",
+    opts: [
+      "Un catalyseur qui accélère la réaction",
+      "Un état de transition instable formé lors de la collision des réactifs",
+      "Le produit final d'une réaction",
+      "Un réactif particulièrement énergétique"
+    ],
+    ans: 1,
+    fb: "Le complexe activé est un état intermédiaire instable et très énergétique qui se forme brièvement lors du passage des réactifs aux produits."
+  },
+  {
+    q: "Sur un diagramme énergétique, où se situe le complexe activé ?",
+    opts: [
+      "Au niveau des réactifs (début de la courbe)",
+      "Au niveau des produits (fin de la courbe)",
+      "Au sommet de la courbe (maximum d'enthalpie)",
+      "À mi-chemin entre réactifs et produits"
+    ],
+    ans: 2,
+    fb: "Le complexe activé se trouve toujours au sommet de la courbe, car il représente le niveau d'enthalpie maximal de la réaction."
+  },
+  {
+    q: "Une réaction endothermique a H(réactifs) = 20 kJ/mol et H(produits) = 80 kJ/mol. Quel est son ΔH ?",
+    opts: ["+100 kJ/mol", "−60 kJ/mol", "+60 kJ/mol", "−100 kJ/mol"],
+    ans: 2,
+    fb: "ΔH = Hp − Hr = 80 − 20 = +60 kJ/mol. Positif → réaction endothermique ✓"
+  },
+  {
+    q: "Si H(Ca) = 200 kJ/mol et H(réactifs) = 50 kJ/mol, quelle est l'énergie d'activation (Ea) ?",
+    opts: ["250 kJ/mol", "150 kJ/mol", "50 kJ/mol", "200 kJ/mol"],
+    ans: 1,
+    fb: "Ea = Hca − Hr = 200 − 50 = 150 kJ/mol."
+  },
+  {
+    q: "Dans une réaction endothermique, la réaction inverse est...",
+    opts: ["Aussi endothermique", "Exothermique", "Ni l'une ni l'autre", "Impossible à déterminer"],
+    ans: 1,
+    fb: "La réaction inverse d'une réaction endothermique est toujours exothermique. On lit simplement le même diagramme de droite à gauche."
+  },
+  {
+    q: "Laquelle de ces affirmations sur l'énergie d'activation est VRAIE ?",
+    opts: [
+      "Elle est négative pour les réactions exothermiques",
+      "Elle représente la différence d'énergie entre les réactifs et les produits",
+      "Elle est toujours positive, quelle que soit la réaction",
+      "Elle est nulle si la réaction est spontanée"
+    ],
+    ans: 2,
+    fb: "L'énergie d'activation est toujours positive (Hca > Hr) et représente l'énergie minimale nécessaire pour former le complexe activé, indépendamment du ΔH."
+  },
+  {
+    q: "La dissolution du nitrate d'ammonium dans l'eau refroidit le mélange. Cette réaction est...",
+    opts: [
+      "Exothermique, car elle produit de la chaleur",
+      "Endothermique, car elle absorbe la chaleur de l'environnement",
+      "Ni endothermique ni exothermique",
+      "Exothermique, car ΔH est négatif"
+    ],
+    ans: 1,
+    fb: "Si l'environnement se refroidit, c'est que la réaction absorbe de la chaleur → endothermique, ΔH > 0. C'est le principe des pochettes de froid !"
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = 0;
+let answeredFlags = new Array(questions.length).fill(false);
+
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('q-num').textContent = `Question ${current + 1} / ${questions.length}`;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-prog').style.width = `${((current + 1) / questions.length) * 100}%`;
+
+  const optsEl = document.getElementById('q-opts');
+  optsEl.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    optsEl.appendChild(btn);
+  });
+
+  const fb = document.getElementById('q-feedback');
+  fb.className = 'feedback-box';
+  fb.textContent = '';
+  document.getElementById('btn-next').style.display = 'none';
+}
+
+function selectAnswer(chosen) {
+  if (answeredFlags[current]) return;
+  answeredFlags[current] = true;
+  answered++;
+
+  const q = questions[current];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('q-feedback');
+
+  if (chosen === q.ans) {
+    btns[chosen].classList.add('correct');
+    fb.className = 'feedback-box show ok';
+    fb.textContent = '✅ Bonne réponse ! ' + q.fb;
+    score++;
+  } else {
+    btns[chosen].classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+    fb.className = 'feedback-box show bad';
+    fb.textContent = '❌ Mauvaise réponse. ' + q.fb;
+  }
+
+  document.getElementById('score-disp').textContent = `${score} / ${questions.length}`;
+
+  const btnNext = document.getElementById('btn-next');
+  if (current < questions.length - 1) {
+    btnNext.textContent = 'Question suivante →';
+    btnNext.style.display = 'block';
+  } else {
+    btnNext.textContent = 'Voir les résultats';
+    btnNext.style.display = 'block';
+  }
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResult();
+    return;
+  }
+  renderQuestion();
+}
+
+function showResult() {
+  document.getElementById('quiz-body').style.display = 'none';
+  const res = document.getElementById('quiz-result');
+  res.classList.add('show');
+  document.getElementById('r-score').textContent = `${score} / ${questions.length}`;
+  const pct = (score / questions.length) * 100;
+  let msg;
+  if (pct >= 90) msg = "Excellent ! Tu maîtrises parfaitement les réactions énergétiques. 🏆";
+  else if (pct >= 70) msg = "Très bien ! Quelques petits détails à revoir, mais tu as les bases solides. 👍";
+  else if (pct >= 50) msg = "Pas mal ! Relis les sections sur l'enthalpie et le diagramme énergétique. 📖";
+  else msg = "Continue tes efforts ! Reprends le cours depuis le début et retente le quiz. 💪";
+  document.getElementById('r-msg').textContent = msg;
+}
+
+function restartQuiz() {
+  current = 0;
+  score = 0;
+  answered = 0;
+  answeredFlags = new Array(questions.length).fill(false);
+  document.getElementById('quiz-body').style.display = 'block';
+  document.getElementById('quiz-result').classList.remove('show');
+  document.getElementById('score-disp').textContent = '0 / 10';
+  renderQuestion();
+}
+
+// Init
+renderQuestion();
+</script>
+</body>
+</html>
