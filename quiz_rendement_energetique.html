@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Le Rendement Énergétique</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #232740;
+    --border: rgba(255,255,255,0.08);
+    --accent: #f5a623;
+    --teal: #4ecdc4;
+    --text: #e8eaf6;
+    --text-muted: #8b8fa8;
+    --green: #6fcf97;
+    --red: #ff6b6b;
+    --blue: #64b5f6;
+    --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+    border-bottom: 2px solid var(--teal);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(78,205,196,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .back-btn {
+    position: absolute;
+    top: 1.25rem; left: 1.25rem;
+    display: flex; align-items: center; gap: 0.4rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+  }
+  .back-btn:hover {
+    color: var(--teal);
+    border-color: rgba(78,205,196,0.4);
+    background: rgba(78,205,196,0.06);
+  }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(78,205,196,0.12);
+    border: 1px solid rgba(78,205,196,0.35);
+    color: var(--teal);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 0.6rem;
+    background: linear-gradient(135deg, #ffffff 0%, var(--teal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+  .hero .emoji-row { font-size: 2rem; margin-bottom: 0.75rem; -webkit-text-fill-color: initial; }
+
+  /* ── PROGRESS ── */
+  .quiz-progress {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .prog-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+    min-width: 100px;
+  }
+  .prog-track {
+    flex: 1;
+    background: var(--surface2);
+    border-radius: 20px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--green));
+    border-radius: 20px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+  .prog-score {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--accent);
+    white-space: nowrap;
+    min-width: 60px;
+    text-align: right;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .q-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--teal);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .q-card.answered::before { opacity: 1; }
+  .q-card.answered.correct-card::before { background: var(--green); }
+  .q-card.answered.wrong-card::before { background: var(--red); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .q-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(78,205,196,0.15);
+    border: 1px solid rgba(78,205,196,0.35);
+    color: var(--teal);
+    font-size: 0.85rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .q-num.answered-correct { background: rgba(111,207,151,0.15); border-color: var(--green); color: var(--green); }
+  .q-num.answered-wrong   { background: rgba(255,107,107,0.15); border-color: var(--red);   color: var(--red); }
+
+  .q-meta {
+    flex: 1;
+  }
+  .q-theme {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+  }
+  .q-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+  }
+
+  /* ── FORMULA HINT ── */
+  .q-hint {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1rem;
+    font-family: 'Fira Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .q-hint .hint-icon { font-size: 0.9rem; }
+
+  /* ── OPTIONS ── */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0.8rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.93rem;
+    font-weight: 600;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .option::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(78,205,196,0.06);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .option:hover:not(.disabled)::after { opacity: 1; }
+  .option:hover:not(.disabled) {
+    border-color: rgba(78,205,196,0.3);
+    transform: translateX(3px);
+  }
+  .option.disabled { cursor: default; transform: none !important; }
+  .option.correct {
+    background: rgba(111,207,151,0.1);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .option.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .opt-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .option.correct .opt-letter { background: var(--green); color: #000; border-color: var(--green); }
+  .option.wrong   .opt-letter { background: var(--red);   color: #fff; border-color: var(--red); }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    display: none;
+    animation: slideIn 0.25s ease;
+  }
+  .feedback.show { display: flex; gap: 0.5rem; align-items: flex-start; }
+  .feedback.ok { background: rgba(111,207,151,0.1); border: 1px solid rgba(111,207,151,0.25); color: var(--green); }
+  .feedback.ko { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.25); color: var(--red); }
+  .feedback .fb-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .feedback .fb-text { color: var(--text); }
+  .feedback strong { color: inherit; }
+
+  @keyframes slideIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── MATH INLINE ── */
+  .mi {
+    font-family: 'Fira Mono', monospace;
+    background: rgba(255,255,255,0.07);
+    padding: 0.1em 0.4em;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: var(--accent);
+  }
+
+  /* ── RÉSULTATS FINAUX ── */
+  .results-card {
+    background: linear-gradient(135deg, var(--surface), rgba(78,205,196,0.06));
+    border: 2px solid rgba(78,205,196,0.3);
+    border-radius: 24px;
+    padding: 2.5rem;
+    text-align: center;
+    margin: 2rem 0;
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .results-card.show { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .results-emoji { font-size: 3.5rem; margin-bottom: 1rem; }
+  .results-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: #fff;
+  }
+  .results-subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+  .score-big {
+    font-family: 'Fira Mono', monospace;
+    font-size: 4rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+  .score-label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; }
+
+  .score-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .score-stat {
+    text-align: center;
+    padding: 1rem 1.5rem;
+    background: var(--surface2);
+    border-radius: 14px;
+    min-width: 100px;
+  }
+  .score-stat .ss-val {
+    font-family: 'Fira Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+  }
+  .score-stat .ss-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .results-btns {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-retry {
+    background: var(--teal);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 0.7rem 1.5rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-retry:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn-cours {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.7rem 1.5rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-cours:hover { border-color: rgba(245,166,35,0.4); color: var(--accent); }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0 1.5rem;
+  }
+  .section-divider hr { flex:1; border:none; border-top:1px solid var(--border); }
+  .section-divider span {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <a class="back-btn" href="cours_rendement_energetique.html">← Retour au cours</a>
+  <div class="emoji-row">🎯</div>
+  <div class="badge">Quiz interactif</div>
+  <h1>Le Rendement Énergétique</h1>
+  <p>Teste ta compréhension avec 10 questions variées</p>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="quiz-progress">
+  <div class="prog-label" id="prog-label">Question 0 / 10</div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <div class="prog-score" id="prog-score">— / 10</div>
+</div>
+
+<div class="container">
+
+  <!-- ── SECTION 1 : Concepts ── -->
+  <div class="section-divider">
+    <hr><span>Partie 1 — Concepts fondamentaux</span><hr>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="qc0">
+    <div class="q-header">
+      <div class="q-num" id="qn0">1</div>
+      <div class="q-meta">
+        <div class="q-theme">Définition</div>
+        <div class="q-text">Qu'est-ce que le rendement énergétique d'un appareil ?</div>
+      </div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="check(0,0,1)"><span class="opt-letter">A</span> La quantité totale d'énergie consommée en une heure</div>
+      <div class="option" onclick="check(0,1,1)"><span class="opt-letter">B</span> Le pourcentage d'énergie consommée transformée en énergie utile</div>
+      <div class="option" onclick="check(0,2,1)"><span class="opt-letter">C</span> La vitesse à laquelle un appareil consomme de l'énergie</div>
+      <div class="option" onclick="check(0,3,1)"><span class="opt-letter">D</span> La différence entre l'énergie utile et l'énergie dissipée</div>
+    </div>
+    <div class="feedback" id="fb0"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="qc1">
+    <div class="q-header">
+      <div class="q-num" id="qn1">2</div>
+      <div class="q-meta">
+        <div class="q-theme">Loi de conservation</div>
+        <div class="q-text">Selon la loi de la conservation de l'énergie, le rendement d'un appareil peut-il dépasser 100 % ?</div>
+      </div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="check(1,0,0)"><span class="opt-letter">A</span> Non, jamais — on ne peut pas créer de l'énergie</div>
+      <div class="option" onclick="check(1,1,0)"><span class="opt-letter">B</span> Oui, avec des technologies très avancées</div>
+      <div class="option" onclick="check(1,2,0)"><span class="opt-letter">C</span> Oui, si l'énergie utile est de type électrique</div>
+      <div class="option" onclick="check(1,3,0)"><span class="opt-letter">D</span> Seulement dans le vide, sans frottement</div>
+    </div>
+    <div class="feedback" id="fb1"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="qc2">
+    <div class="q-header">
+      <div class="q-num" id="qn2">3</div>
+      <div class="q-meta">
+        <div class="q-theme">Énergie dissipée</div>
+        <div class="q-text">Quel est le lien entre l'énergie consommée, l'énergie utile et l'énergie dissipée ?</div>
+      </div>
+    </div>
+    <div class="q-hint"><span class="hint-icon">📐</span> Pense à la loi de conservation de l'énergie</div>
+    <div class="options">
+      <div class="option" onclick="check(2,0,2)"><span class="opt-letter">A</span> E_consommée = E_utile − E_dissipée</div>
+      <div class="option" onclick="check(2,1,2)"><span class="opt-letter">B</span> E_utile = E_consommée + E_dissipée</div>
+      <div class="option" onclick="check(2,2,2)"><span class="opt-letter">C</span> E_consommée = E_utile + E_dissipée</div>
+      <div class="option" onclick="check(2,3,2)"><span class="opt-letter">D</span> E_dissipée = E_utile × E_consommée</div>
+    </div>
+    <div class="feedback" id="fb2"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="qc3">
+    <div class="q-header">
+      <div class="q-num" id="qn3">4</div>
+      <div class="q-meta">
+        <div class="q-theme">Énergie dissipée — cause</div>
+        <div class="q-text">Dans une machine simple, quelle est la principale cause de l'énergie non utile ?</div>
+      </div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="check(3,0,2)"><span class="opt-letter">A</span> L'électricité statique accumulée dans les pièces</div>
+      <div class="option" onclick="check(3,1,2)"><span class="opt-letter">B</span> Le bruit produit par le moteur</div>
+      <div class="option" onclick="check(3,2,2)"><span class="opt-letter">C</span> Le frottement entre les pièces mobiles, qui produit de la chaleur</div>
+      <div class="option" onclick="check(3,3,2)"><span class="opt-letter">D</span> La lumière émise lors du fonctionnement</div>
+    </div>
+    <div class="feedback" id="fb3"></div>
+  </div>
+
+  <!-- ── SECTION 2 : Calculs ── -->
+  <div class="section-divider">
+    <hr><span>Partie 2 — Calculs</span><hr>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="qc4">
+    <div class="q-header">
+      <div class="q-num" id="qn4">5</div>
+      <div class="q-meta">
+        <div class="q-theme">Calcul du rendement</div>
+        <div class="q-text">Un moteur consomme <span class="mi">70 000 J</span> et produit <span class="mi">9 800 J</span> d'énergie mécanique. Quel est son rendement ?</div>
+      </div>
+    </div>
+    <div class="q-hint"><span class="hint-icon">🧮</span> Rendement = (E_utile / E_consommée) × 100</div>
+    <div class="options">
+      <div class="option" onclick="check(4,0,1)"><span class="opt-letter">A</span> 7 %</div>
+      <div class="option" onclick="check(4,1,1)"><span class="opt-letter">B</span> 14 %</div>
+      <div class="option" onclick="check(4,2,1)"><span class="opt-letter">C</span> 25 %</div>
+      <div class="option" onclick="check(4,3,1)"><span class="opt-letter">D</span> 86 %</div>
+    </div>
+    <div class="feedback" id="fb4"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="qc5">
+    <div class="q-header">
+      <div class="q-num" id="qn5">6</div>
+      <div class="q-meta">
+        <div class="q-theme">Calcul de l'énergie utile</div>
+        <div class="q-text">Un appareil a un rendement de <span class="mi">35 %</span> et consomme <span class="mi">200 000 J</span>. Quelle est son énergie utile ?</div>
+      </div>
+    </div>
+    <div class="q-hint"><span class="hint-icon">🧮</span> E_utile = (Rendement / 100) × E_consommée</div>
+    <div class="options">
+      <div class="option" onclick="check(5,0,0)"><span class="opt-letter">A</span> 70 000 J</div>
+      <div class="option" onclick="check(5,1,0)"><span class="opt-letter">B</span> 35 000 J</div>
+      <div class="option" onclick="check(5,2,0)"><span class="opt-letter">C</span> 571 429 J</div>
+      <div class="option" onclick="check(5,3,0)"><span class="opt-letter">D</span> 130 000 J</div>
+    </div>
+    <div class="feedback" id="fb5"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" id="qc6">
+    <div class="q-header">
+      <div class="q-num" id="qn6">7</div>
+      <div class="q-meta">
+        <div class="q-theme">Calcul de l'énergie consommée</div>
+        <div class="q-text">Une ampoule DEL de rendement <span class="mi">80 %</span> émet <span class="mi">60 J</span> de lumière. Quelle énergie électrique a-t-elle consommée ?</div>
+      </div>
+    </div>
+    <div class="q-hint"><span class="hint-icon">🧮</span> E_consommée = (E_utile × 100) / Rendement</div>
+    <div class="options">
+      <div class="option" onclick="check(6,0,3)"><span class="opt-letter">A</span> 48 J</div>
+      <div class="option" onclick="check(6,1,3)"><span class="opt-letter">B</span> 4 800 J</div>
+      <div class="option" onclick="check(6,2,3)"><span class="opt-letter">C</span> 60 J</div>
+      <div class="option" onclick="check(6,3,3)"><span class="opt-letter">D</span> 75 J</div>
+    </div>
+    <div class="feedback" id="fb6"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card" id="qc7">
+    <div class="q-header">
+      <div class="q-num" id="qn7">8</div>
+      <div class="q-meta">
+        <div class="q-theme">Calcul avec dissipation</div>
+        <div class="q-text">Un lecteur DVD consomme <span class="mi">54 000 J</span> et dissipe <span class="mi">16 800 J</span> en chaleur. Quel est son rendement ?</div>
+      </div>
+    </div>
+    <div class="q-hint"><span class="hint-icon">💡</span> Calcule d'abord E_utile = E_consommée − E_dissipée</div>
+    <div class="options">
+      <div class="option" onclick="check(7,0,1)"><span class="opt-letter">A</span> 31,1 %</div>
+      <div class="option" onclick="check(7,1,1)"><span class="opt-letter">B</span> 68,9 %</div>
+      <div class="option" onclick="check(7,2,1)"><span class="opt-letter">C</span> 55,5 %</div>
+      <div class="option" onclick="check(7,3,1)"><span class="opt-letter">D</span> 80 %</div>
+    </div>
+    <div class="feedback" id="fb7"></div>
+  </div>
+
+  <!-- ── SECTION 3 : Application ── -->
+  <div class="section-divider">
+    <hr><span>Partie 3 — Application et analyse</span><hr>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card" id="qc8">
+    <div class="q-header">
+      <div class="q-num" id="qn8">9</div>
+      <div class="q-meta">
+        <div class="q-theme">Comparaison d'appareils</div>
+        <div class="q-text">Parmi les ampoules suivantes, laquelle a le meilleur rendement énergétique ?</div>
+      </div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="check(8,0,2)"><span class="opt-letter">A</span> Ampoule à incandescence (~5 %)</div>
+      <div class="option" onclick="check(8,1,2)"><span class="opt-letter">B</span> Ampoule fluorescente compacte (~25 %)</div>
+      <div class="option" onclick="check(8,2,2)"><span class="opt-letter">C</span> Ampoule DEL (LED) (~80 %)</div>
+      <div class="option" onclick="check(8,3,2)"><span class="opt-letter">D</span> Elles ont toutes le même rendement</div>
+    </div>
+    <div class="feedback" id="fb8"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card" id="qc9">
+    <div class="q-header">
+      <div class="q-num" id="qn9">10</div>
+      <div class="q-meta">
+        <div class="q-theme">Augmentation du rendement</div>
+        <div class="q-text">Une compagnie veut augmenter le rendement de son chauffe-eau. Quelle stratégie est la plus efficace ?</div>
+      </div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="check(9,0,1)"><span class="opt-letter">A</span> Augmenter la puissance de la résistance chauffante</div>
+      <div class="option" onclick="check(9,1,1)"><span class="opt-letter">B</span> Mieux isoler le réservoir pour réduire les pertes thermiques</div>
+      <div class="option" onclick="check(9,2,1)"><span class="opt-letter">C</span> Augmenter la capacité du réservoir d'eau</div>
+      <div class="option" onclick="check(9,3,1)"><span class="opt-letter">D</span> Utiliser de l'eau froide comme point de départ</div>
+    </div>
+    <div class="feedback" id="fb9"></div>
+  </div>
+
+  <!-- ── RÉSULTATS ── -->
+  <div class="results-card" id="results">
+    <div class="results-emoji" id="res-emoji">🎉</div>
+    <div class="results-title" id="res-title">Quiz terminé !</div>
+    <div class="results-subtitle" id="res-subtitle"></div>
+    <div class="score-big" id="res-score"></div>
+    <div class="score-label">sur 10 points</div>
+    <div class="score-breakdown">
+      <div class="score-stat">
+        <div class="ss-val" id="stat-correct" style="color:var(--green)">—</div>
+        <div class="ss-label">Bonnes réponses</div>
+      </div>
+      <div class="score-stat">
+        <div class="ss-val" id="stat-wrong" style="color:var(--red)">—</div>
+        <div class="ss-label">Erreurs</div>
+      </div>
+      <div class="score-stat">
+        <div class="ss-val" id="stat-pct" style="color:var(--accent)">—</div>
+        <div class="ss-label">Résultat</div>
+      </div>
+    </div>
+    <div class="results-btns">
+      <button class="btn-retry" onclick="retryQuiz()">↺ Recommencer</button>
+      <a class="btn-cours" href="cours_rendement_energetique.html">← Retour au cours</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const feedbacks = [
+  // Q1
+  ['Non. Le rendement mesure l\'efficacité de transformation, pas la quantité absolue d\'énergie consommée.',
+   '✓ Exact ! Rendement (%) = (E_utile / E_consommée) × 100.',
+   'Non. C\'est la puissance qui exprime la vitesse de consommation d\'énergie.',
+   'Non. C\'est la formule de l\'énergie dissipée, pas du rendement.'],
+  // Q2
+  ['✓ Correct ! La loi de conservation de l\'énergie interdit tout rendement > 100 %.',
+   'Non. Aucune technologie ne peut créer de l\'énergie — le rendement maximal est 100 %.',
+   'Non. Quelle que soit la forme d\'énergie, le rendement reste ≤ 100 %.',
+   'Non. Même sans frottement, on ne peut pas obtenir plus que l\'énergie investie.'],
+  // Q3
+  ['Non. La soustraction inverserait le signe — E_dissipée serait négative si E_utile > E_consommée.',
+   'Non. Cela signifierait que l\'énergie utile est plus grande que l\'énergie consommée, impossible.',
+   '✓ Correct ! E_consommée = E_utile + E_dissipée (conservation de l\'énergie).',
+   'Non. Il n\'y a pas de multiplication entre ces termes — c\'est une addition.'],
+  // Q4
+  ['Non. L\'électricité statique n\'est pas la cause principale dans les machines simples.',
+   'Non. Le bruit représente une très faible fraction de l\'énergie perdue.',
+   '✓ Correct ! Le frottement transforme l\'énergie mécanique en chaleur indésirable.',
+   'Non. La lumière peut être une perte, mais le frottement est la cause principale.'],
+  // Q5
+  ['Non. 7 % correspondrait à 4 900 J utiles, pas 9 800 J.',
+   '✓ Correct ! (9 800 / 70 000) × 100 = 14 %.',
+   'Non. 25 % correspondrait à 17 500 J utiles.',
+   'Non. 86 % est le complément (énergie dissipée en pourcentage).'],
+  // Q6
+  ['✓ Correct ! (35 / 100) × 200 000 = 70 000 J.',
+   'Non. 35 000 J correspondrait à un rendement de 17,5 %, pas 35 %.',
+   'Non. C\'est le résultat si tu divises au lieu de multiplier.',
+   'Non. Vérifie ton calcul : (35 / 100) × 200 000.'],
+  // Q7
+  ['Non. 48 J correspond à l\'énergie dissipée (20 % × 240 J), pas à l\'énergie consommée.',
+   'Non. 4 800 J — tu as peut-être fait une erreur d\'unité.',
+   'Non. Si E_consommée = E_utile, le rendement serait de 100 %.',
+   '✓ Correct ! E_consommée = (60 × 100) / 80 = 75 J.'],
+  // Q8
+  ['Non. Rendement de 31,1 % = énergie dissipée / énergie consommée.',
+   '✓ Correct ! E_utile = 54 000 − 16 800 = 37 200 J → (37 200 / 54 000) × 100 ≈ 68,9 %.',
+   'Non. Vérifie : d\'abord E_utile = 54 000 − 16 800 = 37 200 J.',
+   'Non. 80 % ne correspond pas aux données du problème.'],
+  // Q9
+  ['Non. L\'ampoule à incandescence est la moins efficace (~5 % de rendement).',
+   'Non. La fluorescente est mieux que l\'incandescence, mais pas la meilleure.',
+   '✓ Correct ! L\'ampoule DEL a le meilleur rendement (~80 %) — seulement 20 % d\'énergie gaspillée.',
+   'Non. Leurs rendements sont très différents : 5 %, 25 %, et 80 %.'],
+  // Q10
+  ['Non. Augmenter la puissance consomme plus d\'énergie sans changer la proportion utile.',
+   '✓ Correct ! Mieux isoler réduit les pertes thermiques → plus d\'énergie utile → rendement ↑',
+   'Non. La capacité n\'affecte pas la proportion d\'énergie utile.',
+   'Non. La température initiale de l\'eau n\'affecte pas le rendement de l\'appareil.']
+];
+
+const correctAnswers = [1, 0, 2, 2, 1, 0, 3, 1, 2, 1];
+let answered = new Array(10).fill(false);
+let score = 0;
+
+function check(qIdx, optIdx, correctIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const card = document.getElementById('qc' + qIdx);
+  const num  = document.getElementById('qn' + qIdx);
+  const opts = card.querySelectorAll('.option');
+  const fb   = document.getElementById('fb' + qIdx);
+  const isOk = optIdx === correctIdx;
+
+  opts.forEach((o, i) => {
+    o.classList.add('disabled');
+    if (i === correctIdx) o.classList.add('correct');
+  });
+  if (!isOk) opts[optIdx].classList.add('wrong');
+  else score++;
+
+  num.className = 'q-num ' + (isOk ? 'answered-correct' : 'answered-wrong');
+  num.textContent = isOk ? '✓' : '✗';
+  card.classList.add('answered', isOk ? 'correct-card' : 'wrong-card');
+
+  fb.innerHTML = '<span class="fb-icon">' + (isOk ? '✅' : '❌') + '</span><span class="fb-text">' + feedbacks[qIdx][optIdx] + '</span>';
+  fb.className = 'feedback show ' + (isOk ? 'ok' : 'ko');
+
+  // Update progress
+  const done = answered.filter(Boolean).length;
+  document.getElementById('prog-label').textContent = 'Question ' + done + ' / 10';
+  document.getElementById('prog-fill').style.width = (done * 10) + '%';
+  document.getElementById('prog-score').textContent = score + ' / ' + done;
+
+  if (done === 10) showResults();
+}
+
+function showResults() {
+  const pct = score * 10;
+  const res = document.getElementById('results');
+  document.getElementById('res-emoji').textContent  = score >= 9 ? '🏆' : score >= 7 ? '🎉' : score >= 5 ? '👍' : '📚';
+  document.getElementById('res-title').textContent  = score >= 9 ? 'Excellent travail !' : score >= 7 ? 'Très bien !' : score >= 5 ? 'Pas mal !' : 'Continue à réviser !';
+  document.getElementById('res-subtitle').textContent = score >= 7 ? 'Tu maîtrises bien le rendement énergétique.' : 'Relis les sections du cours pour consolider tes connaissances.';
+  document.getElementById('res-score').style.color  = score >= 7 ? 'var(--green)' : score >= 5 ? 'var(--accent)' : 'var(--red)';
+  document.getElementById('res-score').textContent  = score;
+  document.getElementById('stat-correct').textContent = score;
+  document.getElementById('stat-wrong').textContent   = 10 - score;
+  document.getElementById('stat-pct').textContent     = pct + ' %';
+  document.getElementById('prog-label').textContent   = 'Terminé !';
+  res.classList.add('show');
+  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function retryQuiz() {
+  answered = new Array(10).fill(false);
+  score = 0;
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('correct','wrong','disabled'));
+  document.querySelectorAll('.feedback').forEach(f => { f.className = 'feedback'; });
+  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('answered','correct-card','wrong-card'));
+  document.querySelectorAll('.q-num').forEach((n, i) => {
+    n.className = 'q-num';
+    n.textContent = i + 1;
+  });
+  document.getElementById('prog-label').textContent = 'Question 0 / 10';
+  document.getElementById('prog-fill').style.width  = '0%';
+  document.getElementById('prog-score').textContent = '— / 10';
+  document.getElementById('results').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

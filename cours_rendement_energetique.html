@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Rendement Énergétique – Cours Interactif</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #232740;
+    --border: rgba(255,255,255,0.08);
+    --accent: #f5a623;
+    --accent2: #4ecdc4;
+    --accent3: #ff6b6b;
+    --accent4: #a78bfa;
+    --text: #e8eaf6;
+    --text-muted: #8b8fa8;
+    --green: #6fcf97;
+    --orange: #f5a623;
+    --red: #ff6b6b;
+    --blue: #64b5f6;
+    --teal: #4ecdc4;
+    --purple: #a78bfa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 40%, #0f1117 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,166,35,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(245,166,35,0.15);
+    border: 1px solid rgba(245,166,35,0.4);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .hero .emoji-row {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    -webkit-text-fill-color: initial;
+  }
+
+  /* ── NAV ── */
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    padding: 1.5rem 2rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .toc a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .toc a:hover {
+    background: rgba(245,166,35,0.12);
+    border-color: rgba(245,166,35,0.4);
+    color: var(--accent);
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 70px;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--surface2);
+  }
+  .section-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .num { color: var(--accent); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .card-highlight {
+    background: rgba(245,166,35,0.06);
+    border: 1px solid rgba(245,166,35,0.25);
+    border-radius: 16px;
+    padding: 1.4rem 1.5rem;
+    margin: 1.25rem 0;
+  }
+  .card-highlight .label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-info {
+    background: rgba(100,181,246,0.07);
+    border: 1px solid rgba(100,181,246,0.25);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+  }
+  .card-warning {
+    background: rgba(255,107,107,0.07);
+    border: 1px solid rgba(255,107,107,0.25);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+  }
+
+  /* ── DÉFINITION BOX ── */
+  .definition {
+    background: linear-gradient(135deg, rgba(78,205,196,0.08), rgba(78,205,196,0.03));
+    border: 1px solid rgba(78,205,196,0.3);
+    border-left: 4px solid var(--teal);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    font-size: 0.97rem;
+  }
+  .definition .def-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── FORMULE ── */
+  .formula-box {
+    background: var(--surface2);
+    border: 2px solid var(--accent);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+  .formula-box .formula-label {
+    position: absolute;
+    top: -12px; left: 20px;
+    background: var(--accent);
+    color: #000;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.7rem;
+    border-radius: 6px;
+  }
+  .formula-main {
+    font-family: 'Fira Mono', monospace;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .formula-main .frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0.3rem;
+    vertical-align: middle;
+  }
+  .formula-main .frac-num {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 3px;
+    color: var(--green);
+  }
+  .formula-main .frac-den {
+    padding-top: 3px;
+    color: var(--red);
+  }
+  .formula-desc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+  }
+  .formula-desc span { display: flex; align-items: center; gap: 0.4rem; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+  /* ── DIAGRAMME ÉNERGIE (SVG-based flow) ── */
+  .energy-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+  }
+
+  /* ── INTERACTIVE CALCULATOR ── */
+  .calculator {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+  }
+  .calc-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .calc-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .calc-tab {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .calc-tab.active {
+    background: rgba(245,166,35,0.15);
+    border-color: rgba(245,166,35,0.5);
+    color: var(--accent);
+  }
+  .calc-panel { display: none; }
+  .calc-panel.active { display: block; }
+
+  .input-group {
+    margin-bottom: 1.25rem;
+  }
+  .input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+  }
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .input-row input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    color: var(--text);
+    font-family: 'Fira Mono', monospace;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-row input:focus {
+    border-color: var(--accent);
+  }
+  .input-unit {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    min-width: 30px;
+  }
+
+  .calc-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 0.7rem 1.5rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  .calc-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .calc-btn:active { transform: translateY(0); }
+
+  .result-box {
+    margin-top: 1.25rem;
+    background: var(--surface2);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .result-box.show { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .result-value {
+    font-family: 'Fira Mono', monospace;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--green);
+    margin-bottom: 0.25rem;
+  }
+  .result-label { font-size: 0.88rem; color: var(--text-muted); }
+  .result-formula {
+    font-family: 'Fira Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    background: var(--surface2);
+    border-radius: 20px;
+    height: 14px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--green), var(--accent));
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    min-width: 0%;
+  }
+
+  /* ── ENERGY FLOW VISUAL ── */
+  .flow-visual {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .flow-box {
+    border-radius: 14px;
+    padding: 0.9rem 1.2rem;
+    text-align: center;
+    flex-shrink: 0;
+    min-width: 120px;
+  }
+  .flow-box .fb-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+    opacity: 0.8;
+  }
+  .flow-box .fb-val {
+    font-family: 'Fira Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .flow-arrow {
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    padding: 0 0.5rem;
+  }
+  .fb-consumed { background: rgba(245,166,35,0.12); border: 1px solid rgba(245,166,35,0.3); color: var(--orange); }
+  .fb-useful   { background: rgba(111,207,151,0.12); border: 1px solid rgba(111,207,151,0.3); color: var(--green); }
+  .fb-lost     { background: rgba(255,107,107,0.12); border: 1px solid rgba(255,107,107,0.3); color: var(--red); }
+  .fb-rendement{ background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.3); color: var(--purple); }
+
+  /* ── EXAMPLE ACCORDION ── */
+  .example-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .example-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+    gap: 0.75rem;
+  }
+  .example-header:hover { background: rgba(255,255,255,0.03); }
+  .example-header .ex-tag {
+    background: rgba(245,166,35,0.15);
+    border: 1px solid rgba(245,166,35,0.3);
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .example-header .ex-title {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .example-header .ex-chevron {
+    color: var(--text-muted);
+    transition: transform 0.25s;
+    font-size: 1.1rem;
+  }
+  .example-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+  .example-block.open .example-body { display: block; }
+  .example-block.open .ex-chevron { transform: rotate(180deg); }
+
+  .step {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    color: #000;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+  .step-content { flex: 1; }
+
+  .math-inline {
+    font-family: 'Fira Mono', monospace;
+    background: var(--surface2);
+    padding: 0.15em 0.5em;
+    border-radius: 6px;
+    font-size: 0.92em;
+    color: var(--accent);
+  }
+  .math-block {
+    font-family: 'Fira Mono', monospace;
+    background: var(--surface2);
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    margin: 0.6rem 0;
+    font-size: 0.9rem;
+    border-left: 3px solid var(--accent);
+    color: #fff;
+  }
+
+  /* ── COMPARAISON DES APPAREILS ── */
+  .device-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  .device-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+  .device-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.18);
+  }
+  .device-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .device-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.75rem; }
+  .device-rendement {
+    font-family: 'Fira Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── INTERACTIVE DEMO AMPOULE ── */
+  .bulb-demo {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.75rem;
+    margin: 1.5rem 0;
+  }
+  .bulb-demo-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .bulb-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  @media (max-width: 540px) { .bulb-grid { grid-template-columns: 1fr; } }
+
+  .bulb-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .bulb-svg-wrap {
+    width: 100px; height: 140px;
+    position: relative;
+  }
+
+  .bulb-type-select {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+  .bulb-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.35rem 0.8rem;
+    color: var(--text-muted);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .bulb-btn.active {
+    background: rgba(245,166,35,0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .bar-row .bar-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    width: 80px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .bar-track {
+    flex: 1;
+    background: var(--surface2);
+    border-radius: 8px;
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    display: flex; align-items: center; justify-content: flex-end; padding-right: 6px;
+  }
+  .bar-fill span {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: rgba(0,0,0,0.85);
+  }
+  .bar-fill.useful { background: linear-gradient(90deg, var(--green), #52c97a); }
+  .bar-fill.wasted { background: linear-gradient(90deg, var(--red), #ff8a80); }
+
+  /* ── CHAINE DE TRANSFORMATION ── */
+  .chain-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1.25rem 0;
+  }
+  .chain-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .chain-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .chain-box:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    cursor: default;
+  }
+  .chain-arrow { color: var(--text-muted); font-size: 1.1rem; padding: 0 0.2rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .formula-main { font-size: 0.95rem; }
+    .flow-visual { flex-direction: column; align-items: flex-start; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="emoji-row">⚡ 🔋 💡</div>
+  <div class="badge">Sciences &amp; Technologies — Secondaire</div>
+  <h1>Le Rendement Énergétique</h1>
+  <p>Comprendre, calculer et optimiser l'efficacité des systèmes technologiques</p>
+</div>
+
+<!-- NAV -->
+<nav class="toc">
+  <a href="#definition">Définition</a>
+  <a href="#formule">Formule</a>
+  <a href="#calcul">Calculatrice</a>
+  <a href="#dissipation">Énergie dissipée</a>
+  <a href="#appareils">Comparaison</a>
+  <a href="#augmentation">Augmentation</a>
+</nav>
+
+<div class="container">
+
+  <!-- ── 1. DÉFINITION ── -->
+  <section id="definition">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(245,166,35,0.15);">📖</div>
+      <h2><span class="num">1.</span> Définition</h2>
+    </div>
+
+    <div class="definition">
+      <div class="def-title">Définition</div>
+      <p>Le <strong style="color:#fff;">rendement énergétique</strong> d'une machine ou d'un système technologique est le <strong style="color:#fff;">pourcentage de l'énergie consommée</strong> qui sera transformée en <strong style="color:#fff;">énergie utile</strong>.</p>
+    </div>
+
+    <div class="card">
+      <p>Il est à peu près impossible d'avoir un système avec un rendement énergétique de <span class="math-inline">100 %</span>. Cela signifierait qu'un appareil utilise <em>toute</em> l'énergie qu'il consomme pour la transformer en la forme souhaitée.</p>
+      <br>
+      <p>En pratique, une partie de l'énergie est toujours transformée en une forme <em>non désirée</em> (souvent de la chaleur). Cette énergie n'a pas disparu : elle a simplement été dissipée dans l'environnement.</p>
+    </div>
+
+    <div class="card-highlight">
+      <div class="label">Exemple concret</div>
+      <p>Dans une <strong style="color:#fff;">ampoule à incandescence</strong>, on souhaite transformer l'énergie électrique en énergie lumineuse. Or, seulement <span class="math-inline">5 %</span> de l'énergie est transformée en lumière. Le reste (<span class="math-inline">95 %</span>) est dissipé sous forme de <strong style="color:#ff6b6b;">chaleur</strong>.</p>
+    </div>
+  </section>
+
+  <!-- ── 2. FORMULE ── -->
+  <section id="formule">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(111,207,151,0.15);">🧮</div>
+      <h2><span class="num">2.</span> Formule</h2>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">Formule</div>
+      <div class="formula-main">
+        Rendement (%) &nbsp;=&nbsp;
+        <span class="frac">
+          <span class="frac-num">E<sub>utile</sub> (J)</span>
+          <span class="frac-den">E<sub>consommée</sub> (J)</span>
+        </span>
+        &nbsp;× 100
+      </div>
+      <div class="formula-desc">
+        <span><span class="dot" style="background:var(--green)"></span> E<sub>utile</sub> : énergie utile (J)</span>
+        <span><span class="dot" style="background:var(--red)"></span> E<sub>consommée</sub> : énergie totale consommée (J)</span>
+      </div>
+    </div>
+
+    <div class="card-warning">
+      <strong style="color:var(--red)">⚠️ Important !</strong> Le rendement énergétique d'un appareil ne peut <strong style="color:#fff;">jamais dépasser 100 %</strong>. Selon la loi de la conservation de l'énergie, on ne peut pas créer d'énergie : un système ne peut pas fournir plus d'énergie utile qu'il n'en a consommée.
+    </div>
+
+    <div class="card-info">
+      <strong style="color:var(--blue)">💡 Isoler une variable :</strong> On peut aussi trouver l'une des énergies si on connaît le rendement :
+      <div class="math-block">E_utile = Rendement × E_consommée / 100</div>
+      <div class="math-block">E_consommée = E_utile × 100 / Rendement</div>
+    </div>
+  </section>
+
+  <!-- ── 3. CALCULATRICE ── -->
+  <section id="calcul">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(100,181,246,0.15);">🔢</div>
+      <h2><span class="num">3.</span> Calculatrice interactive</h2>
+    </div>
+
+    <div class="calculator">
+      <div class="calc-title">⚙️ Calcule le rendement ou une énergie</div>
+      <div class="calc-tabs">
+        <button class="calc-tab active" onclick="switchTab('r')">Trouver le rendement</button>
+        <button class="calc-tab" onclick="switchTab('u')">Trouver E<sub>utile</sub></button>
+        <button class="calc-tab" onclick="switchTab('c')">Trouver E<sub>consommée</sub></button>
+      </div>
+
+      <!-- Panel R -->
+      <div class="calc-panel active" id="panel-r">
+        <div class="input-group">
+          <label>Énergie utile (E<sub>utile</sub>)</label>
+          <div class="input-row">
+            <input type="number" id="r-eutile" placeholder="ex : 9800" min="0" step="any">
+            <span class="input-unit">J</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Énergie consommée (E<sub>consommée</sub>)</label>
+          <div class="input-row">
+            <input type="number" id="r-econso" placeholder="ex : 70000" min="0" step="any">
+            <span class="input-unit">J</span>
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcR()">Calculer le rendement ▶</button>
+        <div class="result-box" id="res-r">
+          <div class="result-value" id="res-r-val">—</div>
+          <div class="result-label">Rendement énergétique</div>
+          <div style="margin-top:0.75rem;">
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="res-r-bar" style="width:0%"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:0.3rem;">
+              <span>0 %</span><span>50 %</span><span>100 %</span>
+            </div>
+          </div>
+          <div class="result-formula" id="res-r-formula"></div>
+        </div>
+      </div>
+
+      <!-- Panel U -->
+      <div class="calc-panel" id="panel-u">
+        <div class="input-group">
+          <label>Rendement (%)</label>
+          <div class="input-row">
+            <input type="number" id="u-rend" placeholder="ex : 80" min="0" max="100" step="any">
+            <span class="input-unit">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Énergie consommée (E<sub>consommée</sub>)</label>
+          <div class="input-row">
+            <input type="number" id="u-econso" placeholder="ex : 100" min="0" step="any">
+            <span class="input-unit">J</span>
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcU()">Calculer E<sub>utile</sub> ▶</button>
+        <div class="result-box" id="res-u">
+          <div class="result-value" id="res-u-val">—</div>
+          <div class="result-label">Énergie utile (J)</div>
+          <div class="result-formula" id="res-u-formula"></div>
+        </div>
+      </div>
+
+      <!-- Panel C -->
+      <div class="calc-panel" id="panel-c">
+        <div class="input-group">
+          <label>Rendement (%)</label>
+          <div class="input-row">
+            <input type="number" id="c-rend" placeholder="ex : 80" min="0" max="100" step="any">
+            <span class="input-unit">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Énergie utile (E<sub>utile</sub>)</label>
+          <div class="input-row">
+            <input type="number" id="c-eutile" placeholder="ex : 60" min="0" step="any">
+            <span class="input-unit">J</span>
+          </div>
+        </div>
+        <button class="calc-btn" onclick="calcC()">Calculer E<sub>consommée</sub> ▶</button>
+        <div class="result-box" id="res-c">
+          <div class="result-value" id="res-c-val">—</div>
+          <div class="result-label">Énergie consommée (J)</div>
+          <div class="result-formula" id="res-c-formula"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples résolus -->
+    <div class="example-block" onclick="toggleEx(this)">
+      <div class="example-header">
+        <span class="ex-tag">Exemple 1</span>
+        <span class="ex-title">La voiture — calculer le rendement</span>
+        <span class="ex-chevron">▾</span>
+      </div>
+      <div class="example-body">
+        <p><strong style="color:#fff;">Problème :</strong> L'énergie pour faire tourner les roues d'une voiture sur 100 m est de <span class="math-inline">9 800 J</span>. L'énergie consommée par le moteur est de <span class="math-inline">70 000 J</span>. Quel est le rendement énergétique ?</p>
+        <br>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong style="color:#fff;">Identifier les données</strong><br>E<sub>utile</sub> = 9 800 J &nbsp;&nbsp;|&nbsp;&nbsp; E<sub>consommée</sub> = 70 000 J</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><strong style="color:#fff;">Appliquer la formule</strong>
+          <div class="math-block">Rendement = (9 800 / 70 000) × 100 = 14 %</div>
+        </div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><strong style="color:var(--green)">Réponse :</strong> Le rendement énergétique de la voiture est de <strong style="color:var(--green)">14 %</strong>. Cela signifie que 86 % de l'énergie consommée est dissipée (chaleur, bruit, frottements...).</div></div>
+      </div>
+    </div>
+
+    <div class="example-block" onclick="toggleEx(this)">
+      <div class="example-header">
+        <span class="ex-tag">Exemple 2</span>
+        <span class="ex-title">Le lecteur DVD — énergie dissipée connue</span>
+        <span class="ex-chevron">▾</span>
+      </div>
+      <div class="example-body">
+        <p><strong style="color:#fff;">Problème :</strong> Un lecteur DVD consomme <span class="math-inline">54 000 J</span> en une heure. Il dissipe <span class="math-inline">16 800 J</span> en énergie thermique. Quel est son rendement ?</p>
+        <br>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong style="color:#fff;">Trouver E<sub>utile</sub></strong>
+          <div class="math-block">E_utile = E_consommée − E_dissipée = 54 000 − 16 800 = 37 200 J</div>
+        </div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><strong style="color:#fff;">Calculer le rendement</strong>
+          <div class="math-block">Rendement = (37 200 / 54 000) × 100 ≈ 68,9 %</div>
+        </div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><strong style="color:var(--green)">Réponse :</strong> Le rendement du lecteur DVD est d'environ <strong style="color:var(--green)">68,9 %</strong>.</div></div>
+      </div>
+    </div>
+
+    <div class="example-block" onclick="toggleEx(this)">
+      <div class="example-header">
+        <span class="ex-tag">Exemple 3</span>
+        <span class="ex-title">Ampoule DEL — trouver E<sub>consommée</sub></span>
+        <span class="ex-chevron">▾</span>
+      </div>
+      <div class="example-body">
+        <p><strong style="color:#fff;">Problème :</strong> Une ampoule DEL a un rendement de <span class="math-inline">80 %</span>. Elle émet <span class="math-inline">60 J</span> d'énergie lumineuse. Quelle quantité d'énergie électrique a-t-elle consommée ?</p>
+        <br>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong style="color:#fff;">Isoler E<sub>consommée</sub></strong>
+          <div class="math-block">E_consommée = (E_utile × 100) / Rendement</div>
+        </div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><strong style="color:#fff;">Substituer</strong>
+          <div class="math-block">E_consommée = (60 × 100) / 80 = 75 J</div>
+        </div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><strong style="color:var(--green)">Réponse :</strong> L'ampoule DEL a consommé <strong style="color:var(--green)">75 J</strong> d'énergie électrique.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4. ÉNERGIE DISSIPÉE ── -->
+  <section id="dissipation">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(255,107,107,0.15);">🌡️</div>
+      <h2><span class="num">4.</span> L'énergie dissipée</h2>
+    </div>
+
+    <div class="definition">
+      <div class="def-title">Définition</div>
+      <p>L'<strong style="color:#fff;">énergie dissipée</strong> est l'énergie qui n'est pas utilisée pour effectuer un travail utile. Elle est transformée en une forme non désirée (chaleur, bruit, vibrations...) et libérée dans l'environnement.</p>
+    </div>
+
+    <div class="card-highlight">
+      <div class="label">Relation fondamentale</div>
+      <div class="math-block">E_consommée = E_utile + E_dissipée</div>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">C'est une conséquence directe de la <strong style="color:#fff;">loi de la conservation de l'énergie</strong> : l'énergie ne disparaît jamais, elle se transforme.</p>
+    </div>
+
+    <p style="margin-bottom:1.25rem; color:var(--text-muted);">Voici comment l'énergie est répartie pour la voiture de l'exemple :</p>
+
+    <div class="flow-visual">
+      <div class="flow-box fb-consumed">
+        <div class="fb-label">Consommée</div>
+        <div class="fb-val">70 000 J</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box fb-useful">
+        <div class="fb-label">Utile (roues)</div>
+        <div class="fb-val">9 800 J</div>
+      </div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-box fb-lost">
+        <div class="fb-label">Dissipée</div>
+        <div class="fb-val">60 200 J</div>
+      </div>
+      <div class="flow-arrow">=</div>
+      <div class="flow-box fb-rendement">
+        <div class="fb-label">Rendement</div>
+        <div class="fb-val">14 %</div>
+      </div>
+    </div>
+
+    <div class="card-info">
+      <strong style="color:var(--blue)">🔩 Origine du gaspillage :</strong> Dans une machine simple, le <strong style="color:#fff;">frottement</strong> est la principale cause d'énergie non utile. Il transforme l'énergie mécanique en <strong style="color:#fff;">énergie thermique</strong> indésirable.
+    </div>
+  </section>
+
+  <!-- ── 5. COMPARAISON DES APPAREILS ── -->
+  <section id="appareils">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(167,139,250,0.15);">📊</div>
+      <h2><span class="num">5.</span> Comparaison d'appareils courants</h2>
+    </div>
+
+    <p style="color:var(--text-muted); margin-bottom:1.25rem;">Le rendement varie énormément selon le type d'appareil. Plus le rendement est élevé, moins il y a d'énergie gaspillée.</p>
+
+    <!-- Demo interactive ampoules -->
+    <div class="bulb-demo">
+      <div class="bulb-demo-title">💡 Comparaison des ampoules</div>
+      <div class="bulb-type-select">
+        <button class="bulb-btn active" onclick="setBulb('incandescence')">Incandescence</button>
+        <button class="bulb-btn" onclick="setBulb('fluorescente')">Fluorescente</button>
+        <button class="bulb-btn" onclick="setBulb('del')">DEL (LED)</button>
+      </div>
+      <div class="bulb-grid">
+        <div class="bulb-visual">
+          <svg id="bulb-svg" width="100" height="140" viewBox="0 0 100 140">
+            <!-- Ampoule body -->
+            <ellipse cx="50" cy="52" rx="36" ry="38" fill="none" stroke-width="2.5" id="bulb-outline"/>
+            <rect x="34" y="82" width="32" height="12" rx="3" fill="none" stroke-width="1.5" id="bulb-neck"/>
+            <rect x="36" y="94" width="28" height="7" rx="2" fill="none" stroke-width="1" id="bulb-cap1"/>
+            <rect x="38" y="101" width="24" height="7" rx="2" fill="none" stroke-width="1" id="bulb-cap2"/>
+            <!-- Filament / glow -->
+            <ellipse id="bulb-glow" cx="50" cy="52" rx="28" ry="30" opacity="0.25"/>
+            <path id="bulb-filament" d="M44 60 L44 45 L50 42 L56 45 L56 60" fill="none" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div id="bulb-name" style="font-weight:800; font-size:0.9rem; text-align:center;"></div>
+          <div id="bulb-rend" style="font-family:'Fira Mono',monospace; font-size:1.6rem; font-weight:500; color:var(--green);"></div>
+        </div>
+        <div>
+          <div class="bar-row">
+            <div class="bar-label">Lumière</div>
+            <div class="bar-track">
+              <div class="bar-fill useful" id="bar-useful" style="width:5%"><span id="bar-u-pct">5%</span></div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Chaleur</div>
+            <div class="bar-track">
+              <div class="bar-fill wasted" id="bar-wasted" style="width:95%"><span id="bar-w-pct">95%</span></div>
+            </div>
+          </div>
+          <p id="bulb-desc" style="font-size:0.85rem; color:var(--text-muted); margin-top:0.75rem; line-height:1.7;"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="device-grid">
+      <div class="device-card">
+        <div class="device-icon">🚗</div>
+        <div class="device-name">Moteur à essence</div>
+        <div class="device-rendement" style="color:var(--red)">≈ 14 %</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:14%; background: var(--red);"></div></div>
+      </div>
+      <div class="device-card">
+        <div class="device-icon">💡</div>
+        <div class="device-name">Ampoule incandescence</div>
+        <div class="device-rendement" style="color:var(--red)">≈ 5 %</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:5%; background:var(--red);"></div></div>
+      </div>
+      <div class="device-card">
+        <div class="device-icon">🌀</div>
+        <div class="device-name">Ampoule fluorescente</div>
+        <div class="device-rendement" style="color:var(--orange)">≈ 25 %</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:25%; background:var(--orange);"></div></div>
+      </div>
+      <div class="device-card">
+        <div class="device-icon">🔆</div>
+        <div class="device-name">Ampoule DEL</div>
+        <div class="device-rendement" style="color:var(--green)">≈ 80 %</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:80%;"></div></div>
+      </div>
+      <div class="device-card">
+        <div class="device-icon">⚡</div>
+        <div class="device-name">Moteur électrique</div>
+        <div class="device-rendement" style="color:var(--green)">≈ 90 %</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:90%;"></div></div>
+      </div>
+      <div class="device-card">
+        <div class="device-icon">🔋</div>
+        <div class="device-name">Panneau solaire</div>
+        <div class="device-rendement" style="color:var(--orange)">≈ 20 %</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:20%; background:var(--orange);"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 6. AUGMENTATION ── -->
+  <section id="augmentation">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(111,207,151,0.15);">📈</div>
+      <h2><span class="num">6.</span> Augmenter le rendement énergétique</h2>
+    </div>
+
+    <p style="color:var(--text-muted); margin-bottom:1.25rem;">Pour augmenter le rendement d'un appareil, deux stratégies sont possibles :</p>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
+      <div class="card" style="border-left:3px solid var(--teal);">
+        <div style="font-size:1.4rem; margin-bottom:0.5rem;">⬇️</div>
+        <strong style="color:var(--teal);">Réduire E<sub>consommée</sub></strong>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Diminuer la quantité d'énergie nécessaire pour effectuer la même tâche.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--green);">
+        <div style="font-size:1.4rem; margin-bottom:0.5rem;">⬆️</div>
+        <strong style="color:var(--green);">Optimiser E<sub>utile</sub></strong>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Améliorer la transformation pour que plus d'énergie soit utile.</p>
+      </div>
+    </div>
+
+    <div class="card-highlight">
+      <div class="label">Exemples concrets</div>
+      <div class="chain-container">
+        <div class="chain-row">
+          <div class="chain-box" style="border-color:rgba(245,166,35,0.3); color:var(--orange);">🏠 Chauffe-eau</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box">Isoler le réservoir</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box">Moins de pertes de chaleur</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box" style="border-color:rgba(111,207,151,0.3); color:var(--green);">Rendement ↑</div>
+        </div>
+        <div class="chain-row">
+          <div class="chain-box" style="border-color:rgba(245,166,35,0.3); color:var(--orange);">🚗 Voiture</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box">Réduire la friction</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box">Moins d'énergie gaspillée</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box" style="border-color:rgba(111,207,151,0.3); color:var(--green);">Rendement ↑</div>
+        </div>
+        <div class="chain-row">
+          <div class="chain-box" style="border-color:rgba(245,166,35,0.3); color:var(--orange);">💡 Éclairage</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box">Remplacer par DEL</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box">5 % → 80 % utile</div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-box" style="border-color:rgba(111,207,151,0.3); color:var(--green);">Rendement ↑</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-info">
+      <strong style="color:var(--blue)">🌍 Pourquoi c'est important ?</strong> Augmenter le rendement énergétique des appareils réduit notre consommation d'énergie, diminue les émissions de gaz à effet de serre et génère des économies financières. C'est un enjeu central du développement durable.
+    </div>
+  </section>
+
+  <!-- ── 7. QUIZ ── -->
+  <section id="quiz-cta">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(78,205,196,0.15);">🎯</div>
+      <h2><span class="num">7.</span> Teste tes connaissances</h2>
+    </div>
+    <div style="background: linear-gradient(135deg, var(--surface), rgba(78,205,196,0.06)); border: 1px solid rgba(78,205,196,0.25); border-radius: 20px; padding: 2.5rem; text-align: center;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🧪</div>
+      <p style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Quiz — 10 questions pour valider tes acquis</p>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.75rem;">Concepts, calculs et applications — trois niveaux de difficulté progressifs</p>
+      <a href="quiz_rendement_energetique.html" style="display:inline-block; background:var(--teal); color:#000; text-decoration:none; border-radius:14px; padding:0.85rem 2.5rem; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800; transition:all 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='none'">
+        Commencer le quiz →
+      </a>
+    </div>
+  </section>
+
+
+</div>
+
+<footer>
+  <p>Cours interactif — Rendement énergétique &nbsp;·&nbsp; Sciences &amp; Technologies Sec. 1–2<br>
+  Contenu adapté de <a href="https://www.alloprof.qc.ca/fr/eleves/bv/sciences/le-rendement-energetique-s1091" target="_blank">Alloprof</a></p>
+</footer>
+
+<script>
+// ── TABS ──
+function switchTab(t) {
+  document.querySelectorAll('.calc-tab').forEach((b,i) => {
+    b.classList.toggle('active', ['r','u','c'][i] === t);
+  });
+  document.querySelectorAll('.calc-panel').forEach((p,i) => {
+    p.classList.toggle('active', ['r','u','c'][i] === t);
+  });
+}
+
+// ── CALC ──
+function fmt(n) {
+  return Number.isInteger(n) ? n.toLocaleString('fr-CA') : n.toFixed(2).toLocaleString('fr-CA');
+}
+
+function calcR() {
+  const eu = parseFloat(document.getElementById('r-eutile').value);
+  const ec = parseFloat(document.getElementById('r-econso').value);
+  const box = document.getElementById('res-r');
+  if (isNaN(eu) || isNaN(ec) || ec <= 0) { alert('Entre des valeurs valides.'); return; }
+  if (eu > ec) { alert("E_utile ne peut pas être supérieure à E_consommée !"); return; }
+  const r = (eu / ec) * 100;
+  document.getElementById('res-r-val').textContent = fmt(r) + ' %';
+  document.getElementById('res-r-bar').style.width = Math.min(r, 100) + '%';
+  document.getElementById('res-r-formula').textContent = `(${fmt(eu)} ÷ ${fmt(ec)}) × 100 = ${fmt(r)} %`;
+  box.classList.add('show');
+}
+
+function calcU() {
+  const rend = parseFloat(document.getElementById('u-rend').value);
+  const ec = parseFloat(document.getElementById('u-econso').value);
+  const box = document.getElementById('res-u');
+  if (isNaN(rend) || isNaN(ec) || rend <= 0 || rend > 100 || ec <= 0) { alert('Entre des valeurs valides (rendement entre 0 et 100).'); return; }
+  const eu = (rend / 100) * ec;
+  document.getElementById('res-u-val').textContent = fmt(eu) + ' J';
+  document.getElementById('res-u-formula').textContent = `(${fmt(rend)} / 100) × ${fmt(ec)} = ${fmt(eu)} J`;
+  box.classList.add('show');
+}
+
+function calcC() {
+  const rend = parseFloat(document.getElementById('c-rend').value);
+  const eu = parseFloat(document.getElementById('c-eutile').value);
+  const box = document.getElementById('res-c');
+  if (isNaN(rend) || isNaN(eu) || rend <= 0 || rend > 100 || eu <= 0) { alert('Entre des valeurs valides (rendement entre 0 et 100).'); return; }
+  const ec = (eu * 100) / rend;
+  document.getElementById('res-c-val').textContent = fmt(ec) + ' J';
+  document.getElementById('res-c-formula').textContent = `(${fmt(eu)} × 100) ÷ ${fmt(rend)} = ${fmt(ec)} J`;
+  box.classList.add('show');
+}
+
+// ── ACCORDION ──
+function toggleEx(el) { el.classList.toggle('open'); }
+
+// ── BULB DEMO ──
+const bulbs = {
+  incandescence: { rend: 5, name: 'Incandescence', color: '#faad14', desc: "Très peu efficace : 95 % de l'énergie est gaspillée en chaleur. L'essentiel de l'énergie fait simplement chauffer un filament de tungstène." },
+  fluorescente:  { rend: 25, name: 'Fluorescente (néon)', color: '#7ec8e3', desc: "Nettement mieux que l'incandescence, mais encore 75 % de l'énergie est dissipée. Contient du mercure — à recycler obligatoirement." },
+  del:           { rend: 80, name: 'DEL (LED)', color: '#6fcf97', desc: "La technologie la plus efficace du marché. Seulement 20 % d'énergie gaspillée. Durée de vie 20× plus longue que l'incandescence." }
+};
+
+function setBulb(type) {
+  document.querySelectorAll('.bulb-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const b = bulbs[type];
+  document.getElementById('bulb-name').textContent = b.name;
+  document.getElementById('bulb-rend').textContent = b.rend + ' %';
+  document.getElementById('bulb-desc').textContent = b.desc;
+  document.getElementById('bar-useful').style.width = b.rend + '%';
+  document.getElementById('bar-u-pct').textContent = b.rend + '%';
+  document.getElementById('bar-wasted').style.width = (100-b.rend) + '%';
+  document.getElementById('bar-w-pct').textContent = (100-b.rend) + '%';
+  // SVG colours
+  document.getElementById('bulb-outline').setAttribute('stroke', b.color);
+  document.getElementById('bulb-neck').setAttribute('stroke', b.color);
+  document.getElementById('bulb-cap1').setAttribute('stroke', b.color);
+  document.getElementById('bulb-cap2').setAttribute('stroke', b.color);
+  document.getElementById('bulb-glow').setAttribute('fill', b.color);
+  document.getElementById('bulb-glow').setAttribute('opacity', (b.rend/100 * 0.5 + 0.1).toFixed(2));
+  document.getElementById('bulb-filament').setAttribute('stroke', b.color);
+}
+// init
+setBulb('incandescence');
+document.querySelector('.bulb-btn').classList.add('active');
+
+</script>
+</body>
+</html>
