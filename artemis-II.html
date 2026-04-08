@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Artémis II — Science Sec 1-2</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --orange: #f97316;
+    --orange-dim: #7c3a12;
+    --text: #e8eaf0;
+    --muted: #8890a8;
+    --border: #2e3248;
+    --green: #22c55e;
+    --green-dim: #14532d;
+    --red: #ef4444;
+    --red-dim: #7f1d1d;
+    --blue: #60a5fa;
+    --blue-dim: #1e3a6e;
+    --purple: #a78bfa;
+    --purple-dim: #3b1f6e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
+  header { background: var(--surface); border-bottom: 2px solid var(--orange); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
+  header .rocket { font-size: 2rem; }
+  header h1 { font-size: 1.4rem; font-weight: 700; color: var(--orange); }
+  header p { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+  .badge-live { display: inline-flex; align-items: center; gap: 6px; background: var(--orange-dim); color: var(--orange); font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-left: auto; flex-shrink: 0; }
+  .pulse { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; animation: pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .progress-bar { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .section-tab { flex: 1; min-width: 88px; padding: 0.6rem 0.4rem; text-align: center; font-size: 0.71rem; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .section-tab:hover { color: var(--text); background: var(--surface2); }
+  .section-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+  .section-tab.done { color: var(--green); }
+  main { max-width: 800px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .card-title { color: var(--orange); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .card h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .card p { color: var(--muted); line-height: 1.65; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1rem 0; }
+  .stat { background: var(--surface2); border-radius: 10px; padding: 1rem; text-align: center; }
+  .stat-val { font-size: 1.4rem; font-weight: 700; color: var(--orange); }
+  .stat-lbl { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
+  .astro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1rem 0; }
+  .astro { background: var(--surface2); border-radius: 10px; padding: 1rem; display: flex; align-items: flex-start; gap: 12px; }
+  .astro-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+  .av-o { background: var(--orange-dim); color: var(--orange); }
+  .av-b { background: var(--blue-dim); color: var(--blue); }
+  .av-g { background: var(--green-dim); color: var(--green); }
+  .astro-name { font-size: 0.95rem; font-weight: 600; }
+  .astro-role { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+  .astro-badge { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; margin-top: 5px; }
+  .ab-o { background: var(--orange-dim); color: var(--orange); }
+  .ab-b { background: var(--blue-dim); color: var(--blue); }
+  .ab-g { background: var(--green-dim); color: var(--green); }
+  .highlight { border-left: 3px solid var(--orange); background: var(--surface2); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin: 1rem 0; font-size: 0.92rem; color: var(--text); }
+  .highlight.info { border-color: var(--blue); }
+  .highlight.success { border-color: var(--green); }
+  .highlight.purple { border-color: var(--purple); }
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1rem 0; }
+  .tech { background: var(--surface2); border-radius: 10px; padding: 1rem; }
+  .tech-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .tech-title { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .tech-body { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+  .timeline { margin: 1rem 0; }
+  .tl { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .tl:last-child { border-bottom: none; }
+  .tl-day { font-size: 0.75rem; font-weight: 600; color: var(--muted); min-width: 52px; margin-top: 3px; }
+  .tl-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .dot-done { background: var(--green); }
+  .dot-now { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+  .dot-soon { background: var(--border); }
+  .dot-old { background: var(--purple); }
+  .tl-title { font-size: 0.9rem; font-weight: 600; }
+  .tl-sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+  .apollo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 1rem 0; }
+  .apollo-mission { background: var(--surface2); border-radius: 10px; padding: 0.9rem; text-align: center; border: 1px solid var(--border); }
+  .apollo-num { font-size: 1.1rem; font-weight: 700; color: var(--purple); }
+  .apollo-year { font-size: 0.72rem; color: var(--muted); }
+  .apollo-fact { font-size: 0.75rem; color: var(--text); margin-top: 4px; line-height: 1.35; }
+  .compare-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.84rem; }
+  .compare-table th { background: var(--surface2); padding: 8px 10px; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table td:first-child { color: var(--muted); font-size: 0.8rem; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .col-apollo { color: var(--purple) !important; font-weight: 600; }
+  .col-artemis { color: var(--orange) !important; font-weight: 600; }
+  .video-grid { display: flex; flex-direction: column; gap: 12px; margin: 1rem 0; }
+  .video-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; display: flex; gap: 14px; align-items: flex-start; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+  .video-card:hover { border-color: var(--orange); background: #261a09; }
+  .video-thumb { width: 64px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+  .vt-red { background: #7f1d1d; }
+  .vt-blue { background: var(--blue-dim); }
+  .vt-purple { background: var(--purple-dim); }
+  .vt-green { background: var(--green-dim); }
+  .video-info { flex: 1; }
+  .video-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+  .vl-apollo { color: var(--purple); }
+  .vl-artemis { color: var(--orange); }
+  .vl-doc { color: var(--blue); }
+  .video-title { font-size: 0.88rem; font-weight: 600; color: var(--text); line-height: 1.35; }
+  .video-desc { font-size: 0.77rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+  .video-arrow { color: var(--muted); flex-shrink: 0; margin-top: 2px; }
+  .section-sublabel { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin: 1.2rem 0 0.5rem; }
+  .nav-btns { display: flex; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1.2rem; font-size: 0.9rem; color: var(--text); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .btn:hover { border-color: var(--orange); color: var(--orange); }
+  .btn.primary { background: var(--orange); border-color: var(--orange); color: #fff; font-weight: 600; }
+  .btn.primary:hover { background: #ea6b00; }
+  .quiz-q { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.5; }
+  .quiz-num { font-size: 0.78rem; color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.9rem; text-align: left; color: var(--text); cursor: pointer; font-family: inherit; transition: all 0.15s; display: flex; align-items: center; gap: 10px; }
+  .quiz-opt:hover { border-color: var(--orange); }
+  .quiz-opt.correct { background: var(--green-dim); border-color: var(--green); color: #a7f3c0; }
+  .quiz-opt.wrong { background: var(--red-dim); border-color: var(--red); color: #fca5a5; }
+  .quiz-opt .mark { width: 20px; height: 20px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+  .quiz-feedback { margin-top: 1rem; padding: 0.9rem 1rem; border-radius: 8px; font-size: 0.88rem; line-height: 1.5; }
+  .fb-correct { background: var(--green-dim); border: 1px solid var(--green); color: #a7f3c0; }
+  .fb-wrong { background: var(--red-dim); border: 1px solid var(--red); color: #fca5a5; }
+  .quiz-progress { display: flex; gap: 5px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .qp { width: 22px; height: 6px; border-radius: 3px; background: var(--border); transition: background 0.3s; }
+  .qp.done { background: var(--green); }
+  .qp.current { background: var(--orange); }
+  .score-card { text-align: center; padding: 2rem; }
+  .score-num { font-size: 3.5rem; font-weight: 700; }
+  .score-label { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+  .score-msg { font-size: 1.1rem; margin-top: 1rem; font-weight: 600; }
+  @media (max-width: 520px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .astro-grid { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: 1fr; }
+    .apollo-grid { grid-template-columns: 1fr 1fr; }
+    .video-card { flex-direction: column; }
+    .video-thumb { width: 100%; height: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="rocket">🚀</div>
+  <div>
+    <h1>Mission Artémis II</h1>
+    <p>Science — Secondaire 1 et 2</p>
+  </div>
+  <div class="badge-live"><div class="pulse"></div> En cours</div>
+</header>
+
+<div class="progress-bar" id="tabs">
+  <div class="section-tab active" onclick="goTo(0)">1 · La mission</div>
+  <div class="section-tab" onclick="goTo(1)">2 · L'équipage</div>
+  <div class="section-tab" onclick="goTo(2)">3 · Technologies</div>
+  <div class="section-tab" onclick="goTo(3)">4 · Le voyage</div>
+  <div class="section-tab" onclick="goTo(4)">5 · Apollo</div>
+  <div class="section-tab" onclick="goTo(5)">6 · Pourquoi ?</div>
+  <div class="section-tab" onclick="goTo(6)">7 · Vidéos</div>
+  <div class="section-tab" onclick="goTo(7)">8 · Quiz</div>
+</div>
+
+<main>
+
+<!-- S1 : LA MISSION -->
+<div class="section active" id="sec0">
+  <div class="card">
+    <div class="card-title">Mission spatiale · 1 avril 2026</div>
+    <h2>Artémis II</h2>
+    <p>Pour la première fois depuis 1972, des astronautes ont quitté l'orbite terrestre pour se diriger vers la Lune. La mission dure <strong>10 jours</strong> et se déroule <strong>en ce moment même</strong>.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">10</div><div class="stat-lbl">jours de mission</div></div>
+    <div class="stat"><div class="stat-val">4</div><div class="stat-lbl">astronautes à bord</div></div>
+    <div class="stat"><div class="stat-val">400 000 km</div><div class="stat-lbl">de la Terre</div></div>
+  </div>
+  <div class="highlight">
+    <strong>Le saviez-vous ?</strong> La dernière fois que des humains ont voyagé aussi loin dans l'espace, c'était en 1972 avec <em>Apollo 17</em> — il y a plus de 54 ans !
+  </div>
+  <div class="highlight info">
+    <strong>Artémis</strong> est la déesse grecque de la Lune, et la sœur jumelle d'Apollon. Le nom du programme rend hommage aux missions Apollo des années 1960-70.
+  </div>
+  <div class="nav-btns"><button class="btn primary" onclick="goTo(1)">Suivant : L'équipage →</button></div>
+</div>
+
+<!-- S2 : L'ÉQUIPAGE -->
+<div class="section" id="sec1">
+  <div class="card">
+    <div class="card-title">Section 2</div>
+    <h2>Les 4 astronautes</h2>
+    <p>Cette mission est historique : l'équipage réunit plusieurs <strong>premières mondiales</strong>.</p>
+  </div>
+  <div class="astro-grid">
+    <div class="astro"><div class="astro-avatar av-o">RW</div><div><div class="astro-name">Reid Wiseman</div><div class="astro-role">Commandant · NASA 🇺🇸</div><span class="astro-badge ab-o">Pilote militaire</span></div></div>
+    <div class="astro"><div class="astro-avatar av-b">CK</div><div><div class="astro-name">Christina Koch</div><div class="astro-role">Pilote · NASA 🇺🇸</div><span class="astro-badge ab-b">1re femme vers la Lune 🌙</span></div></div>
+    <div class="astro"><div class="astro-avatar av-g">VG</div><div><div class="astro-name">Victor Glover</div><div class="astro-role">Spécialiste · NASA 🇺🇸</div><span class="astro-badge ab-g">1er Afro-Américain 🌙</span></div></div>
+    <div class="astro"><div class="astro-avatar av-o">JH</div><div><div class="astro-name">Jeremy Hansen</div><div class="astro-role">Spécialiste · ASC 🇨🇦</div><span class="astro-badge ab-o">1er Canadien vers la Lune 🌙</span></div></div>
+  </div>
+  <div class="highlight success"><strong>Connexion canadienne !</strong> Jeremy Hansen est colonel de l'armée de l'air canadienne. Artémis II est son tout premier vol dans l'espace — il représente le Canada comme jamais auparavant.</div>
+  <div class="nav-btns"><button class="btn" onclick="goTo(0)">← Retour</button><button class="btn primary" onclick="goTo(2)">Suivant : Technologies →</button></div>
+</div>
+
+<!-- S3 : TECHNOLOGIES -->
+<div class="section" id="sec2">
+  <div class="card">
+    <div class="card-title">Section 3</div>
+    <h2>La fusée et le vaisseau</h2>
+    <p>Artémis II utilise deux véhicules conçus spécialement pour les voyages vers la Lune.</p>
+  </div>
+  <div class="tech-grid">
+    <div class="tech"><div class="tech-icon">🚀</div><div class="tech-title">Fusée SLS</div><div class="tech-body">Space Launch System. La plus puissante fusée jamais construite par la NASA. Deux gigantesques boosters à poudre fournissent 75 % de la poussée au décollage.</div></div>
+    <div class="tech"><div class="tech-icon">🛸</div><div class="tech-title">Vaisseau Orion « Integrity »</div><div class="tech-body">L'équipage a baptisé leur vaisseau « Integrity » (intégrité). Il transporte les 4 astronautes et peut voyager bien plus loin que la Station spatiale internationale.</div></div>
+    <div class="tech"><div class="tech-icon">📍</div><div class="tech-title">Décollage · Floride</div><div class="tech-body">Lancement depuis le Centre spatial Kennedy (complexe 39B) en Floride, le 1er avril 2026 à 18h24 heure locale.</div></div>
+    <div class="tech"><div class="tech-icon">🌊</div><div class="tech-title">Amerrissage · Pacifique</div><div class="tech-body">Orion atterrira dans l'océan Pacifique, près de San Diego, vendredi 11 avril. Un navire de la Marine américaine récupérera l'équipage.</div></div>
+  </div>
+  <div class="highlight"><strong>Attention aux termes !</strong> On dit <em>amerrissage</em> quand un vaisseau se pose sur l'eau — et non atterrissage. Orion reviendra en mer, comme les capsules Apollo.</div>
+  <div class="nav-btns"><button class="btn" onclick="goTo(1)">← Retour</button><button class="btn primary" onclick="goTo(3)">Suivant : Le voyage →</button></div>
+</div>
+
+<!-- S4 : LE VOYAGE -->
+<div class="section" id="sec3">
+  <div class="card">
+    <div class="card-title">Section 4</div>
+    <h2>Chronologie de la mission</h2>
+    <p>Le point orange indique où en est la mission <strong>aujourd'hui</strong>.</p>
+  </div>
+  <div class="timeline">
+    <div class="tl"><div class="tl-day">Jour 1</div><div class="tl-dot dot-done"></div><div><div class="tl-title">✅ Décollage — 1er avril 2026</div><div class="tl-sub">SLS décolle de la Floride à 18h24. Les boosters larguent 2 minutes après.</div></div></div>
+    <div class="tl"><div class="tl-day">Jours 2–4</div><div class="tl-dot dot-done"></div><div><div class="tl-title">✅ Voyage vers la Lune</div><div class="tl-sub">Orion s'éloigne à plus de 400 000 km de la Terre — record pour un équipage depuis 1972.</div></div></div>
+    <div class="tl"><div class="tl-day">Jour 6</div><div class="tl-dot dot-done"></div><div><div class="tl-title">✅ Survol de la Lune — 6 avril</div><div class="tl-sub">Orion passe à 6 500 km de la surface lunaire. Magnifiques photos de la Lune !</div></div></div>
+    <div class="tl"><div class="tl-day">Jour 7</div><div class="tl-dot dot-now"></div><div><div class="tl-title">🔶 Aujourd'hui — Retour vers la Terre</div><div class="tl-sub">L'équipage effectue des corrections de trajectoire et se prépare pour le retour.</div></div></div>
+    <div class="tl"><div class="tl-day">Jour 10</div><div class="tl-dot dot-soon"></div><div><div class="tl-title">⏳ Amerrissage — 11 avril 2026</div><div class="tl-sub">Orion entre dans l'atmosphère à grande vitesse. Le bouclier thermique absorbe des milliers de degrés. Parachutes déployés, splash-down dans le Pacifique.</div></div></div>
+  </div>
+  <div class="nav-btns"><button class="btn" onclick="goTo(2)">← Retour</button><button class="btn primary" onclick="goTo(4)">Suivant : Apollo →</button></div>
+</div>
+
+<!-- S5 : APOLLO -->
+<div class="section" id="sec4">
+  <div class="card">
+    <div class="card-title">Section 5 · Histoire</div>
+    <h2>Le programme Apollo</h2>
+    <p>Pour comprendre Artémis II, il faut connaître Apollo — le programme qui a envoyé des humains sur la Lune il y a plus de 50 ans.</p>
+  </div>
+
+  <div class="highlight purple">
+    <strong>Contexte :</strong> Nous sommes en pleine Guerre froide. États-Unis et URSS se disputent la suprématie dans tous les domaines. En 1957, les Soviétiques lancent le 1er satellite (<em>Spoutnik</em>). En 1961, le 1er homme dans l'espace est le Russe <strong>Youri Gagarine</strong>. Le président Kennedy répond : <em>« Nous irons sur la Lune avant la fin de cette décennie. »</em>
+  </div>
+
+  <div class="timeline">
+    <div class="tl"><div class="tl-day">1957</div><div class="tl-dot dot-old"></div><div><div class="tl-title">Spoutnik — 1er satellite artificiel</div><div class="tl-sub">L'URSS place le premier objet humain en orbite terrestre. La course à l'espace commence.</div></div></div>
+    <div class="tl"><div class="tl-day">1961</div><div class="tl-dot dot-old"></div><div><div class="tl-title">Youri Gagarine — 1er humain dans l'espace</div><div class="tl-sub">Le cosmonaute soviétique fait le tour de la Terre en 108 minutes. Les États-Unis sont humiliés.</div></div></div>
+    <div class="tl"><div class="tl-day">1961</div><div class="tl-dot dot-old"></div><div><div class="tl-title">Kennedy lance le défi Apollo</div><div class="tl-sub">Le président annonce l'objectif : envoyer un humain sur la Lune avant 1970. Le programme Apollo est né.</div></div></div>
+    <div class="tl"><div class="tl-day">1967</div><div class="tl-dot dot-old"></div><div><div class="tl-title">Tragédie : Apollo 1</div><div class="tl-sub">Un incendie au sol tue les 3 astronautes (Grissom, White, Chaffee). Le programme est suspendu et repensé.</div></div></div>
+    <div class="tl"><div class="tl-day">1968</div><div class="tl-dot dot-old"></div><div><div class="tl-title">Apollo 8 — 1re orbite lunaire habitée</div><div class="tl-sub">Borman, Lovell et Anders font le tour de la Lune pour la 1re fois. Ils photographient la Terre depuis l'espace lointain.</div></div></div>
+    <div class="tl"><div class="tl-day">1969</div><div class="tl-dot dot-old"></div><div><div class="tl-title">🌙 Apollo 11 — 1er pas sur la Lune !</div><div class="tl-sub">Neil Armstrong et Buzz Aldrin marchent sur la Lune le 21 juillet 1969. 650 millions de personnes regardent en direct. Armstrong dit : <em>« C'est un petit pas pour un homme, un grand bond pour l'humanité. »</em></div></div></div>
+    <div class="tl"><div class="tl-day">1970</div><div class="tl-dot dot-old"></div><div><div class="tl-title">Apollo 13 — « Houston, nous avons un problème »</div><div class="tl-sub">Une explosion endommage le vaisseau à 200 000 km de la Terre. Grâce à une ingéniosité exceptionnelle, les 3 astronautes rentrent sains et saufs — la mission est un « succès raté ».</div></div></div>
+    <div class="tl"><div class="tl-day">1972</div><div class="tl-dot dot-old"></div><div><div class="tl-title">Apollo 17 — dernier pas humain sur la Lune</div><div class="tl-sub">Gene Cernan est le dernier humain à marcher sur la Lune. Il faudra attendre 54 ans pour qu'un équipage se rapproche à nouveau de la Lune — avec Artémis II !</div></div></div>
+  </div>
+
+  <div class="card-title" style="margin:1rem 0 0.6rem;">Les 6 missions Apollo qui ont aluni</div>
+  <div class="apollo-grid">
+    <div class="apollo-mission"><div class="apollo-num">Apollo 11</div><div class="apollo-year">Juil. 1969</div><div class="apollo-fact">Armstrong & Aldrin — 1ers humains sur la Lune</div></div>
+    <div class="apollo-mission"><div class="apollo-num">Apollo 12</div><div class="apollo-year">Nov. 1969</div><div class="apollo-fact">Conrad & Bean — 2e alunissage réussi</div></div>
+    <div class="apollo-mission"><div class="apollo-num">Apollo 14</div><div class="apollo-year">Fév. 1971</div><div class="apollo-fact">Shepard & Mitchell — 9h à la surface</div></div>
+    <div class="apollo-mission"><div class="apollo-num">Apollo 15</div><div class="apollo-year">Juil. 1971</div><div class="apollo-fact">Scott & Irwin — 1er rover lunaire</div></div>
+    <div class="apollo-mission"><div class="apollo-num">Apollo 16</div><div class="apollo-year">Avr. 1972</div><div class="apollo-fact">Young & Duke — 95 kg de roches</div></div>
+    <div class="apollo-mission"><div class="apollo-num">Apollo 17</div><div class="apollo-year">Déc. 1972</div><div class="apollo-fact">Cernan & Schmitt — Derniers humains sur la Lune</div></div>
+  </div>
+
+  <div class="card-title" style="margin:1rem 0 0.6rem;">Apollo vs Artémis — comparaison</div>
+  <table class="compare-table">
+    <thead><tr><th>Critère</th><th class="col-apollo">Programme Apollo</th><th class="col-artemis">Programme Artémis</th></tr></thead>
+    <tbody>
+      <tr><td>Époque</td><td>1961 – 1972</td><td>2017 – aujourd'hui</td></tr>
+      <tr><td>Fusée</td><td>Saturn V (110 m)</td><td>SLS (98 m)</td></tr>
+      <tr><td>Vaisseau</td><td>Capsule Apollo + module lunaire</td><td>Capsule Orion</td></tr>
+      <tr><td>Équipage</td><td>3 hommes, tous Américains</td><td>4 pers., mixte, international</td></tr>
+      <tr><td>Objectif</td><td>Battre l'URSS, marcher sur la Lune</td><td>Retourner sur la Lune, préparer Mars</td></tr>
+      <tr><td>Roches ramenées</td><td>382 kg au total (Apollo 11–17)</td><td>Objectif pour Artémis III et +</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight success"><strong>Record brisé en 2026 !</strong> Artémis II bat le record de distance en espace profond — un record qui appartenait à Apollo 13 depuis 1970 !</div>
+  <div class="nav-btns"><button class="btn" onclick="goTo(3)">← Retour</button><button class="btn primary" onclick="goTo(5)">Suivant : Pourquoi ? →</button></div>
+</div>
+
+<!-- S6 : POURQUOI -->
+<div class="section" id="sec5">
+  <div class="card">
+    <div class="card-title">Section 6</div>
+    <h2>Pourquoi cette mission ?</h2>
+    <p>Artémis II n'est pas qu'un exploit — c'est une <strong>étape préparatoire</strong> essentielle.</p>
+  </div>
+  <div class="tech-grid">
+    <div class="tech"><div class="tech-icon">🧪</div><div class="tech-title">Tester le vaisseau Orion</div><div class="tech-body">Vérifier que tous les systèmes fonctionnent avec un vrai équipage : combinaisons, air, eau, communications, bouclier thermique...</div></div>
+    <div class="tech"><div class="tech-icon">🌙</div><div class="tech-title">Préparer Artémis III</div><div class="tech-body">La prochaine mission fera <strong>marcher des astronautes sur la Lune</strong> — une première depuis Apollo 17 en 1972.</div></div>
+    <div class="tech"><div class="tech-icon">🌍</div><div class="tech-title">Une mission internationale</div><div class="tech-body">Le Canada participe grâce à Jeremy Hansen. Plus de 50 pays ont suivi le lancement en direct.</div></div>
+    <div class="tech"><div class="tech-icon">🔬</div><div class="tech-title">Science en apesanteur</div><div class="tech-body">L'équipage réalise des expériences sur les effets de l'espace sur le corps humain (os, muscles, sommeil, vision...).</div></div>
+  </div>
+  <div class="highlight success"><strong>Grand objectif :</strong> Le programme Artémis vise à établir une présence humaine durable autour de la Lune, et à préparer un futur voyage vers Mars.</div>
+  <div class="nav-btns"><button class="btn" onclick="goTo(4)">← Retour</button><button class="btn primary" onclick="goTo(6)">Suivant : Vidéos →</button></div>
+</div>
+
+<!-- S7 : VIDÉOS -->
+<div class="section" id="sec6">
+  <div class="card">
+    <div class="card-title">Section 7</div>
+    <h2>Vidéos et ressources</h2>
+    <p>Clique sur une carte pour ouvrir le lien dans un nouvel onglet.</p>
+  </div>
+
+  <div class="section-sublabel" style="color:var(--purple);">Programme Apollo · Histoire</div>
+  <div class="video-grid">
+    <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=KQUOMOQ3vZQ','_blank')">
+      <div class="video-thumb vt-red">▶</div>
+      <div class="video-info">
+        <div class="video-label vl-apollo">NASA · YouTube</div>
+        <div class="video-title">Apollo 11 — Les premiers pas sur la Lune (images restaurées)</div>
+        <div class="video-desc">Images officielles NASA du 21 juillet 1969. Neil Armstrong descend l'échelle et pose le pied sur la Lune pour la première fois. Commentaire en anglais, images universelles.</div>
+      </div>
+      <div class="video-arrow">↗</div>
+    </div>
+    <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=S9HdPi9Ikhk','_blank')">
+      <div class="video-thumb vt-purple">▶</div>
+      <div class="video-info">
+        <div class="video-label vl-apollo">Documentaire · Arte / YouTube</div>
+        <div class="video-title">La course à l'espace — Apollo contre l'URSS</div>
+        <div class="video-desc">Documentaire en français sur la rivalité USA / URSS qui a mené à Apollo. Contexte de la Guerre froide expliqué clairement pour les élèves.</div>
+      </div>
+      <div class="video-arrow">↗</div>
+    </div>
+    <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=oXTHhJJPpFk','_blank')">
+      <div class="video-thumb vt-red">▶</div>
+      <div class="video-info">
+        <div class="video-label vl-apollo">Apollo 13 · NASA</div>
+        <div class="video-title">Apollo 13 — La mission du miracle (résumé)</div>
+        <div class="video-desc">Retour sur la crise d'Apollo 13 : explosion à 200 000 km, 3 astronautes bloqués, retour miraculeux. La mission qui ressemble le plus à la trajectoire d'Artémis II.</div>
+      </div>
+      <div class="video-arrow">↗</div>
+    </div>
+  </div>
+
+  <div class="section-sublabel" style="color:var(--orange);">Mission Artémis II · En direct</div>
+  <div class="video-grid">
+    <div class="video-card" onclick="window.open('https://www.youtube.com/@NASA/streams','_blank')">
+      <div class="video-thumb vt-blue">🔴</div>
+      <div class="video-info">
+        <div class="video-label vl-artemis">NASA · Live YouTube</div>
+        <div class="video-title">NASA Live — Couverture en direct d'Artémis II</div>
+        <div class="video-desc">La chaîne officielle NASA diffuse en continu : images de la mission, communications avec l'équipage, conférences de presse. En ce moment même !</div>
+      </div>
+      <div class="video-arrow">↗</div>
+    </div>
+    <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=21X5lGlDOfg','_blank')">
+      <div class="video-thumb vt-blue">▶</div>
+      <div class="video-info">
+        <div class="video-label vl-artemis">Artémis II · Replay lancement</div>
+        <div class="video-title">Décollage d'Artémis II — 1er avril 2026 (vidéo complète)</div>
+        <div class="video-desc">Replay complet du lancement de la fusée SLS avec les 4 astronautes, depuis la Floride. On entend les boosters s'allumer et voit la fusée s'élever.</div>
+      </div>
+      <div class="video-arrow">↗</div>
+    </div>
+  </div>
+
+  <div class="section-sublabel" style="color:var(--blue);">Pour aller plus loin</div>
+  <div class="video-grid">
+    <div class="video-card" onclick="window.open('https://fr.wikipedia.org/wiki/Programme_Apollo','_blank')">
+      <div class="video-thumb vt-purple">📖</div>
+      <div class="video-info">
+        <div class="video-label vl-doc">Lecture · Wikipédia FR</div>
+        <div class="video-title">Programme Apollo — article complet en français</div>
+        <div class="video-desc">Toutes les missions Apollo détaillées : dates, équipages, objectifs, résultats. Bonne référence pour compléter tes notes.</div>
+      </div>
+      <div class="video-arrow">↗</div>
+    </div>
+    <div class="video-card" onclick="window.open('https://www.nasa.gov/artemis/','_blank')">
+      <div class="video-thumb vt-blue">🌐</div>
+      <div class="video-info">
+        <div class="video-label vl-doc">Site officiel · NASA</div>
+        <div class="video-title">nasa.gov/artemis — Le programme Artémis officiel</div>
+        <div class="video-desc">Photos, vidéos, infographies et dernières nouvelles directement depuis la NASA. En anglais, mais très visuel et accessible.</div>
+      </div>
+      <div class="video-arrow">↗</div>
+    </div>
+  </div>
+
+  <div class="highlight info" style="margin-top:1rem;">
+    <strong>Note :</strong> Si un lien ne s'ouvre pas depuis l'école, essaie de copier l'adresse dans un nouvel onglet. Certaines vidéos peuvent être bloquées selon le réseau.
+  </div>
+  <div class="nav-btns"><button class="btn" onclick="goTo(5)">← Retour</button><button class="btn primary" onclick="goTo(7)">Passer au Quiz →</button></div>
+</div>
+
+<!-- S8 : QUIZ -->
+<div class="section" id="sec7">
+  <div class="card">
+    <div class="card-title">Section 8</div>
+    <h2>Quiz — Apollo &amp; Artémis II</h2>
+    <p>10 questions sur les deux programmes. Lis bien avant de répondre !</p>
+  </div>
+  <div id="quiz-container"></div>
+</div>
+
+</main>
+
+<script>
+var current = 0;
+
+function goTo(n) {
+  document.getElementById('sec' + current).classList.remove('active');
+  document.getElementById('sec' + n).classList.add('active');
+  var tabs = document.querySelectorAll('.section-tab');
+  tabs[current].classList.remove('active');
+  if (current !== n) tabs[current].classList.add('done');
+  tabs[n].classList.remove('done');
+  tabs[n].classList.add('active');
+  current = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === 7 && !quizStarted) startQuiz();
+}
+
+var questions = [
+  { q: "Quel cosmonaute soviétique fut le 1er humain dans l'espace, en 1961 ?", opts: ["Buzz Aldrin", "Youri Gagarine", "Neil Armstrong", "Valentina Terechkova"], ok: 1, ex: "Youri Gagarine a fait le tour de la Terre le 12 avril 1961, en 108 minutes. Les États-Unis ont lancé le programme Apollo en réponse." },
+  { q: "En quelle année Neil Armstrong a-t-il posé le pied sur la Lune ?", opts: ["1965", "1967", "1969", "1972"], ok: 2, ex: "Le 21 juillet 1969, Apollo 11 alunit dans la Mer de la Tranquillité. 650 millions de personnes ont regardé en direct !" },
+  { q: "Quelle mission Apollo a connu une explosion et est rentrée miraculeusement ?", opts: ["Apollo 1", "Apollo 8", "Apollo 13", "Apollo 17"], ok: 2, ex: "Apollo 13 (1970) : une explosion a endommagé le vaisseau à 200 000 km de la Terre. Les 3 astronautes ont survécu grâce à une ingéniosité exceptionnelle." },
+  { q: "Combien de kg de roches lunaires les missions Apollo ont-elles ramenées ?", opts: ["12 kg", "75 kg", "382 kg", "1 200 kg"], ok: 2, ex: "Les 6 missions Apollo ont ramené 382 kg de roches lunaires, étudiées dans le monde entier. Elles ont beaucoup appris aux scientifiques sur la formation de la Lune." },
+  { q: "Depuis quelle année les humains n'avaient-ils pas voyagé aussi loin, avant Artémis II ?", opts: ["1985", "1969", "1972", "2001"], ok: 2, ex: "Apollo 17 en décembre 1972 était la dernière mission lunaire habitée. Artémis II brise une absence de 54 ans !" },
+  { q: "Quel astronaute représente le Canada dans la mission Artémis II ?", opts: ["Marc Garneau", "Julie Payette", "David Saint-Jacques", "Jeremy Hansen"], ok: 3, ex: "Jeremy Hansen est colonel de l'armée de l'air canadienne. C'est son tout premier vol spatial et il est le premier Canadien à voyager vers la Lune !" },
+  { q: "Christina Koch entre dans l'histoire grâce à Artémis II. Pourquoi ?", opts: ["1re femme à marcher sur la Lune", "1re femme à voyager vers la Lune", "1re astronaute dans l'espace", "1re directrice de la NASA"], ok: 1, ex: "Christina Koch est la première femme à voyager vers la Lune. Marcher sur la Lune, c'est prévu pour Artémis III !" },
+  { q: "Qu'est-ce qu'un « amerrissage » ?", opts: ["Un atterrissage sur la Lune", "Un atterrissage d'urgence", "Quand un vaisseau se pose sur l'eau", "Un atterrissage sur Mars"], ok: 2, ex: "On dit « amerrissage » quand un vaisseau spatial atterrit sur la mer. Orion reviendra dans le Pacifique, comme les capsules Apollo autrefois." },
+  { q: "Quel est le but principal d'Artémis II ?", opts: ["Installer une base sur la Lune", "Récupérer des roches lunaires", "Tester le vaisseau Orion avec un équipage", "Photographier Mars depuis la Lune"], ok: 2, ex: "Artémis II est un vol de test : vérifier que tout fonctionne avant d'envoyer des astronautes se poser sur la Lune avec Artémis III." },
+  { q: "Quelle phrase Neil Armstrong a-t-il prononcée en posant le pied sur la Lune ?", opts: ["« Houston, nous avons un problème. »", "« C'est un petit pas pour un homme, un grand bond pour l'humanité. »", "« L'aigle vient de se poser. »", "« Nous reviendrons un jour. »"], ok: 1, ex: "Armstrong a dit : « C'est un petit pas pour un homme, un grand bond pour l'humanité. » C'est l'une des phrases les plus célèbres de l'histoire." }
+];
+
+var quizStarted = false, qi = 0, score = 0, answered = false;
+
+function startQuiz() {
+  quizStarted = true; qi = 0; score = 0; renderQuestion();
+}
+
+function renderQuestion() {
+  if (qi >= questions.length) { showScore(); return; }
+  answered = false;
+  var d = questions[qi];
+  var labels = ['A','B','C','D'];
+  var prog = '';
+  for (var i = 0; i < questions.length; i++) {
+    prog += '<div class="qp ' + (i < qi ? 'done' : i === qi ? 'current' : '') + '"></div>';
+  }
+  var optsHtml = '';
+  d.opts.forEach(function(opt, i) {
+    optsHtml += '<button class="quiz-opt" id="opt'+i+'" onclick="answer('+i+')">' +
+      '<span class="mark">'+labels[i]+'</span>'+opt+'</button>';
+  });
+  document.getElementById('quiz-container').innerHTML =
+    '<div class="quiz-progress">'+prog+'</div>' +
+    '<div class="quiz-num">Question '+(qi+1)+' / '+questions.length+'</div>' +
+    '<div class="quiz-q">'+d.q+'</div>' +
+    '<div class="quiz-opts">'+optsHtml+'</div>' +
+    '<div id="qfeedback"></div>';
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  var d = questions[qi];
+  var btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach(function(b){ b.onclick = null; });
+  btns[d.ok].classList.add('correct');
+  var ok = (i === d.ok);
+  if (!ok) btns[i].classList.add('wrong');
+  else score++;
+  var fb = document.getElementById('qfeedback');
+  fb.innerHTML = '<div class="quiz-feedback '+(ok?'fb-correct':'fb-wrong')+'">' +
+    (ok ? '✅ Bonne réponse ! ' : '❌ Pas tout à fait. La bonne réponse est « '+d.opts[d.ok]+' ». ') + d.ex + '</div>';
+  var nb = document.createElement('div');
+  nb.style.marginTop = '1rem';
+  nb.innerHTML = qi < questions.length-1
+    ? '<button class="btn primary" onclick="nextQ()">Question suivante →</button>'
+    : '<button class="btn primary" onclick="showScore()">Voir mon résultat →</button>';
+  fb.appendChild(nb);
+}
+
+function nextQ() { qi++; renderQuestion(); }
+
+function showScore() {
+  var pct = Math.round(score / questions.length * 100);
+  var msg = pct >= 80 ? '🏆 Excellent ! Tu maîtrises Apollo et Artémis !' : pct >= 60 ? '👍 Bien joué ! Quelques révisions et ce sera parfait.' : '📚 Relis les sections Apollo et Artémis puis réessaie !';
+  var color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--orange)' : 'var(--red)';
+  document.getElementById('quiz-container').innerHTML =
+    '<div class="card score-card">' +
+    '<div style="font-size:3rem;margin-bottom:.5rem;">🚀</div>' +
+    '<div class="score-num" style="color:'+color+'">'+score+' / '+questions.length+'</div>' +
+    '<div class="score-label">'+pct+' % de bonnes réponses</div>' +
+    '<div class="score-msg">'+msg+'</div>' +
+    '</div>' +
+    '<div class="nav-btns" style="justify-content:center;margin-top:1rem;">' +
+    '<button class="btn" onclick="goTo(0)">← Recommencer la lecture</button>' +
+    '<button class="btn primary" onclick="restartQuiz()">🔄 Refaire le quiz</button>' +
+    '</div>';
+}
+
+function restartQuiz() { qi = 0; score = 0; renderQuestion(); }
+</script>
+</body>
+</html>
